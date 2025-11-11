@@ -2,3 +2,6 @@
 src/build
 src/*.so
 __pycache__
+Experiments/test_*
+Experiments/models/test_*
+tem/*

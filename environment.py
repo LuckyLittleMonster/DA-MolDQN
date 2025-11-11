@@ -164,13 +164,13 @@ class Molecule(object):
         vas = []
         des = []
         for state, maintain_OH in zip(self.states, self.maintain_OH_flags):
-            # valid_actions, fingerprints = cxx_environment.get_valid_actions_and_fingerprint_smile(
-            #    state, self.use_cxx_incremental_fingerprint, maintain_OH)
+            valid_actions, fingerprints = cxx_environment.get_valid_actions_and_fingerprint(
+               state, self.use_cxx_incremental_fingerprint, maintain_OH)
             # some mathine reports seg fault for transfering Mol Object. It should be a rdkit issue.
-            valid_actions, fingerprints = cxx_environment.get_valid_actions_and_fingerprint_smile(
-               Chem.MolToSmiles(state), self.use_cxx_incremental_fingerprint, maintain_OH)
-            if isinstance(valid_actions[0], str):
-                valid_actions = [Chem.MolFromSmiles(state) for state in valid_actions]
+            # valid_actions, fingerprints = cxx_environment.get_valid_actions_and_fingerprint_smile(
+            #    Chem.MolToSmiles(state), self.use_cxx_incremental_fingerprint, maintain_OH)
+            # if isinstance(valid_actions[0], str):
+            #     valid_actions = [Chem.MolFromSmiles(state) for state in valid_actions]
             # valid_actions = [Chem.RWMol(state)]
             # fingerprints = [self.morganFingerprintGen.GetFingerprint(mol) for mol in valid_actions]
             # print(fingerprints)
