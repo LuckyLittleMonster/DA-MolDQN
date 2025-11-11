@@ -1,4 +1,0 @@
-CC(=O)/C=C(\O)c1cccnc1
-Oc1ccc(/N=C(/Cc2ccc(Cl)cc2)c2ccc(O)c(O)c2O)cc1
-O=C(/C=C/c1ccc(/C=N/OCc2ccccc2)cc1)NO
-O=C(O)/C(O)=C/C(=O)c1ccnc2ccccc12
