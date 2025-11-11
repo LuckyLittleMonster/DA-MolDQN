@@ -1,0 +1,4 @@
+*.sif
+src/build
+src/*.so
+__pycache__

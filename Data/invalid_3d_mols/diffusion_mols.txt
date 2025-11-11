@@ -1,0 +1,95 @@
+==> Data/invalid_3d_mols/diffusion_mols_rank_0.txt <==
+783 of 826 tested mols (94.7942%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_10.txt <==
+790 of 825 tested mols (95.7576%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_11.txt <==
+786 of 825 tested mols (95.2727%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_12.txt <==
+786 of 826 tested mols (95.1574%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_13.txt <==
+787 of 826 tested mols (95.2785%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_14.txt <==
+777 of 826 tested mols (94.0678%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_15.txt <==
+780 of 826 tested mols (94.4310%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_16.txt <==
+775 of 826 tested mols (93.8257%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_17.txt <==
+786 of 826 tested mols (95.1574%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_18.txt <==
+790 of 826 tested mols (95.6416%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_19.txt <==
+778 of 826 tested mols (94.1889%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_1.txt <==
+774 of 825 tested mols (93.8182%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_20.txt <==
+783 of 826 tested mols (94.7942%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_21.txt <==
+782 of 826 tested mols (94.6731%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_22.txt <==
+784 of 826 tested mols (94.9153%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_23.txt <==
+792 of 826 tested mols (95.8838%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_24.txt <==
+799 of 826 tested mols (96.7312%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_25.txt <==
+784 of 825 tested mols (95.0303%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_26.txt <==
+787 of 826 tested mols (95.2785%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_27.txt <==
+790 of 826 tested mols (95.6416%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_28.txt <==
+791 of 826 tested mols (95.7627%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_29.txt <==
+797 of 826 tested mols (96.4891%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_2.txt <==
+781 of 826 tested mols (94.5521%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_30.txt <==
+788 of 826 tested mols (95.3995%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_31.txt <==
+765 of 804 tested mols (95.1493%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_3.txt <==
+789 of 826 tested mols (95.5206%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_4.txt <==
+780 of 825 tested mols (94.5455%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_5.txt <==
+778 of 826 tested mols (94.1889%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_6.txt <==
+786 of 824 tested mols (95.3883%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_7.txt <==
+785 of 825 tested mols (95.1515%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_8.txt <==
+787 of 826 tested mols (95.2785%) have valid 3d conformers.
+
+==> Data/invalid_3d_mols/diffusion_mols_rank_9.txt <==
+793 of 826 tested mols (96.0048%) have valid 3d conformers.

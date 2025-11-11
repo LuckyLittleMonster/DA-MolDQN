@@ -1,0 +1,1 @@
+export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/shared/data1/Users/l1062811/envs/rdkit/include/python3.11"

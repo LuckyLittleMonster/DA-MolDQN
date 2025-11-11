@@ -1,0 +1,2 @@
+hostname
+nvidia-smi

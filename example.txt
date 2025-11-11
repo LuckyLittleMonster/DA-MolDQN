@@ -1,0 +1,1 @@
+python main_hpc.py --experiment test --trial 1 --init_mol_start 0 --iteration 2000 --init_mol_path ./Data/aodb_20.txt --gpu_list 0 --num_init_mol 1 --max_steps_per_episode 10 --reward bde_ip --eps_decay 0.968 --max_batch_size 128 --cache bde --maintain_OH exist --checkpoint trial_573 --eps_threshold 0.5

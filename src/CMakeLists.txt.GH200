@@ -1,0 +1,67 @@
+cmake_minimum_required( VERSION 3.5 )
+
+project(RDKitSV)
+
+set(RDBASE $ENV{RDBASE})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${RDBASE}/Code/cmake/Modules")
+
+# note that if you haven't installed/built the toolkit with CoordGen, you'll
+# have problems with this.
+add_definitions("-DRDK_BUILD_COORDGEN_SUPPORT=ON")
+add_compile_options(-Wall)
+
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED OFF)
+set(Boost_USE_STATIC_RUNTIME ON)
+set(Boost_NO_BOOST_CMAKE ON)
+set(CMAKE_CXX_FLAGS "-fpermissive -fPIC -shared -O3")
+
+#set(Boost_INCLUDE_DIR /usr/include)
+#set(Boost_LIBRARY_DIR /usr/lib)
+set(Boost_INCLUDE_DIR /shared/data1/Users/l1062811/envs/hpc310/include)
+set(Boost_LIBRARY_DIR /shared/data1/Users/l1062811/envs/hpc310/lib)
+include_directories(${Boost_INCLUDE_DIR})
+
+find_package(NumPy REQUIRED)
+#find_package (Python 3.11 COMPONENTS Interpreter Development NumPy REQUIRED)
+include_directories(${PYTHON_NUMPY_INCLUDE_PATH})
+#include_directories("/shared/data1/Users/l1062811/envs/hpc311alf/lib/python3.11/site-packages/numpy/core/include")
+#set(PYTHON_INCLUDE_DIRS /shared/data1/Users/l1062811/envs/hpc311alf/lib/python3.11/site-packages)
+
+message(STATUS "PYTHON_NUMPY_INCLUDE_PATH='${PYTHON_NUMPY_INCLUDE_PATH}'")
+
+
+find_package( Boost REQUIRED COMPONENTS iostreams regex python filesystem system numpy)
+include_directories(${Boost_INCLUDE_DIR})
+message(STATUS "Boost_INCLUDE_DIR='${Boost_INCLUDE_DIR}'")
+
+find_package( Cairo REQUIRED )
+
+# specify where CMake can find the RDKit libraries
+
+#include_directories ( ${RDBASE}/Code ${CAIRO_INCLUDE_DIRS} "/usr/bin/python3.10" )
+include_directories ( ${RDBASE}/Code ${CAIRO_INCLUDE_DIRS} "/shared/data1/Users/l1062811/envs/hpc310/bin/python3.10" )
+link_directories ( ${RDBASE}/lib )
+
+set(RDKit_LIBS RDKitChemReactions RDKitFileParsers RDKitSmilesParse RDKitDepictor
+         RDKitRDGeometryLib RDKitRDGeneral RDKitSubstructMatch RDKitSubgraphs
+         RDKitMolDraw2D RDKitGraphMol RDKitDistGeometry RDKitDistGeomHelpers
+           RDKitMolAlign RDKitOptimizer RDKitForceField RDKitForceFieldHelpers
+         RDKitAlignment RDKitForceField  RDKitMolTransforms RDKitEigenSolvers RDKitFingerprints)
+
+         
+
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
+
+find_package (Threads)
+set(RDKit_THREAD_LIBS Threads::Threads)
+
+set( LIBS ${RDKIT_LIBRARIES} Boost::iostreams Boost::regex Boost::python Boost::numpy ${RDKit_THREAD_LIBS}
+     ${CAIRO_LIBRARIES} )
+
+
+include_directories(${RDKIT_INCLUDE_DIR})
+
+
+add_executable( cenv.so environment.cpp incremental_morgan_fingerprint.cpp)
+target_link_libraries( cenv.so ${LIBS} ${RDKit_LIBS})

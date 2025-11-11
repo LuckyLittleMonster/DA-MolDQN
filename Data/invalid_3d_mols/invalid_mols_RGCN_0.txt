@@ -1,0 +1,1 @@
+0 of 0 tested mols (0%) have valid 3d conformers.
