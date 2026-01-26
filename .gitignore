@@ -6,5 +6,3 @@ Experiments/test_*
 Experiments/models/test_*
 tem/*
 synnet/checkpoints/*/
-Data/synnet/preprocessed/*.npy
-Data/synnet/preprocessed/*.npz
