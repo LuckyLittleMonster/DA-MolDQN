@@ -97,6 +97,11 @@ parser.add_argument('--save_model_freq', type=int, default=1000, help="it saves 
     "If freq <= 0, it will never save during training or testing")
 parser.add_argument('--save_path_freq', type=int, default=1000, help="it saves the model every 1000 episodes by default.\n"
     "If freq <= 0, it will never save during training or testing")
+parser.add_argument('--env_type', type=str, default='atom', choices=['atom', 'synnet'], help="Environment type: atom (default DA-MolDQN) or synnet (Synthesis-based optimization)")
+parser.add_argument('--synnet_ckpt_dir', type=str, default='synnet/checkpoints', help="Directory containing SynNet model checkpoints")
+parser.add_argument('--synnet_rxn_templates', type=str, default='Data/synnet/preprocessed/rxn_collection.json.gz', help="Path to reaction templates")
+parser.add_argument('--synnet_building_blocks', type=str, default='Data/synnet/preprocessed/zinc_filtered.csv.gz', help="Path to building blocks")
+parser.add_argument('--synnet_embeddings', type=str, default='Data/synnet/preprocessed/building_blocks_emb.npy', help="Path to molecular embeddings")
 
 
 args = parser.parse_args()
@@ -125,6 +130,8 @@ def train(args, rank, init_mols):
     # from agent import Agent, QEDRewardMolecule, BDEIPRewardMolecule
     from agent import DistributedAgent, MultiMolecules
     from dqn import MolDQN
+    if args.env_type == 'synnet':
+        from synnet.synth_agent import SynthMultiMolecules
 
     # the cenv should be imported at last.
     # to do : fix the dependency issue in cenv
@@ -154,10 +161,17 @@ def train(args, rank, init_mols):
         if args.test:    
             init_eps_threshold = 0.0 # eps is zero for test
 
-    environment = MultiMolecules(
-        args = args,
-        device = device,
-        init_mols = [Chem.MolFromSmiles(s) for s in  init_mols]
+    if args.env_type == 'synnet':
+        environment = SynthMultiMolecules(
+            args = args,
+            device = device,
+            init_mols = [Chem.MolFromSmiles(s) for s in init_mols]
+        )
+    else:
+        environment = MultiMolecules(
+            args = args,
+            device = device,
+            init_mols = [Chem.MolFromSmiles(s) for s in init_mols]
         )
     # with open('./Experiments/trial_{}_rank_{}_initial_reward.pickle'.format(args.trial, rank), 'wb') as handle:
     #     pickle.dump(environment.init_rewards, handle, protocol=pickle.HIGHEST_PROTOCOL)
@@ -371,8 +385,12 @@ def main(args, rank = None):
 
     print(f"rank {rank}/{world_size} started on {platform.node()}")
 
+    init_method_str = args.init_method
+    if not init_method_str.startswith("tcp://"):
+        init_method_str = f"{args.init_method}_{args.experiment}_{args.trial}"
+
     dist.init_process_group(backend=args.backend,
-                            init_method=f"{args.init_method}_{args.experiment}_{args.trial}",
+                            init_method=init_method_str,
                             world_size=world_size,
                             rank=rank,
                             timeout=datetime.timedelta(seconds=600))

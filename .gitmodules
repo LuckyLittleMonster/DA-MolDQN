@@ -1,3 +1,9 @@
 [submodule "BDE-db2"]
 	path = BDE-db2
 	url = https://github.com/patonlab/BDE-db2.git
+[submodule "refs/nvmolkit"]
+	path = refs/nvmolkit
+	url = https://github.com/NVIDIA-Digital-Bio/nvMolKit.git
+[submodule "refs/SynNet"]
+	path = refs/SynNet
+	url = https://github.com/wenhao-gao/SynNet.git

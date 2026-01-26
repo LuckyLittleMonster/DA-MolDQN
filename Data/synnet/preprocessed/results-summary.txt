@@ -1,0 +1,8 @@
+{
+  "NoReactantAvailableError": 424,
+  "TypeError": 139,
+  "success": 305,
+  "NoBiReactionAvailableError": 73,
+  "NoReactionPossibleError": 41,
+  "NoReactionAvailableError": 18
+}
