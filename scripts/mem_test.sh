@@ -1,3 +1,0 @@
-torchrun --nproc-per-node=1  main_dist.py --iteration 80000 --max_steps_per_episode 10 --init_mol_path ./Data/anti_400.txt --discount_factor 1.0 --backend gloo --gpu_list 0 1 2 3 --torch_num_threads 1 --num_init_mol 1 --record_path  --update_episodes 1 --torchrun --trial 82 --reward QED --use_cxx_incremental_fingerprint 1
-sleep 20
-torchrun --nproc-per-node=1  main_dist.py --iteration 80000 --max_steps_per_episode 10 --init_mol_path ./Data/anti_400.txt --discount_factor 1.0 --backend gloo --gpu_list 0 1 2 3 --torch_num_threads 1 --num_init_mol 1 --record_path  --update_episodes 1 --torchrun --trial 83 --reward QED --use_cxx_incremental_fingerprint 1

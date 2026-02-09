@@ -7,3 +7,18 @@
 [submodule "refs/SynNet"]
 	path = refs/SynNet
 	url = https://github.com/wenhao-gao/SynNet.git
+[submodule "refs/MolDQN-pytorch"]
+	path = refs/MolDQN-pytorch
+	url = https://github.com/aksub99/MolDQN-pytorch.git
+[submodule "refs/reaction-graph-link-prediction"]
+	path = refs/reaction-graph-link-prediction
+	url = https://github.com/MolecularAI/reaction-graph-link-prediction.git
+[submodule "refs/ReactionT5v2"]
+	path = refs/ReactionT5v2
+	url = https://github.com/sagawatatsuya/ReactionT5v2.git
+[submodule "refs/RxnFlow"]
+	path = refs/RxnFlow
+	url = https://github.com/SeonghwanSeo/RxnFlow.git
+[submodule "refs/synflownet"]
+	path = refs/synflownet
+	url = https://github.com/mirunacrt/synflownet.git

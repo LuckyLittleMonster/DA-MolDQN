@@ -6,3 +6,8 @@ Experiments/test_*
 Experiments/models/test_*
 tem/*
 synnet/checkpoints/*/
+rl_sync_not_working/
+skills
+docs/
+.*/
+CLAUDE.md
