@@ -26,7 +26,7 @@ from template.building_blocks import BuildingBlockLibrary
 
 # Default paths relative to this file
 _THIS_DIR = Path(__file__).resolve().parent
-_DEFAULT_TEMPLATE_PATH = _THIS_DIR / "data" / "templates.txt"
+_DEFAULT_TEMPLATE_PATH = _THIS_DIR / "data" / "templates_v2.txt"
 _DEFAULT_BB_PATH = _THIS_DIR / "data" / "building_blocks.smi.gz"
 
 

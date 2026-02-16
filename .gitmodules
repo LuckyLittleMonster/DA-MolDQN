@@ -22,3 +22,6 @@
 [submodule "refs/synflownet"]
 	path = refs/synflownet
 	url = https://github.com/mirunacrt/synflownet.git
+[submodule "refs/ReaSyn"]
+	path = refs/ReaSyn
+	url = https://github.com/NVIDIA-Digital-Bio/ReaSyn.git

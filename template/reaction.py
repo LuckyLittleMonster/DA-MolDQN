@@ -189,7 +189,7 @@ def load_templates(path: str) -> tuple[list[UniReaction], list[BiReaction]]:
     with open(path) as f:
         for line in f:
             template = line.strip()
-            if not template:
+            if not template or template.startswith('#'):
                 continue
             rxn = Reaction(template, index=idx)
             if rxn.num_reactants == 1 and rxn.num_products == 1:

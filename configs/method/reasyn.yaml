@@ -1,0 +1,34 @@
+name: reasyn
+
+# ReaSyn model
+model_dir: refs/ReaSyn/data/trained_model
+model_files:
+  - nv-reasyn-ar-166m-v2.ckpt
+  - nv-reasyn-eb-174m-v2.ckpt
+
+# FastSampler L1a config
+use_fp16: true
+max_branch_states: 8
+skip_editflow: true
+rxn_product_limit: 1
+max_evolve_steps: 4
+num_cycles: 1
+num_editflow_samples: 10
+num_editflow_steps: 50
+expansion_width: 16
+search_width: 8
+
+# Action generation
+top_k: 20
+num_workers: 16
+
+# MLP DQN
+input_dim: 4097  # Morgan FP (4096) + step_fraction (1)
+hidden_dim: 256
+
+# Incremental action cache
+use_cache: true
+min_cached_actions: 5
+max_neighbors: 200
+explore_prob: 0.1
+cache_path: null

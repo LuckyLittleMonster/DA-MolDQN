@@ -1,0 +1,21 @@
+name: route
+
+# Route generation
+decompose_method: paroutes  # random, dfs, retro, aizynth, paroutes
+route_steps: 3
+routes_per_mol: 1
+aizynth_path: null
+paroutes_path: null  # default: Data/paroutes/n1_routes_matched.json
+bb_library: null
+
+# Model architecture
+fp_dim: 4096
+template_emb_dim: 128
+block_emb_dim: 64
+route_emb_dim: 256
+hidden_dim: 256
+max_route_len: 10
+
+# Cascade validation
+cascade_workers: 8
+cascade_topk: 64

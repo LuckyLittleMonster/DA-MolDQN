@@ -1,0 +1,6 @@
+# @package _global_
+episodes: 500
+max_steps: 5
+num_molecules: 64
+log_freq: 10
+save_freq: 50

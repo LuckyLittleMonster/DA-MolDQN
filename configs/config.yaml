@@ -1,0 +1,45 @@
+defaults:
+  - method: route
+  - reward: qed
+  - _self_
+
+# Experiment
+exp_name: default
+trial: 1
+seed: 42
+
+# Training
+episodes: 200
+max_steps: 5
+batch_size: 32
+replay_size: 50000
+lr: 1e-4
+gamma: 0.9
+polyak: 0.995
+grad_steps: 4
+
+# Epsilon schedule
+eps_start: 1.0
+eps_decay: 0.995
+eps_min: 0.05
+
+# Molecules
+init_mol:
+  - c1ccc(N)cc1
+  - c1ccc(O)cc1
+  - CCO
+  - CC(=O)O
+  - c1ccccc1
+  - CC(C)N
+  - c1ccc(C=O)cc1
+  - CCCC
+init_mol_path: null
+mol_json: null
+num_molecules: null
+
+# Infrastructure
+device: cuda
+gpu: 0
+log_freq: 5
+save_freq: 50
+load_checkpoint: null

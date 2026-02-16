@@ -1,0 +1,13 @@
+name: dock
+
+target: null  # e.g., "3pbl" — directory under docking/targets/
+dock_weight: 0.7
+sa_weight: 0.2
+
+# Docking search box (overrides from target config.json)
+center_x: null
+center_y: null
+center_z: null
+size_x: 22.5
+size_y: 22.5
+size_z: 22.5

@@ -1,0 +1,4 @@
+name: qed
+
+qed_weight: 0.8
+sa_weight: 0.2
