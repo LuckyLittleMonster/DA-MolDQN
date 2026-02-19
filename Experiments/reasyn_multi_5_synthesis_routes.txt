@@ -1,0 +1,1227 @@
+================================================================================
+ReaSyn Multi-objective (1iep) — Trial 5, Episode 49
+50 episodes from reasyn_multi_1 checkpoint + Deep Synthesis (8×2)
+================================================================================
+
+Molecules: 64
+Best dock score ever: -11.62 kcal/mol
+Synthesis depth distribution: {0: 12, 1: 35, 2: 5, 3: 10, 5: 1, 6: 1}
+Multi-step routes (>=2 steps): 17/64 (26.6%)
+
+--------------------------------------------------------------------------------
+TOP-5 BEST DOCKING SCORES (across all 50 episodes)
+--------------------------------------------------------------------------------
+
+  #1  Dock = -11.62 kcal/mol  (episode 35)
+  Init:  C[C@@H](N)C1CCN(c2ccc(Cl)cn2)CC1
+  Final: O=C(Nc1ccc(N2CCOCC2)nc1)Nc1ccc(-c2c(F)cc(F)cc2F)cn1
+  Path:  C[C@@H](N)C1CCN(c2ccc(Cl)cn2)CC1 -> Nc1ccc(Nc2ccc(N3CCOCC3)nc2)cn1 -> O=C(Nc1ccc(N2CCOCC2)nc1)Nc1ccc(-c2c(F)cc(F)cc2F)cn1 -> O=C(Nc1ccc(N2CCOCC2)nc1)Nc1ccc(-c2c(F)cc(F)cc2F)cn1 -> O=C(Nc1ccc(N2CCOCC2)nc1)Nc1ccc(-c2c(F)cc(F)cc2F)cn1 -> O=C(Nc1ccc(N2CCOCC2)nc1)Nc1ccc(-c2c(F)cc(F)cc2F)cn1
+  Synthesis (1 step):
+    BB/Intermediate: Nc1ccc(N2CCOCC2)nc1
+    BB/Intermediate: Nc1ccc(-c2c(F)cc(F)cc2F)cn1
+    Step 1: Reaction R36
+
+  #2  Dock = -11.18 kcal/mol  (episode 7)
+  Init:  COCCN1CCC([C@H](C)NC(C)=O)CC1
+  Final: N#Cc1ccc(C(=O)[O-])c(-c2ccc(O)c(F)c2)c1
+  Path:  COCCN1CCC([C@H](C)NC(C)=O)CC1 -> Cc1ccc(CC(=O)c2ccc(C#N)cn2)cc1 -> O=C([O-])C(Cl)c1ccc(CBr)cc1 -> N#Cc1ccc(-c2ccc(CC(=O)[O-])cc2)cc1 -> N#Cc1ccc(-c2ccc(C(=O)[O-])c(F)c2)cc1 -> N#Cc1ccc(C(=O)[O-])c(-c2ccc(O)c(F)c2)c1
+  Synthesis (1 step):
+    BB/Intermediate: O=C([O-])c1ccc(Cl)cc1-c1ccc(O)c(F)c1
+    Step 1: Reaction R113
+
+  #3  Dock = -11.18 kcal/mol  (episode 10)
+  Init:  COCCN1CCC([C@H](C)NC(C)=O)CC1
+  Final: N#Cc1ccc(-c2ccc(C(=O)[O-])c(F)c2)cc1
+  Path:  COCCN1CCC([C@H](C)NC(C)=O)CC1 -> Cc1ccc(CC(=O)c2ccc(C#N)cn2)cc1 -> CONC(=O)Cc1ccc(C#N)cc1 -> O=C([O-])C(Cl)c1ccc(CBr)cc1 -> N#Cc1ccc(-c2ccc(CC(=O)[O-])cc2)cc1 -> N#Cc1ccc(-c2ccc(C(=O)[O-])c(F)c2)cc1
+  Synthesis (1 step):
+    BB/Intermediate: O=C([O-])c1ccc(-c2ccc(Cl)cc2)cc1F
+    Step 1: Reaction R113
+
+  #4  Dock = -11.18 kcal/mol  (episode 19)
+  Init:  C[C@]1(CCCO)CCCN1Cc1cnon1
+  Final: N#Cc1ccc(-c2ccc(C(=O)[O-])c(F)c2)cc1
+  Path:  C[C@]1(CCCO)CCCN1Cc1cnon1 -> O=C([O-])Cc1ccc(CC(O)c2cc(Br)co2)cc1 -> CC(C)COc1ccc(C(Br)C(=O)[O-])cc1 -> O=C([O-])C(Br)c1ccc(-c2ccc(Cl)cc2)cc1 -> O=C([O-])C(Br)c1ccc(-c2ccc(Cl)cc2)cc1 -> N#Cc1ccc(-c2ccc(C(=O)[O-])c(F)c2)cc1
+  Synthesis (1 step):
+    BB/Intermediate: O=C([O-])c1ccc(-c2ccc(Cl)cc2)cc1F
+    Step 1: Reaction R113
+
+  #5  Dock = -11.18 kcal/mol  (episode 20)
+  Init:  N#Cc1ccc(F)c(C=O)c1Cl
+  Final: N#Cc1ccc(C(=O)[O-])c(-c2ccc(O)c(F)c2)c1
+  Path:  N#Cc1ccc(F)c(C=O)c1Cl -> O=Cc1cc(Cl)cc(F)c1Cl -> O=Cc1cc(Cl)ccc1C(=O)[O-] -> N#Cc1ccc(-c2ccc(C(=O)[O-])c(F)c2)cc1 -> N#Cc1ccc(-c2ccc(C(=O)[O-])c(F)c2)cc1 -> N#Cc1ccc(C(=O)[O-])c(-c2ccc(O)c(F)c2)c1
+  Synthesis (1 step):
+    BB/Intermediate: O=C([O-])c1ccc(Cl)cc1-c1ccc(O)c(F)c1
+    Step 1: Reaction R113
+
+
+================================================================================
+ALL 64 MOLECULES — LAST EPISODE (ep 49)
+================================================================================
+
+--- Molecule 1/64 ---
+  Init:  C#CCOC(=O)[C@H]1COCCO1
+  Final: N#Cc1ccc(OCc2ccc(Br)cc2)c(Cl)c1
+  Step 1: dock=-8.76  reward=0.605  CHANGED
+    C#CCOC(=O)[C@H]1COCCO1
+    -> N#Cc1ccc(COC(=O)C2COCCO2)c(Cl)c1
+  Step 2: dock=-7.96  reward=0.690  CHANGED
+    N#Cc1ccc(COC(=O)C2COCCO2)c(Cl)c1
+    -> N#Cc1ccc(OCc2ccc(Br)cc2)c(Cl)c1
+  Step 3: dock=-7.96  reward=0.766  same
+  Step 4: dock=-7.96  reward=0.851  same
+  Step 5: dock=-7.96  reward=0.946  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: N#Cc1ccc(OCc2ccc(O)cc2)c(Cl)c1
+    Step 1: Reaction R108
+
+--- Molecule 2/64 ---
+  Init:  C[C@]1(CCCO)CCCN1Cc1cnon1
+  Final: Cc1c(C)c(CO)c(C)c(C)c1CO
+  Step 1: dock=-6.50  reward=0.565  CHANGED
+    C[C@]1(CCCO)CCCN1Cc1cnon1
+    -> Cc1c(C)c(CBr)c(C)c(C)c1CO
+  Step 2: dock=-6.65  reward=0.619  CHANGED
+    Cc1c(C)c(CBr)c(C)c(C)c1CO
+    -> Cc1cc(CO)c(O)c(CBr)c1
+  Step 3: dock=-6.65  reward=0.687  same
+  Step 4: dock=-6.65  reward=0.764  same
+  Step 5: dock=-6.34  reward=0.832  CHANGED
+    Cc1cc(CO)c(O)c(CBr)c1
+    -> Cc1c(C)c(CO)c(C)c(C)c1CO
+  Deep Synthesis (3 steps):
+    BB/Intermediate: CC(C)(C)OC(=O)Cn1c(=O)oc2ccccc21
+    Step 1: Reaction R85
+    BB/Intermediate: OCC(Br)C(Br)CO
+    Step 2: Reaction R108
+    BB/Intermediate: Cc1c(C)c(CO)c(C)c(C)c1CO
+    Step 3: Reaction R56
+
+--- Molecule 3/64 ---
+  Init:  CCOCCN[C@H]1CCC[C@@H]1C
+  Final: CC1CCCC(NC(=O)CC2CCCO2)C1C
+  Step 1: dock=-7.57  reward=0.543  CHANGED
+    CCOCCN[C@H]1CCC[C@@H]1C
+    -> CCC(=O)NC1CCCC(C)C1C
+  Step 2: dock=-7.61  reward=0.653  CHANGED
+    CCC(=O)NC1CCCC(C)C1C
+    -> CC1CCCC(NC(=O)CC2CCCO2)C1C
+  Step 3: dock=-7.61  reward=0.725  same
+  Step 4: dock=-7.61  reward=0.806  same
+  Step 5: dock=-7.61  reward=0.895  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CC1CCCC(NC(=O)CC2CCCO2)C1C
+
+--- Molecule 4/64 ---
+  Init:  CC[C@H](C)[C@H](C)NC[C@@H](C)O
+  Final: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 1: dock=-6.34  reward=0.491  CHANGED
+    CC[C@H](C)[C@H](C)NC[C@@H](C)O
+    -> CCC(CC)C(CC)C(C)O
+  Step 2: dock=-9.50  reward=0.717  CHANGED
+    CCC(CC)C(CC)C(C)O
+    -> CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 3: dock=-9.50  reward=0.797  same
+  Step 4: dock=-9.50  reward=0.885  same
+  Step 5: dock=-9.50  reward=0.984  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+
+--- Molecule 5/64 ---
+  Init:  N#Cc1ccc(F)c(C=O)c1Cl
+  Final: Clc1cccc(Cl)c1OCc1cccc(-c2nn[nH]n2)c1
+  Step 1: dock=-7.09  reward=0.533  CHANGED
+    N#Cc1ccc(F)c(C=O)c1Cl
+    -> COc1ccc(C#N)c(Cl)c1F
+  Step 2: dock=-6.46  reward=0.619  CHANGED
+    COc1ccc(C#N)c(Cl)c1F
+    -> CC(C)(C)Oc1ccc(C#N)cc1Br
+  Step 3: dock=-7.96  reward=0.766  CHANGED
+    CC(C)(C)Oc1ccc(C#N)cc1Br
+    -> N#Cc1ccc(OCc2ccc(Br)cc2)c(Cl)c1
+  Step 4: dock=-7.73  reward=0.846  CHANGED
+    N#Cc1ccc(OCc2ccc(Br)cc2)c(Cl)c1
+    -> Cc1ccc(COc2ccc(C#N)cc2C#N)cc1
+  Step 5: dock=-8.45  reward=0.933  CHANGED
+    Cc1ccc(COc2ccc(C#N)cc2C#N)cc1
+    -> Clc1cccc(Cl)c1OCc1cccc(-c2nn[nH]n2)c1
+  Deep Synthesis (1 step):
+    BB/Intermediate: N#Cc1cccc(COc2c(Cl)cccc2Cl)c1
+    Step 1: Reaction R83
+
+--- Molecule 6/64 ---
+  Init:  COCC[C@@H](C)NC(=O)[C@@H](OC)C1CC1
+  Final: CCC(C)C(Cl)(NC(=O)CCOC)C(=O)[O-]
+  Step 1: dock=-6.60  reward=0.464  CHANGED
+    COCC[C@@H](C)NC(=O)[C@@H](OC)C1CC1
+    -> COCCC(=O)NC(C)CC(=O)[O-]
+  Step 2: dock=-5.78  reward=0.548  CHANGED
+    COCCC(=O)NC(C)CC(=O)[O-]
+    -> CCC(C)C(NC(=O)CCOC)C(=O)Cl
+  Step 3: dock=-6.46  reward=0.527  CHANGED
+    CCC(C)C(NC(=O)CCOC)C(=O)Cl
+    -> CCC(C)C(Cl)(NC(=O)CCOC)C(=O)[O-]
+  Step 4: dock=-6.46  reward=0.585  same
+  Step 5: dock=-6.46  reward=0.650  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CCC(C)C(NC(=O)CCOC)C(=O)[O-]
+    Step 1: Reaction R112
+
+--- Molecule 7/64 ---
+  Init:  CC(=O)NCCNCC1CCC1
+  Final: O=C(CSC1CCCCC1)NC1CCCC1
+  Step 1: dock=-6.85  reward=0.532  CHANGED
+    CC(=O)NCCNCC1CCC1
+    -> CC(=O)NCCNC(=O)CSC1CCCC1
+  Step 2: dock=-7.49  reward=0.668  CHANGED
+    CC(=O)NCCNC(=O)CSC1CCCC1
+    -> O=C(CSC1CCCCC1)NC1CCCC1
+  Step 3: dock=-7.49  reward=0.742  same
+  Step 4: dock=-7.49  reward=0.824  same
+  Step 5: dock=-7.49  reward=0.916  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: O=C(CSC1CCCCC1)NC1CCCC1
+
+--- Molecule 8/64 ---
+  Init:  CCc1nsc(Cl)n1
+  Final: CCC(=O)c1ccc(C#N)cc1
+  Step 1: dock=-8.33  reward=0.547  CHANGED
+    CCc1nsc(Cl)n1
+    -> CCC(=O)c1ccc(C#N)cc1
+  Step 2: dock=-8.33  reward=0.607  same
+  Step 3: dock=-8.33  reward=0.675  same
+  Step 4: dock=-8.33  reward=0.750  same
+  Step 5: dock=-8.33  reward=0.833  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CCC(=O)c1ccc(Cl)cc1
+    Step 1: Reaction R113
+
+--- Molecule 9/64 ---
+  Init:  CC[C@](C)(CO)NC1CCCC1
+  Final: CC(O)(C1CCCCC1)C(C)(Br)C1CCCCC1
+  Step 1: dock=-6.93  reward=0.527  CHANGED
+    CC[C@](C)(CO)NC1CCCC1
+    -> CC(O)(C1CCCCC1)C(C)(Br)C1CCCCC1
+  Step 2: dock=-6.93  reward=0.586  same
+  Step 3: dock=-6.93  reward=0.651  same
+  Step 4: dock=-6.93  reward=0.723  same
+  Step 5: dock=-6.93  reward=0.804  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CC(O)(C1CCCCC1)C(C)(O)C1CCCCC1
+    Step 1: Reaction R108
+
+--- Molecule 10/64 ---
+  Init:  CCc1ncc(C(=O)NC(C)C)s1
+  Final: COc1c(Cl)cc(C(=O)O)cc1Cl
+  Step 1: dock=-7.60  reward=0.634  CHANGED
+    CCc1ncc(C(=O)NC(C)C)s1
+    -> COc1c(Cl)cc(C(=O)NC(C)C)cc1C#N
+  Step 2: dock=-7.60  reward=0.705  same
+  Step 3: dock=-6.94  reward=0.741  CHANGED
+    COc1c(Cl)cc(C(=O)NC(C)C)cc1C#N
+    -> COc1c(Cl)cc(C(=O)O)cc1Cl
+  Step 4: dock=-6.94  reward=0.823  same
+  Step 5: dock=-6.94  reward=0.914  same
+  Deep Synthesis (3 steps):
+    BB/Intermediate: COC(=O)c1ccc(F)c(F)c1
+    Step 1: Reaction R85
+    BB/Intermediate: COCCOC(=O)c1cc(Cl)c(OC)c(Cl)c1
+    BB/Intermediate: CC(C)(C)OC(=O)N1CCCC(O)CC1
+    Step 2: Reaction R56
+    BB/Intermediate: COCCOC(=O)c1cc(Cl)c(OC)c(Cl)c1
+    Step 3: Reaction R85
+
+--- Molecule 11/64 ---
+  Init:  CNCC(=O)NCC1CCCC1
+  Final: OC1CCCCCCC1CBr
+  Step 1: dock=-7.96  reward=0.491  CHANGED
+    CNCC(=O)NCC1CCCC1
+    -> OC1CCCCC1C1CCCCCC1Br
+  Step 2: dock=-6.96  reward=0.576  CHANGED
+    OC1CCCCC1C1CCCCCC1Br
+    -> OC1CCCCCCC1CBr
+  Step 3: dock=-6.96  reward=0.640  same
+  Step 4: dock=-6.96  reward=0.712  same
+  Step 5: dock=-6.96  reward=0.791  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: OCC1CCCCCCC1O
+    Step 1: Reaction R108
+
+--- Molecule 12/64 ---
+  Init:  C[C@@H](CN)CNC(=O)Nc1cccnc1
+  Final: Cc1cc(C2CCCCC2Br)ccc1F
+  Step 1: dock=-8.52  reward=0.495  CHANGED
+    C[C@@H](CN)CNC(=O)Nc1cccnc1
+    -> BrC1CCCCCC1c1ccccc1
+  Step 2: dock=-7.77  reward=0.591  CHANGED
+    BrC1CCCCCC1c1ccccc1
+    -> Clc1cccc(C2CCCC2Br)c1
+  Step 3: dock=-8.68  reward=0.680  CHANGED
+    Clc1cccc(C2CCCC2Br)c1
+    -> Cc1cc(C2CCCCC2Br)ccc1F
+  Step 4: dock=-8.68  reward=0.756  same
+  Step 5: dock=-8.68  reward=0.840  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: Cc1cc(C2CCCCC2O)ccc1F
+    Step 1: Reaction R108
+
+--- Molecule 13/64 ---
+  Init:  N#Cc1ccccc1CS(=O)(=O)C(F)F
+  Final: COC(=O)c1ccccc1C(=O)Cc1c(C)c(C)c(CO)c(C)c1C
+  Step 1: dock=-7.86  reward=0.610  CHANGED
+    N#Cc1ccccc1CS(=O)(=O)C(F)F
+    -> N#Cc1ccccc1CS(=O)(=O)Nn1cnnc1
+  Step 2: dock=-5.72  reward=0.520  CHANGED
+    N#Cc1ccccc1CS(=O)(=O)Nn1cnnc1
+    -> N#Cc1ccccc1C(=O)OCC(Br)C(Br)CO
+  Step 3: dock=-6.80  reward=0.526  CHANGED
+    N#Cc1ccccc1C(=O)OCC(Br)C(Br)CO
+    -> COC(=O)c1ccccc1C(=O)CC(Br)C(Br)CO
+  Step 4: dock=-6.80  reward=0.584  same
+  Step 5: dock=-8.29  reward=0.845  CHANGED
+    COC(=O)c1ccccc1C(=O)CC(Br)C(Br)CO
+    -> COC(=O)c1ccccc1C(=O)Cc1c(C)c(C)c(CO)c(C)c1C
+  Deep Synthesis (2 steps):
+    BB/Intermediate: Cc1c(C)c(CO)c(C)c(C)c1CO
+    Step 1: Reaction R108
+    BB/Intermediate: COC(=O)c1ccccc1C#N
+    Step 2: Reaction R97
+
+--- Molecule 14/64 ---
+  Init:  C[C@@H](N)C1CCN(c2ccc(Cl)cn2)CC1
+  Final: C[C@@H](N)C1CCN(c2ccc(Cl)cn2)CC1
+  Step 1: dock=-7.44  reward=0.609  same
+  Step 2: dock=-7.44  reward=0.677  same
+  Step 3: dock=-7.44  reward=0.752  same
+  Step 4: dock=-7.44  reward=0.836  same
+  Step 5: dock=-7.44  reward=0.929  same
+  Deep Synthesis (2 steps):
+    BB/Intermediate: CC(C)(C)OC(=O)Nc1ccc(Cl)cn1
+    Step 1: Reaction R84
+    BB/Intermediate: Brc1cnc(N2CCCC2)cn1
+    Step 2: Reaction R9
+
+--- Molecule 15/64 ---
+  Init:  c1cc2c(o1)CNCC2
+  Final: O=C(C1CC[NH+](CC2CO2)CC1)N1CCc2ccc(Cl)nc2C1
+  Step 1: dock=-9.27  reward=0.607  CHANGED
+    c1cc2c(o1)CNCC2
+    -> O=C(C1CNC1)N1CCc2ccc(Cl)nc2C1
+  Step 2: dock=-7.77  reward=0.561  CHANGED
+    O=C(C1CNC1)N1CCc2ccc(Cl)nc2C1
+    -> O=C(C1CC[NH+](CC2CO2)CC1)N1CCc2ccc(Cl)nc2C1
+  Step 3: dock=-7.77  reward=0.623  same
+  Step 4: dock=-7.77  reward=0.693  same
+  Step 5: dock=-7.77  reward=0.770  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CCOC(=O)C1CC[NH+](CC2CO2)CC1
+    BB/Intermediate: Clc1ccc2c(n1)CNCC2
+    Step 1: Reaction R49
+
+--- Molecule 16/64 ---
+  Init:  CCOC(=O)C1=C(N)[C@H](C)OC1
+  Final: CC(C)(F)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 1: dock=-8.58  reward=0.606  CHANGED
+    CCOC(=O)C1=C(N)[C@H](C)OC1
+    -> CCOC(=O)c1ccc(C(=O)O)cc1
+  Step 2: dock=-8.98  reward=0.700  CHANGED
+    CCOC(=O)c1ccc(C(=O)O)cc1
+    -> COC(C)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 3: dock=-9.31  reward=0.799  CHANGED
+    COC(C)C(=O)Nc1ccc(C(=O)O)cc1
+    -> CC(C)(F)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 4: dock=-9.31  reward=0.887  same
+  Step 5: dock=-9.31  reward=0.986  same
+  Deep Synthesis (3 steps):
+    BB/Intermediate: Nc1ccc(S(=O)(=O)C(=O)O)cc1
+    BB/Intermediate: O=C([O-])C(O)(C(=O)[O-])C(=O)[O-]
+    Step 1: Reaction R8
+    BB/Intermediate: CC(C)(Cl)N=NC(C)(C)Cl
+    Step 2: Reaction R56
+    BB/Intermediate: COC(=O)c1ccc(NC(=O)C(C)(C)F)cc1
+    BB/Intermediate: Nc1ccc(S(=O)(=O)C(=O)O)cc1
+    Step 3: Reaction R49
+
+--- Molecule 17/64 ---
+  Init:  COC(=O)NNC(=O)c1nc(C)cs1
+  Final: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 1: dock=-6.43  reward=0.595  CHANGED
+    COC(=O)NNC(=O)c1nc(C)cs1
+    -> Cc1csc(NC(=O)C(O)c2ccccc2)n1
+  Step 2: dock=-9.50  reward=0.717  CHANGED
+    Cc1csc(NC(=O)C(O)c2ccccc2)n1
+    -> CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 3: dock=-9.50  reward=0.797  same
+  Step 4: dock=-9.50  reward=0.885  same
+  Step 5: dock=-9.50  reward=0.984  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+
+--- Molecule 18/64 ---
+  Init:  C[C@H]1CN(C(=O)c2cnco2)C[C@@]1(C)CO
+  Final: CC(C)(F)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 1: dock=-8.58  reward=0.606  CHANGED
+    C[C@H]1CN(C(=O)c2cnco2)C[C@@]1(C)CO
+    -> CCOC(=O)c1ccc(C(=O)O)cc1
+  Step 2: dock=-8.98  reward=0.700  CHANGED
+    CCOC(=O)c1ccc(C(=O)O)cc1
+    -> COC(C)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 3: dock=-9.31  reward=0.799  CHANGED
+    COC(C)C(=O)Nc1ccc(C(=O)O)cc1
+    -> CC(C)(F)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 4: dock=-9.31  reward=0.887  same
+  Step 5: dock=-9.31  reward=0.986  same
+  Deep Synthesis (3 steps):
+    BB/Intermediate: Nc1ccc(S(=O)(=O)C(=O)O)cc1
+    BB/Intermediate: O=C([O-])C(O)(C(=O)[O-])C(=O)[O-]
+    Step 1: Reaction R8
+    BB/Intermediate: CC(C)(Cl)N=NC(C)(C)Cl
+    Step 2: Reaction R56
+    BB/Intermediate: COC(=O)c1ccc(NC(=O)C(C)(C)F)cc1
+    BB/Intermediate: Nc1ccc(S(=O)(=O)C(=O)O)cc1
+    Step 3: Reaction R49
+
+--- Molecule 19/64 ---
+  Init:  CN[C@@H]1CCN(CC(=O)NC(C)C)C1
+  Final: CC(C)c1ccc(NC(=O)CCC(Br)C(=O)[O-])cc1
+  Step 1: dock=-7.28  reward=0.568  CHANGED
+    CN[C@@H]1CCN(CC(=O)NC(C)C)C1
+    -> CC(C)NC(=O)CCCC(=O)N1CCC1
+  Step 2: dock=-8.06  reward=0.678  CHANGED
+    CC(C)NC(=O)CCCC(=O)N1CCC1
+    -> CC(C)c1ccc(NC(=O)CCCC(=O)Cl)cc1
+  Step 3: dock=-8.49  reward=0.753  CHANGED
+    CC(C)c1ccc(NC(=O)CCCC(=O)Cl)cc1
+    -> CC(C)c1ccc(NC(=O)CCC(Br)C(=O)[O-])cc1
+  Step 4: dock=-8.49  reward=0.836  same
+  Step 5: dock=-8.49  reward=0.929  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CC(C)c1ccc(NC(=O)CCCC(=O)[O-])cc1
+    Step 1: Reaction R111
+
+--- Molecule 20/64 ---
+  Init:  CCCN(C(=S)NC)C1CC1
+  Final: CC(C)C1CCC(Cl)C(C2CCCC2O)C1
+  Step 1: dock=-5.99  reward=0.529  CHANGED
+    CCCN(C(=S)NC)C1CC1
+    -> CCC(SC(Cl)(Cl)C(=O)NC)C1CCCC1
+  Step 2: dock=-8.05  reward=0.500  CHANGED
+    CCC(SC(Cl)(Cl)C(=O)NC)C1CCCC1
+    -> CCC(Cl)C1CCCC(C)(C)CC1
+  Step 3: dock=-8.05  reward=0.555  same
+  Step 4: dock=-8.36  reward=0.649  CHANGED
+    CCC(Cl)C1CCCC(C)(C)CC1
+    -> CC(C)C1CCCC(C(C)Br)CC1
+  Step 5: dock=-7.51  reward=0.823  CHANGED
+    CC(C)C1CCCC(C(C)Br)CC1
+    -> CC(C)C1CCC(Cl)C(C2CCCC2O)C1
+  Deep Synthesis (1 step):
+    BB/Intermediate: CC(C)C1CCC(O)C(C2CCCC2O)C1
+    Step 1: Reaction R109
+
+--- Molecule 21/64 ---
+  Init:  Cn1cc(Cl)nc1C=O
+  Final: Cn1cnc2c(Sc3cc(F)c(C=O)cc3F)cccc21
+  Step 1: dock=-8.68  reward=0.610  CHANGED
+    Cn1cc(Cl)nc1C=O
+    -> Cn1cnc(Sc2cc(F)c(C=O)cc2F)c1Cl
+  Step 2: dock=-8.35  reward=0.620  CHANGED
+    Cn1cnc(Sc2cc(F)c(C=O)cc2F)c1Cl
+    -> Cc1cc(C=O)c(F)cc1Sc1cccc2c1ncn2C
+  Step 3: dock=-6.86  reward=0.650  CHANGED
+    Cc1cc(C=O)c(F)cc1Sc1cccc2c1ncn2C
+    -> Cn1cnc2c(Sc3cc(F)c(C=O)cc3F)cccc21
+  Step 4: dock=-6.86  reward=0.722  same
+  Step 5: dock=-6.86  reward=0.803  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: O=Cc1cc(F)c(Cl)cc1F
+    BB/Intermediate: Cn1cnc2c(Cl)cccc21
+    Step 1: Reaction R21
+
+--- Molecule 22/64 ---
+  Init:  CC(=O)N[C@H](CN)C1CC1
+  Final: CC(=O)NCCc1ccc(C(=O)O)cc1
+  Step 1: dock=-8.41  reward=0.554  CHANGED
+    CC(=O)N[C@H](CN)C1CC1
+    -> CC(=O)NCCCC(=O)NC(C1CC1)C1CC1
+  Step 2: dock=-7.95  reward=0.647  CHANGED
+    CC(=O)NCCCC(=O)NC(C1CC1)C1CC1
+    -> CC(=O)NCCc1ccccc1
+  Step 3: dock=-8.73  reward=0.765  CHANGED
+    CC(=O)NCCc1ccccc1
+    -> CC(=O)NCCc1ccc(C(=O)O)cc1
+  Step 4: dock=-8.73  reward=0.850  same
+  Step 5: dock=-8.73  reward=0.945  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: COC(=O)c1ccc(CCNC(C)=O)cc1
+    Step 1: Reaction R85
+
+--- Molecule 23/64 ---
+  Init:  COCC(=NOC)c1ccc(Cl)cc1
+  Final: CCC(O)(c1ccc(Cl)cc1)c1cccc(C(=O)N(C)C)c1
+  Step 1: dock=-7.49  reward=0.546  CHANGED
+    COCC(=NOC)c1ccc(Cl)cc1
+    -> CN(C)C(=O)c1ccc(Cl)cc1
+  Step 2: dock=-8.09  reward=0.727  CHANGED
+    CN(C)C(=O)c1ccc(Cl)cc1
+    -> CCC(O)(c1ccc(Cl)cc1)c1ccc(C(=O)N(C)C)cc1
+  Step 3: dock=-8.37  reward=0.814  CHANGED
+    CCC(O)(c1ccc(Cl)cc1)c1ccc(C(=O)N(C)C)cc1
+    -> CCC(O)(c1ccc(Cl)cc1)c1cccc(C(=O)N(C)C)c1
+  Step 4: dock=-8.37  reward=0.904  same
+  Step 5: dock=-8.37  reward=1.005  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CCC(=O)c1ccc(Cl)cc1
+    BB/Intermediate: CN(C)C(=O)c1cccc(Br)c1
+    Step 1: Reaction R98
+
+--- Molecule 24/64 ---
+  Init:  OCC12CC(CO)(C1)C2
+  Final: CCCC(=O)N1CCC(c2ccccc2)CC1
+  Step 1: dock=-6.21  reward=0.515  CHANGED
+    OCC12CC(CO)(C1)C2
+    -> CC(C)(C)OC(=O)N1CCC(N)(C(N)=O)CC1
+  Step 2: dock=-7.50  reward=0.678  CHANGED
+    CC(C)(C)OC(=O)N1CCC(N)(C(N)=O)CC1
+    -> CCCC(=O)N1CCC(C(=O)NC(C)(C)C)CC1
+  Step 3: dock=-9.19  reward=0.778  CHANGED
+    CCCC(=O)N1CCC(C(=O)NC(C)(C)C)CC1
+    -> CCCC(=O)N1CCC(c2ccccc2)CC1
+  Step 4: dock=-9.19  reward=0.864  same
+  Step 5: dock=-9.19  reward=0.960  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CCCC(=O)N1CCC(c2ccccc2)CC1
+
+--- Molecule 25/64 ---
+  Init:  Clc1csc2cncnc12
+  Final: N#Cc1ccc(C(=O)N2CCCC2C(=O)Cl)cc1
+  Step 1: dock=-9.81  reward=0.624  CHANGED
+    Clc1csc2cncnc12
+    -> N#Cc1ccc(C(=O)N2CCCC2C(=O)Cl)cc1
+  Step 2: dock=-7.66  reward=0.702  CHANGED
+    N#Cc1ccc(C(=O)N2CCCC2C(=O)Cl)cc1
+    -> CC1CCCCN1C(=O)c1cccc(-c2nn[nH]n2)c1
+  Step 3: dock=-7.66  reward=0.780  same
+  Step 4: dock=-9.81  reward=0.856  CHANGED
+    CC1CCCCN1C(=O)c1cccc(-c2nn[nH]n2)c1
+    -> N#Cc1ccc(C(=O)N2CCCC2C(=O)Cl)cc1
+  Step 5: dock=-9.81  reward=0.951  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: N#Cc1ccc(C(=O)N2CCCC2C(=O)[O-])cc1
+    Step 1: Reaction R107
+
+--- Molecule 26/64 ---
+  Init:  C=C=CCNC(=O)CC1CCCC1
+  Final: CCC[NH+](C)C(C)C(=O)Nc1ccc(C)c(F)c1
+  Step 1: dock=-8.27  reward=0.592  CHANGED
+    C=C=CCNC(=O)CC1CCCC1
+    -> CCC(C)[NH+](C)CC(=O)Nc1ccc(F)c(F)c1
+  Step 2: dock=-7.42  reward=0.637  CHANGED
+    CCC(C)[NH+](C)CC(=O)Nc1ccc(F)c(F)c1
+    -> CCC[NH+](C)C(C)C(=O)Nc1ccc(C)c(F)c1
+  Step 3: dock=-7.42  reward=0.708  same
+  Step 4: dock=-7.42  reward=0.786  same
+  Step 5: dock=-7.42  reward=0.874  same
+  Deep Synthesis (3 steps):
+    BB/Intermediate: Cc1nc2ccc(N)cc2nc1C
+    BB/Intermediate: O=C([O-])C(S)C(S)C(=O)[O-]
+    Step 1: Reaction R8
+    BB/Intermediate: CCCC(C[NH2+]C(C)C)C(=O)[O-]
+    BB/Intermediate: CCS(=O)(=O)c1cc(N)ccc1F
+    Step 2: Reaction R8
+    BB/Intermediate: Cc1ccc(Br)cc1N
+    Step 3: Reaction R103
+
+--- Molecule 27/64 ---
+  Init:  N#CCc1nc2cccc(Br)c2[nH]1
+  Final: C[NH2+]Cc1c(C#N)cccc1Oc1ccccc1Br
+  Step 1: dock=-6.60  reward=0.615  CHANGED
+    N#CCc1nc2cccc(Br)c2[nH]1
+    -> Brc1cccc(Br)c1Cc1nn[nH]n1
+  Step 2: dock=-7.44  reward=0.706  CHANGED
+    Brc1cccc(Br)c1Cc1nn[nH]n1
+    -> C[NH2+]Cc1c(C#N)cccc1Oc1ccccc1Br
+  Step 3: dock=-7.44  reward=0.785  same
+  Step 4: dock=-7.44  reward=0.872  same
+  Step 5: dock=-7.44  reward=0.969  same
+  Deep Synthesis (6 steps):
+    BB/Intermediate: CCC([NH3+])c1c(Cl)cccc1Cl
+    Step 1: Reaction R113
+    BB/Intermediate: Cc1ccc(Br)c(O)c1
+    Step 2: Reaction R56
+    BB/Intermediate: Cc1ccc(Br)c(O)c1
+    Step 3: Reaction R56
+    BB/Intermediate: Oc1cc(Br)c(O)cc1Br
+    Step 4: Reaction R103
+    BB/Intermediate: CC1=C2C(N)=C(C#N)C(C)=C2C(N)=C1C#N
+    Step 5: Reaction R103
+    BB/Intermediate: N#CCc1c(Br)cccc1Br
+    Step 6: Reaction R113
+
+--- Molecule 28/64 ---
+  Init:  C[C@@H](C(=O)O)n1cccc1C=O
+  Final: Cc1ccc(C(=O)O)c(C)c1
+  Step 1: dock=-7.06  reward=0.581  CHANGED
+    C[C@@H](C(=O)O)n1cccc1C=O
+    -> O=Cc1cccn1-c1ccccc1C(=O)O
+  Step 2: dock=-7.45  reward=0.610  CHANGED
+    O=Cc1cccn1-c1ccccc1C(=O)O
+    -> Cc1ccc(C(=O)O)c(C)c1
+  Step 3: dock=-7.45  reward=0.678  same
+  Step 4: dock=-7.45  reward=0.753  same
+  Step 5: dock=-7.45  reward=0.837  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: COC(=O)c1ccc(C)cc1C
+    Step 1: Reaction R85
+
+--- Molecule 29/64 ---
+  Init:  CN(CCO)CC(C)(C)O
+  Final: Cc1ccc(C(=O)O)c(C)c1
+  Step 1: dock=-5.46  reward=0.462  CHANGED
+    CN(CCO)CC(C)(C)O
+    -> CC1(C)COc2cscc2OC1
+  Step 2: dock=-8.34  reward=0.593  CHANGED
+    CC1(C)COc2cscc2OC1
+    -> Cc1cc(C)c(C(C)C(C)Cl)c(C)c1
+  Step 3: dock=-7.79  reward=0.695  CHANGED
+    Cc1cc(C)c(C(C)C(C)Cl)c(C)c1
+    -> Cc1cc(C)c(C(=O)O)c(C)c1
+  Step 4: dock=-7.45  reward=0.753  CHANGED
+    Cc1cc(C)c(C(=O)O)c(C)c1
+    -> Cc1ccc(C(=O)O)c(C)c1
+  Step 5: dock=-7.45  reward=0.837  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: COC(=O)c1ccc(C)cc1C
+    Step 1: Reaction R85
+
+--- Molecule 30/64 ---
+  Init:  C=CCCOCC(=O)NC1CC(=O)C1
+  Final: CC(=O)c1ccc(OCC(=O)O)cc1
+  Step 1: dock=-7.55  reward=0.596  CHANGED
+    C=CCCOCC(=O)NC1CC(=O)C1
+    -> CCOc1ccc(OCC(=O)O)cc1
+  Step 2: dock=-8.34  reward=0.662  CHANGED
+    CCOc1ccc(OCC(=O)O)cc1
+    -> CC(=O)c1ccc(OCC(=O)O)cc1
+  Step 3: dock=-8.34  reward=0.735  same
+  Step 4: dock=-8.34  reward=0.817  same
+  Step 5: dock=-8.34  reward=0.908  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: COC(=O)COc1ccc(C(C)=O)cc1
+    Step 1: Reaction R85
+
+--- Molecule 31/64 ---
+  Init:  COCCOCCNC(=O)c1csnn1
+  Final: CC(C)(F)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 1: dock=-8.58  reward=0.606  CHANGED
+    COCCOCCNC(=O)c1csnn1
+    -> CCOC(=O)c1ccc(C(=O)O)cc1
+  Step 2: dock=-8.98  reward=0.700  CHANGED
+    CCOC(=O)c1ccc(C(=O)O)cc1
+    -> COC(C)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 3: dock=-9.31  reward=0.799  CHANGED
+    COC(C)C(=O)Nc1ccc(C(=O)O)cc1
+    -> CC(C)(F)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 4: dock=-9.31  reward=0.887  same
+  Step 5: dock=-9.31  reward=0.986  same
+  Deep Synthesis (3 steps):
+    BB/Intermediate: Nc1ccc(S(=O)(=O)C(=O)O)cc1
+    BB/Intermediate: O=C([O-])C(O)(C(=O)[O-])C(=O)[O-]
+    Step 1: Reaction R8
+    BB/Intermediate: CC(C)(Cl)N=NC(C)(C)Cl
+    Step 2: Reaction R56
+    BB/Intermediate: COC(=O)c1ccc(NC(=O)C(C)(C)F)cc1
+    BB/Intermediate: Nc1ccc(S(=O)(=O)C(=O)O)cc1
+    Step 3: Reaction R49
+
+--- Molecule 32/64 ---
+  Init:  CCC[C@@H](N)C(=O)NCCCSC
+  Final: CCCC(Br)CCC(O)C(F)(F)F
+  Step 1: dock=-6.43  reward=0.477  CHANGED
+    CCC[C@@H](N)C(=O)NCCCSC
+    -> CCCC(C)C(=O)C(C)CC
+  Step 2: dock=-7.07  reward=0.606  CHANGED
+    CCCC(C)C(=O)C(C)CC
+    -> CCCC(Br)CCC(O)C(F)(F)F
+  Step 3: dock=-7.07  reward=0.673  same
+  Step 4: dock=-7.07  reward=0.748  same
+  Step 5: dock=-7.07  reward=0.831  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CCCC(O)CCC(O)C(F)(F)F
+    Step 1: Reaction R108
+
+--- Molecule 33/64 ---
+  Init:  C=CCC1(C(=O)NCC2CC2)CCC1
+  Final: O=C1CCCCCCCCCCC1CCc1nn[nH]n1
+  Step 1: dock=-7.21  reward=0.426  CHANGED
+    C=CCC1(C(=O)NCC2CC2)CCC1
+    -> C=CCC1(Cl)CCCCC1CC
+  Step 2: dock=-6.19  reward=0.585  CHANGED
+    C=CCC1(Cl)CCCCC1CC
+    -> CCC1CCCCC1(O)C(F)(Br)C(=O)[O-]
+  Step 3: dock=-8.23  reward=0.548  CHANGED
+    CCC1CCCCC1(O)C(F)(Br)C(=O)[O-]
+    -> O=C1CCCCCCCCCCC1CCc1noc(C(Br)(C(=O)[O-])C(=O)[O-])n1
+  Step 4: dock=-8.08  reward=0.873  CHANGED
+    O=C1CCCCCCCCCCC1CCc1noc(C(Br)(C(=O)[O-])C(=O)[O-])n1
+    -> O=C1CCCCCCCCCCC1CCc1nn[nH]n1
+  Step 5: dock=-8.08  reward=0.970  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: N#CCCC1CCCCCCCCCCC1=O
+    Step 1: Reaction R83
+
+--- Molecule 34/64 ---
+  Init:  O=C(O)c1ccc(CNCCCF)nc1
+  Final: CC(C)(F)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 1: dock=-8.58  reward=0.606  CHANGED
+    O=C(O)c1ccc(CNCCCF)nc1
+    -> CCOC(=O)c1ccc(C(=O)O)cc1
+  Step 2: dock=-8.98  reward=0.700  CHANGED
+    CCOC(=O)c1ccc(C(=O)O)cc1
+    -> COC(C)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 3: dock=-9.31  reward=0.799  CHANGED
+    COC(C)C(=O)Nc1ccc(C(=O)O)cc1
+    -> CC(C)(F)C(=O)Nc1ccc(C(=O)O)cc1
+  Step 4: dock=-9.31  reward=0.887  same
+  Step 5: dock=-9.31  reward=0.986  same
+  Deep Synthesis (3 steps):
+    BB/Intermediate: Nc1ccc(S(=O)(=O)C(=O)O)cc1
+    BB/Intermediate: O=C([O-])C(O)(C(=O)[O-])C(=O)[O-]
+    Step 1: Reaction R8
+    BB/Intermediate: CC(C)(Cl)N=NC(C)(C)Cl
+    Step 2: Reaction R56
+    BB/Intermediate: COC(=O)c1ccc(NC(=O)C(C)(C)F)cc1
+    BB/Intermediate: Nc1ccc(S(=O)(=O)C(=O)O)cc1
+    Step 3: Reaction R49
+
+--- Molecule 35/64 ---
+  Init:  COCCN1CCC([C@H](C)NC(C)=O)CC1
+  Final: CC(O)CNC(=O)CC(O)c1ccc(C#N)cc1
+  Step 1: dock=-6.85  reward=0.515  CHANGED
+    COCCN1CCC([C@H](C)NC(C)=O)CC1
+    -> COCC(CN1CCC([NH3+])CC1)SCC(=O)OC(C)(C)C
+  Step 2: dock=-8.04  reward=0.648  CHANGED
+    COCC(CN1CCC([NH3+])CC1)SCC(=O)OC(C)(C)C
+    -> COCC(O)c1ccc(C#N)cc1
+  Step 3: dock=-6.73  reward=0.683  CHANGED
+    COCC(O)c1ccc(C#N)cc1
+    -> C[NH+](C)CCC(Br)c1ccc(Cl)cc1
+  Step 4: dock=-6.73  reward=0.759  same
+  Step 5: dock=-6.42  reward=0.795  CHANGED
+    C[NH+](C)CCC(Br)c1ccc(Cl)cc1
+    -> CC(O)CNC(=O)CC(O)c1ccc(C#N)cc1
+  Deep Synthesis (1 step):
+    BB/Intermediate: CC(O)CNC(=O)CC(O)c1ccc(Cl)cc1
+    Step 1: Reaction R113
+
+--- Molecule 36/64 ---
+  Init:  Nc1cccc2nn[nH]c12
+  Final: O=C([O-])COc1cc2ccccc2cc1Br
+  Step 1: dock=-9.35  reward=0.612  CHANGED
+    Nc1cccc2nn[nH]c12
+    -> O=C(O)Nc1ccc2ccccc2c1
+  Step 2: dock=-9.60  reward=0.718  CHANGED
+    O=C(O)Nc1ccc2ccccc2c1
+    -> O=C([O-])C(Cl)S(=O)(=O)Nc1ccc2ccccc2c1
+  Step 3: dock=-9.26  reward=0.804  CHANGED
+    O=C([O-])C(Cl)S(=O)(=O)Nc1ccc2ccccc2c1
+    -> O=C([O-])COc1cc2ccccc2cc1Br
+  Step 4: dock=-9.26  reward=0.893  same
+  Step 5: dock=-9.26  reward=0.993  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: O=C([O-])COc1cc2ccccc2cc1O
+    Step 1: Reaction R108
+
+--- Molecule 37/64 ---
+  Init:  CC[C@@H](N)C(=O)NO[C@@H]1CCCCO1
+  Final: CCC(CCC#N)NC(=O)c1ccc(C)cc1O
+  Step 1: dock=-7.99  reward=0.623  CHANGED
+    CC[C@@H](N)C(=O)NO[C@@H]1CCCCO1
+    -> Cc1ccc(C(=O)NOC2CCCCO2)c(Br)c1
+  Step 2: dock=-9.49  reward=0.715  CHANGED
+    Cc1ccc(C(=O)NOC2CCCCO2)c(Br)c1
+    -> CCC(CCC#N)NC(=O)c1ccc(C)cc1O
+  Step 3: dock=-9.49  reward=0.795  same
+  Step 4: dock=-9.49  reward=0.883  same
+  Step 5: dock=-9.49  reward=0.981  same
+  Deep Synthesis (5 steps):
+    BB/Intermediate: CC(C)CS(=O)(=O)NC(C)CCCO
+    Step 1: Reaction R114
+    BB/Intermediate: Cc1ccc(Br)c(O)c1
+    Step 2: Reaction R97
+    BB/Intermediate: C=C(Br)CCCCC#N
+    Step 3: Reaction R98
+    BB/Intermediate: Cc1ccc(Br)c(O)c1
+    Step 4: Reaction R113
+    BB/Intermediate: C=C(Br)CCCCC#N
+    Step 5: Reaction R97
+
+--- Molecule 38/64 ---
+  Init:  C=C(C)CCNC(=O)[C@@H](F)CC
+  Final: Cc1ccc(O)c(Cc2cc(C)ccc2Br)c1
+  Step 1: dock=-8.00  reward=0.532  CHANGED
+    C=C(C)CCNC(=O)[C@@H](F)CC
+    -> C=C(C)CCc1cc(C)cc(C)c1
+  Step 2: dock=-7.53  reward=0.665  CHANGED
+    C=C(C)CCc1cc(C)cc(C)c1
+    -> Cc1cc(CCO)ccc1Br
+  Step 3: dock=-6.86  reward=0.753  CHANGED
+    Cc1cc(CCO)ccc1Br
+    -> Cc1ccc(O)c(Cc2cc(C)ccc2Br)c1
+  Step 4: dock=-6.86  reward=0.837  same
+  Step 5: dock=-6.86  reward=0.929  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: Cc1ccc(O)c(Cc2cc(C)ccc2O)c1
+    Step 1: Reaction R108
+
+--- Molecule 39/64 ---
+  Init:  CCN(C)C1CC(O)C1
+  Final: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 1: dock=-9.50  reward=0.645  CHANGED
+    CCN(C)C1CC(O)C1
+    -> CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 2: dock=-9.50  reward=0.717  same
+  Step 3: dock=-9.50  reward=0.797  same
+  Step 4: dock=-9.50  reward=0.885  same
+  Step 5: dock=-9.50  reward=0.984  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+
+--- Molecule 40/64 ---
+  Init:  C=CC(C)(C)C(=O)N[C@@H]1CC[C@H](C#N)C1
+  Final: CC(C)(C)OC(=O)N1CCC(O)(Cc2nn[nH]n2)CC1
+  Step 1: dock=-7.05  reward=0.582  CHANGED
+    C=CC(C)(C)C(=O)N[C@@H]1CC[C@H](C#N)C1
+    -> CC(C)(C)OC(=O)N1CCC(O)(Cc2nn[nH]n2)CC1
+  Step 2: dock=-7.05  reward=0.647  same
+  Step 3: dock=-7.05  reward=0.718  same
+  Step 4: dock=-7.05  reward=0.798  same
+  Step 5: dock=-7.05  reward=0.887  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CC(C)(C)OC(=O)N1CCC(O)(CC#N)CC1
+    Step 1: Reaction R83
+
+--- Molecule 41/64 ---
+  Init:  C[C@@H](O)[C@@]1(CN)C[C@@H]1C
+  Final: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 1: dock=-6.73  reward=0.414  CHANGED
+    C[C@@H](O)[C@@]1(CN)C[C@@H]1C
+    -> CC(C)C1NC(Cl)C(C(C)C)NC1O
+  Step 2: dock=-6.34  reward=0.545  CHANGED
+    CC(C)C1NC(Cl)C(C(C)C)NC1O
+    -> CCC(CC)C(CC)C(C)O
+  Step 3: dock=-9.50  reward=0.797  CHANGED
+    CCC(CC)C(CC)C(C)O
+    -> CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 4: dock=-9.50  reward=0.885  same
+  Step 5: dock=-9.50  reward=0.984  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+
+--- Molecule 42/64 ---
+  Init:  CN(C)C(=O)NCCCF
+  Final: CC(C)(Br)C(=O)Nc1ccccc1
+  Step 1: dock=-8.51  reward=0.617  CHANGED
+    CN(C)C(=O)NCCCF
+    -> CC(C)(Br)C(=O)Nc1ccccc1
+  Step 2: dock=-8.51  reward=0.686  same
+  Step 3: dock=-8.51  reward=0.762  same
+  Step 4: dock=-8.51  reward=0.847  same
+  Step 5: dock=-8.51  reward=0.941  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CC(C)(O)C(=O)Nc1ccccc1
+    Step 1: Reaction R108
+
+--- Molecule 43/64 ---
+  Init:  NC[C@@]1(O)C[C@H]2C=C[C@H]1C2
+  Final: Cc1ccc(OC2(CC#N)CCN(C(=O)OC(C)(C)C)CC2)c(O)c1
+  Step 1: dock=-7.43  reward=0.546  CHANGED
+    NC[C@@]1(O)C[C@H]2C=C[C@H]1C2
+    -> CC(C)(C)OC(=O)N1CCC(O)(C(F)(F)F)C1
+  Step 2: dock=-7.70  reward=0.599  CHANGED
+    CC(C)(C)OC(=O)N1CCC(O)(C(F)(F)F)C1
+    -> CC(C)(C)OC(=O)N1CCC(CO)(Oc2ccc(O)c(Br)c2Br)CC1
+  Step 3: dock=-7.22  reward=0.732  CHANGED
+    CC(C)(C)OC(=O)N1CCC(CO)(Oc2ccc(O)c(Br)c2Br)CC1
+    -> Cc1ccc(Br)c(OC2(CO)CCN(C(=O)OC(C)(C)C)CC2)c1
+  Step 4: dock=-7.17  reward=0.844  CHANGED
+    Cc1ccc(Br)c(OC2(CO)CCN(C(=O)OC(C)(C)C)CC2)c1
+    -> Cc1ccc(OC2(CC#N)CCN(C(=O)OC(C)(C)C)CC2)c(O)c1
+  Step 5: dock=-7.17  reward=0.938  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CC(C)(C)OC(=O)N1CCC(O)(CC#N)CC1
+    BB/Intermediate: Cc1ccc(Br)c(O)c1
+    Step 1: Reaction R56
+
+--- Molecule 44/64 ---
+  Init:  CN1CCC(C#N)CC1
+  Final: CC(C)(C)OC(=O)N1CCCC(c2nn[nH]n2)C1
+  Step 1: dock=-6.84  reward=0.574  CHANGED
+    CN1CCC(C#N)CC1
+    -> CC(C)(C)OC(=O)N1CCCC(c2nn[nH]n2)C1
+  Step 2: dock=-6.84  reward=0.637  same
+  Step 3: dock=-6.84  reward=0.708  same
+  Step 4: dock=-6.84  reward=0.787  same
+  Step 5: dock=-6.84  reward=0.874  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CC(C)(C)OC(=O)N1CCCC(C#N)C1
+    Step 1: Reaction R83
+
+--- Molecule 45/64 ---
+  Init:  CNC(=O)n1ccnc1
+  Final: N#Cc1cccc(NC(=O)CCc2ccccc2)c1
+  Step 1: dock=-8.20  reward=0.588  CHANGED
+    CNC(=O)n1ccnc1
+    -> N#Cc1ccc(C(=O)n2ccnc2)c(Cl)c1
+  Step 2: dock=-7.52  reward=0.713  CHANGED
+    N#Cc1ccc(C(=O)n2ccnc2)c(Cl)c1
+    -> N#Cc1cccc(NC(=O)c2ccc(Cl)cc2Cl)c1
+  Step 3: dock=-8.69  reward=0.827  CHANGED
+    N#Cc1cccc(NC(=O)c2ccc(Cl)cc2Cl)c1
+    -> N#Cc1cccc(NC(=O)CCc2ccccc2)c1
+  Step 4: dock=-8.69  reward=0.919  same
+  Step 5: dock=-8.69  reward=1.021  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: O=C(CCc1ccccc1)Nc1cccc(I)c1
+    Step 1: Reaction R113
+
+--- Molecule 46/64 ---
+  Init:  C[C@H](NCCF)[C@@H](C)C(=O)O
+  Final: CC(Cl)C(=O)OCc1ccccc1
+  Step 1: dock=-7.70  reward=0.519  CHANGED
+    C[C@H](NCCF)[C@@H](C)C(=O)O
+    -> CC(=O)C(C)C(OC(=O)C(C)[NH2+]C1CCCC1)(C(=O)O)c1ccccc1
+  Step 2: dock=-8.10  reward=0.565  CHANGED
+    CC(=O)C(C)C(OC(=O)C(C)[NH2+]C1CCCC1)(C(=O)O)c1ccccc1
+    -> CC(Cl)C(=O)OCc1ccccc1
+  Step 3: dock=-8.10  reward=0.627  same
+  Step 4: dock=-8.10  reward=0.697  same
+  Step 5: dock=-8.10  reward=0.774  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CC(O)C(=O)OCc1ccccc1
+    Step 1: Reaction R109
+
+--- Molecule 47/64 ---
+  Init:  C[C@H](O)[C@H](C)SCc1nnc(O)s1
+  Final: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 1: dock=-6.81  reward=0.499  CHANGED
+    C[C@H](O)[C@H](C)SCc1nnc(O)s1
+    -> CC1(c2nnc(COCC(Br)C(Br)CO)s2)CCCC1
+  Step 2: dock=-4.44  reward=0.531  CHANGED
+    CC1(c2nnc(COCC(Br)C(Br)CO)s2)CCCC1
+    -> OCC(Br)C(Br)CCl
+  Step 3: dock=-6.34  reward=0.674  CHANGED
+    OCC(Br)C(Br)CCl
+    -> Cc1c(C)c(CO)c(C)c(C)c1CO
+  Step 4: dock=-9.50  reward=0.885  CHANGED
+    Cc1c(C)c(CO)c(C)c(C)c1CO
+    -> CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 5: dock=-9.50  reward=0.984  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+
+--- Molecule 48/64 ---
+  Init:  COCc1cncc(Br)c1
+  Final: CCc1ccc(CC(O)c2cncc(C#N)c2)s1
+  Step 1: dock=-7.47  reward=0.643  CHANGED
+    COCc1cncc(Br)c1
+    -> N#Cc1cccc(CC(O)c2cncc(Br)c2)c1
+  Step 2: dock=-9.52  reward=0.763  CHANGED
+    N#Cc1cccc(CC(O)c2cncc(Br)c2)c1
+    -> N#Cc1cncc(C(O)Cc2cccc(Br)c2)c1
+  Step 3: dock=-8.16  reward=0.791  CHANGED
+    N#Cc1cncc(C(O)Cc2cccc(Br)c2)c1
+    -> CCc1ccc(CC(O)c2cncc(C#N)c2)s1
+  Step 4: dock=-8.16  reward=0.879  same
+  Step 5: dock=-8.16  reward=0.977  same
+  Deep Synthesis (2 steps):
+    BB/Intermediate: OCC(Br)C(Br)CO
+    BB/Intermediate: N#Cc1cncc(C(F)(F)F)c1
+    Step 1: Reaction R97
+    BB/Intermediate: CCc1ccc(CC(O)c2cncc(Br)c2)s1
+    Step 2: Reaction R113
+
+--- Molecule 49/64 ---
+  Init:  CNC(=S)N[C@H](C)C(=O)NCCF
+  Final: CCN(CC(C)C)C(=O)C(C)SC(Cl)(Cl)C(=O)NC
+  Step 1: dock=-5.85  reward=0.503  CHANGED
+    CNC(=S)N[C@H](C)C(=O)NCCF
+    -> CNC(=O)C(Cl)(Cl)SC(C)C(=O)NCCC(C)C
+  Step 2: dock=-6.04  reward=0.570  CHANGED
+    CNC(=O)C(Cl)(Cl)SC(C)C(=O)NCCC(C)C
+    -> CCN(CC(C)C)C(=O)C(C)SC(Cl)(Cl)C(=O)NC
+  Step 3: dock=-6.04  reward=0.633  same
+  Step 4: dock=-6.04  reward=0.704  same
+  Step 5: dock=-6.04  reward=0.782  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CCN(CC(C)C)C(=O)C(C)Cl
+    BB/Intermediate: CNC(=O)C(Cl)(Cl)Cl
+    Step 1: Reaction R21
+
+--- Molecule 50/64 ---
+  Init:  C[C@H]1CN(N)C(=O)O1
+  Final: CS(=O)(=O)N1CC(C(N)=O)Oc2ccccc21
+  Step 1: dock=-5.78  reward=0.519  CHANGED
+    C[C@H]1CN(N)C(=O)O1
+    -> CC1CN(S(C)(=O)=O)c2ccccc2O1
+  Step 2: dock=-6.01  reward=0.608  CHANGED
+    CC1CN(S(C)(=O)=O)c2ccccc2O1
+    -> CS(=O)(=O)N1CC(C(N)=O)Oc2ccccc21
+  Step 3: dock=-6.01  reward=0.675  same
+  Step 4: dock=-6.01  reward=0.750  same
+  Step 5: dock=-6.01  reward=0.834  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CS(=O)(=O)N1CC(C(N)=O)Oc2ccccc21
+
+--- Molecule 51/64 ---
+  Init:  CCCCN(C)C(=O)CN
+  Final: CCCCCC(C[NH+](C)C)NC(C)(C(=O)NC1(C)CCCC1)C(F)(F)F
+  Step 1: dock=-8.38  reward=0.577  CHANGED
+    CCCCN(C)C(=O)CN
+    -> CCCCCN(C)C(=O)C(C)(N)C(F)(F)F
+  Step 2: dock=-7.14  reward=0.485  CHANGED
+    CCCCCN(C)C(=O)C(C)(N)C(F)(F)F
+    -> CCCCCC(C[NH+](C)C)NC(C)(C(=O)NC1(C)CCCC1)C(F)(F)F
+  Step 3: dock=-7.14  reward=0.538  same
+  Step 4: dock=-7.14  reward=0.598  same
+  Step 5: dock=-7.14  reward=0.665  same
+  Deep Synthesis (3 steps):
+    BB/Intermediate: C1CSCCSCCS1
+    BB/Intermediate: CC1(CNC(=O)OC(C)(C)C)CCCC1
+    Step 1: Reaction R85
+    BB/Intermediate: COC(=O)CNC(=O)C(C)(N)C(F)(F)F
+    Step 2: Reaction R85
+    BB/Intermediate: CCCCCC#CCCC(C)=O
+    Step 3: Reaction R43
+
+--- Molecule 52/64 ---
+  Init:  CCC(=O)[C@@H](N)C(C)C
+  Final: COCCNC(C(=O)O)c1ccc(Br)cc1
+  Step 1: dock=-7.19  reward=0.579  CHANGED
+    CCC(=O)[C@@H](N)C(C)C
+    -> CCC(=O)C(C)c1ccc(Br)cc1
+  Step 2: dock=-7.96  reward=0.686  CHANGED
+    CCC(=O)C(C)c1ccc(Br)cc1
+    -> CCOC(=O)C(N)c1ccc(Br)cc1
+  Step 3: dock=-7.00  reward=0.706  CHANGED
+    CCOC(=O)C(N)c1ccc(Br)cc1
+    -> COCCNC(C(=O)O)c1ccc(Br)cc1
+  Step 4: dock=-7.00  reward=0.784  same
+  Step 5: dock=-7.00  reward=0.872  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: COCCNC(C(=O)OC)c1ccc(Br)cc1
+    Step 1: Reaction R85
+
+--- Molecule 53/64 ---
+  Init:  C[C@@H](O)CN1CCO[C@H](C)[C@@H]1C
+  Final: CCCC(Br)CCC(O)C(F)(F)F
+  Step 1: dock=-6.09  reward=0.515  CHANGED
+    C[C@@H](O)CN1CCO[C@H](C)[C@@H]1C
+    -> CC(Br)CCC(O)C(C)(C)C
+  Step 2: dock=-7.07  reward=0.606  CHANGED
+    CC(Br)CCC(O)C(C)(C)C
+    -> CCCC(Br)CCC(O)C(F)(F)F
+  Step 3: dock=-7.07  reward=0.673  same
+  Step 4: dock=-7.07  reward=0.748  same
+  Step 5: dock=-7.07  reward=0.831  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CCCC(O)CCC(O)C(F)(F)F
+    Step 1: Reaction R108
+
+--- Molecule 54/64 ---
+  Init:  CC(C)C[C@@H](C)CC(=O)OC[C@@H](C)O
+  Final: Cc1c(C)c(CO)c(C)c(C)c1CO
+  Step 1: dock=-6.09  reward=0.515  CHANGED
+    CC(C)C[C@@H](C)CC(=O)OC[C@@H](C)O
+    -> CC(Br)CCC(O)C(C)(C)C
+  Step 2: dock=-7.07  reward=0.606  CHANGED
+    CC(Br)CCC(O)C(C)(C)C
+    -> CCCC(Br)CCC(O)C(F)(F)F
+  Step 3: dock=-7.07  reward=0.673  same
+  Step 4: dock=-4.56  reward=0.669  CHANGED
+    CCCC(Br)CCC(O)C(F)(F)F
+    -> OCC(Br)C(Br)CBr
+  Step 5: dock=-6.34  reward=0.832  CHANGED
+    OCC(Br)C(Br)CBr
+    -> Cc1c(C)c(CO)c(C)c(C)c1CO
+  Deep Synthesis (3 steps):
+    BB/Intermediate: CC(C)(C)OC(=O)Cn1c(=O)oc2ccccc21
+    Step 1: Reaction R85
+    BB/Intermediate: OCC(Br)C(Br)CO
+    Step 2: Reaction R108
+    BB/Intermediate: Cc1c(C)c(CO)c(C)c(C)c1CO
+    Step 3: Reaction R56
+
+--- Molecule 55/64 ---
+  Init:  Oc1ncccc1CN[C@@H]1CCSC1
+  Final: N#Cc1cccnc1NC(=O)c1ccccc1OC1CCCCC1CC(F)(F)F
+  Step 1: dock=-7.93  reward=0.508  CHANGED
+    Oc1ncccc1CN[C@@H]1CCSC1
+    -> O=C(OC1CCSC1)c1cccnc1Cl
+  Step 2: dock=-8.33  reward=0.685  CHANGED
+    O=C(OC1CCSC1)c1cccnc1Cl
+    -> O=C(O)c1cccnc1OC1CCC2C3C(O)CCC3C12
+  Step 3: dock=-7.93  reward=0.726  CHANGED
+    O=C(O)c1cccnc1OC1CCC2C3C(O)CCC3C12
+    -> N#Cc1cccnc1NC(=O)c1ccccc1OC1CCC2C3C(O)CCC3C12
+  Step 4: dock=-8.29  reward=0.831  CHANGED
+    N#Cc1cccnc1NC(=O)c1ccccc1OC1CCC2C3C(O)CCC3C12
+    -> N#Cc1cccnc1NC(=O)c1ccccc1OCC1CCCCCCC1O
+  Step 5: dock=-8.60  reward=0.877  CHANGED
+    N#Cc1cccnc1NC(=O)c1ccccc1OCC1CCCCCCC1O
+    -> N#Cc1cccnc1NC(=O)c1ccccc1OC1CCCCC1CC(F)(F)F
+  Deep Synthesis (2 steps):
+    BB/Intermediate: O=C(Nc1ncccc1Br)c1ccccc1Br
+    Step 1: Reaction R113
+    BB/Intermediate: OC1CCCCC1CC(F)(F)F
+    Step 2: Reaction R56
+
+--- Molecule 56/64 ---
+  Init:  C#CC(=O)N1CCS(=O)CC1
+  Final: Cc1c(C)c(CO)c(C)c(C)c1CO
+  Step 1: dock=-6.50  reward=0.565  CHANGED
+    C#CC(=O)N1CCS(=O)CC1
+    -> Cc1c(C)c(CBr)c(C)c(C)c1CO
+  Step 2: dock=-6.65  reward=0.619  CHANGED
+    Cc1c(C)c(CBr)c(C)c(C)c1CO
+    -> Cc1cc(CO)c(O)c(CBr)c1
+  Step 3: dock=-6.65  reward=0.687  same
+  Step 4: dock=-6.65  reward=0.764  same
+  Step 5: dock=-6.34  reward=0.832  CHANGED
+    Cc1cc(CO)c(O)c(CBr)c1
+    -> Cc1c(C)c(CO)c(C)c(C)c1CO
+  Deep Synthesis (3 steps):
+    BB/Intermediate: CC(C)(C)OC(=O)Cn1c(=O)oc2ccccc21
+    Step 1: Reaction R85
+    BB/Intermediate: OCC(Br)C(Br)CO
+    Step 2: Reaction R108
+    BB/Intermediate: Cc1c(C)c(CO)c(C)c(C)c1CO
+    Step 3: Reaction R56
+
+--- Molecule 57/64 ---
+  Init:  C[C@H](NC(=O)c1cnc(S)[nH]1)C(=O)O
+  Final: CC(C)(C)OC(=O)NCC1CCCCC1[NH3+]
+  Step 1: dock=-7.43  reward=0.577  CHANGED
+    C[C@H](NC(=O)c1cnc(S)[nH]1)C(=O)O
+    -> CC(C)(C)OC(=O)NCC1CCC(Cl)(C(=O)[O-])CC1
+  Step 2: dock=-7.78  reward=0.619  CHANGED
+    CC(C)(C)OC(=O)NCC1CCC(Cl)(C(=O)[O-])CC1
+    -> CC(C)(C)OC(=O)NCC1CCCCC1[NH3+]
+  Step 3: dock=-7.78  reward=0.688  same
+  Step 4: dock=-7.78  reward=0.764  same
+  Step 5: dock=-7.78  reward=0.849  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CC(C)(C)OC(=O)NCC1CCCCC1[NH3+]
+
+--- Molecule 58/64 ---
+  Init:  O=C(NCCCF)C1[C@@H]2CCC[C@@H]12
+  Final: OC1CCCCCCC1CBr
+  Step 1: dock=-7.96  reward=0.491  CHANGED
+    O=C(NCCCF)C1[C@@H]2CCC[C@@H]12
+    -> OC1CCCCC1C1CCCCCC1Br
+  Step 2: dock=-6.96  reward=0.576  CHANGED
+    OC1CCCCC1C1CCCCCC1Br
+    -> OC1CCCCCCC1CBr
+  Step 3: dock=-6.96  reward=0.640  same
+  Step 4: dock=-6.96  reward=0.712  same
+  Step 5: dock=-6.96  reward=0.791  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: OCC1CCCCCCC1O
+    Step 1: Reaction R108
+
+--- Molecule 59/64 ---
+  Init:  OCc1ccc2c(c1)CCNC2
+  Final: O=C([O-])C(Br)c1ccc(-c2ccc(Cl)cc2)cc1
+  Step 1: dock=-10.00  reward=0.600  CHANGED
+    OCc1ccc2c(c1)CCNC2
+    -> O=C([O-])C(Cl)c1ccc2c(c1)CCCC2
+  Step 2: dock=-10.14  reward=0.721  CHANGED
+    O=C([O-])C(Cl)c1ccc2c(c1)CCCC2
+    -> O=C([O-])C(Br)c1ccc(-c2ccc(Cl)cc2)cc1
+  Step 3: dock=-10.14  reward=0.801  same
+  Step 4: dock=-10.14  reward=0.890  same
+  Step 5: dock=-10.14  reward=0.989  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: O=C([O-])Cc1ccc(-c2ccc(Cl)cc2)cc1
+    Step 1: Reaction R111
+
+--- Molecule 60/64 ---
+  Init:  OC[C@]12COC[C@@H]1C2
+  Final: CC(C)C(C)NC(=O)N1CCOC(CC(=O)[O-])C1
+  Step 1: dock=-8.27  reward=0.611  CHANGED
+    OC[C@]12COC[C@@H]1C2
+    -> CC(C)(C)OC(=O)NCC1CCC(C(=O)[O-])CC1
+  Step 2: dock=-6.15  reward=0.577  CHANGED
+    CC(C)(C)OC(=O)NCC1CCC(C(=O)[O-])CC1
+    -> CC(C)C(C)NC(=O)N1CCOC(CC(=O)[O-])C1
+  Step 3: dock=-6.15  reward=0.641  same
+  Step 4: dock=-6.15  reward=0.712  same
+  Step 5: dock=-6.15  reward=0.791  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CC(C)C(C)NC(=O)N1CCOC(CC(=O)[O-])C1
+
+--- Molecule 61/64 ---
+  Init:  Cc1ccnc2c(CO)cnn12
+  Final: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 1: dock=-9.50  reward=0.645  CHANGED
+    Cc1ccnc2c(CO)cnn12
+    -> CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+  Step 2: dock=-9.50  reward=0.717  same
+  Step 3: dock=-9.50  reward=0.797  same
+  Step 4: dock=-9.50  reward=0.885  same
+  Step 5: dock=-9.50  reward=0.984  same
+  Deep Synthesis (0 steps):
+    BB/Intermediate: CC(C)(O)CC1(C(=O)[O-])CCc2ccccc2C1
+
+--- Molecule 62/64 ---
+  Init:  C=C=CCNC(=O)c1cnsn1
+  Final: Cc1ccc(O)c(Cc2cc(C)ccc2Br)c1
+  Step 1: dock=-6.01  reward=0.586  CHANGED
+    C=C=CCNC(=O)c1cnsn1
+    -> Cc1c(Br)cc(C(=O)O)cc1Br
+  Step 2: dock=-6.19  reward=0.571  CHANGED
+    Cc1c(Br)cc(C(=O)O)cc1Br
+    -> Cc1ccc(Br)c(Br)c1
+  Step 3: dock=-6.86  reward=0.753  CHANGED
+    Cc1ccc(Br)c(Br)c1
+    -> Cc1ccc(O)c(Cc2cc(C)ccc2Br)c1
+  Step 4: dock=-6.86  reward=0.837  same
+  Step 5: dock=-6.86  reward=0.929  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: Cc1ccc(O)c(Cc2cc(C)ccc2O)c1
+    Step 1: Reaction R108
+
+--- Molecule 63/64 ---
+  Init:  C#CCNC1CCC1
+  Final: O=C(Cc1nn[nH]n1)NC1CCCCCCCCCCC1
+  Step 1: dock=-8.77  reward=0.596  CHANGED
+    C#CCNC1CCC1
+    -> O=C(NC1CCCCCC1)NC1CCCCCC1
+  Step 2: dock=-7.96  reward=0.642  CHANGED
+    O=C(NC1CCCCCC1)NC1CCCCCC1
+    -> O=C(NC1CCCCC1)NC1CCCCC1CBr
+  Step 3: dock=-8.28  reward=0.791  CHANGED
+    O=C(NC1CCCCC1)NC1CCCCC1CBr
+    -> O=C(Cc1nn[nH]n1)NC1CCCCCCCCCCC1
+  Step 4: dock=-8.28  reward=0.879  same
+  Step 5: dock=-8.28  reward=0.977  same
+  Deep Synthesis (2 steps):
+    BB/Intermediate: FC1CCCCC1Br
+    Step 1: Reaction R113
+    BB/Intermediate: N#CCC(=O)NC1CCCCCCCCCCC1
+    Step 2: Reaction R83
+
+--- Molecule 64/64 ---
+  Init:  CCOc1cccc2c1CCNC2
+  Final: O=C(O)c1ccccc1OC(F)(F)F
+  Step 1: dock=-6.71  reward=0.565  CHANGED
+    CCOc1cccc2c1CCNC2
+    -> CCOc1ccccc1C(=O)O
+  Step 2: dock=-8.00  reward=0.680  CHANGED
+    CCOc1ccccc1C(=O)O
+    -> O=C(O)c1ccccc1OC(F)(F)F
+  Step 3: dock=-8.00  reward=0.756  same
+  Step 4: dock=-8.00  reward=0.840  same
+  Step 5: dock=-8.00  reward=0.933  same
+  Deep Synthesis (1 step):
+    BB/Intermediate: CCOC(=O)c1ccccc1OC(F)(F)F
+    Step 1: Reaction R85
