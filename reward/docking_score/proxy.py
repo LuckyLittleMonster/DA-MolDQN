@@ -210,13 +210,16 @@ def _load_tdc_model(name):
     import types as _types
 
     if name == 'DRD2':
-        # Patch rdkit.six for newer RDKit versions
+        # Patch rdkit.six for newer RDKit versions (needed to unpickle old TDC model)
         if 'rdkit.six' not in sys.modules:
             rdkit_six = _types.ModuleType('rdkit.six')
             rdkit_six.iteritems = lambda d: d.items()
             sys.modules['rdkit.six'] = rdkit_six
-        from tdc.chem_utils.oracle.oracle import load_drd2_model
-        return load_drd2_model()
+        cache = Path(__file__).resolve().parent.parent.parent / "Data" / "oracles" / "drd2_current.pkl"
+        if not cache.exists():
+            raise FileNotFoundError(f"DRD2 model not found at {cache}")
+        with open(cache, 'rb') as f:
+            return pickle.load(f)  # nosec
     elif name == 'GSK3B':
         # Use our own retrained model (compatible with sklearn 1.8.0)
         cache = Path(__file__).resolve().parent.parent.parent / "Data" / "proxy_cache" / "gsk3b_rf_chembl.pkl"
