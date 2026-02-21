@@ -4,10 +4,30 @@ BaseDQN — abstract base (forward: observations → Q-values).
 MLPDQN  — 3-layer MLP (fingerprint + step → Q-value).
 DQN     — backward-compatible alias for MLPDQN.
 create_dqn() — factory that dispatches to MLPDQN or GNNDQN.
+make_observation() — Morgan FP observation builder.
 """
 
 from abc import abstractmethod
+
+import numpy as np
+import torch
 import torch.nn as nn
+from rdkit import Chem
+from rdkit.Chem import AllChem
+
+
+def make_observation(smiles, step_frac):
+    """Morgan FP (4096) + step_fraction -> tensor (4097,)."""
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        fp = np.zeros(4096, dtype=np.float32)
+    else:
+        fp = np.array(
+            AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=4096),
+            dtype=np.float32,
+        )
+    obs = np.append(fp, np.float32(step_frac))
+    return torch.from_numpy(obs)
 
 
 class BaseDQN(nn.Module):

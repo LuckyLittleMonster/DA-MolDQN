@@ -1,4 +1,5 @@
 name: qed
 
-qed_weight: 0.8
-sa_weight: 0.2
+# Pure QED — matches RxnFlow/SynFlowNet baselines.
+qed_weight: 1.0
+sa_weight: 0.0

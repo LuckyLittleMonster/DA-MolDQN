@@ -1,0 +1,15 @@
+name: dock_deprecated
+
+# DEPRECATED: Pure dock score only — no QED, no SA.
+# Use reward=dock instead (matches RxnFlow LIT-PCBA baseline).
+
+# Target protein — directory name under Data/docking_targets/
+# Available: seh (sEH, PDB 1ZD5), drd2 (DRD2, PDB 3PBL), gsk3b (GSK3β, PDB 1UV5)
+target: seh
+
+# Scoring backend: 'dock' (Uni-Dock GPU) or 'proxy' (MPNN/SVM/RF proxy model)
+scoring_method: dock
+
+# Baseline weights: pure dock score
+dock_weight: 1.0
+sa_weight: 0.0

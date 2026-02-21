@@ -1,13 +1,22 @@
 name: dock
 
-target: null  # e.g., "3pbl" — directory under docking/targets/
-dock_weight: 0.7
-sa_weight: 0.2
+# RxnFlow-compatible docking reward: 0.5*QED + 0.5*Vina_norm
+# Matches RxnFlow's LIT-PCBA setup.
+# NO Lipinski, NO PAINS, NO SA penalty.
 
-# Docking search box (overrides from target config.json)
-center_x: null
-center_y: null
-center_z: null
-size_x: 22.5
-size_y: 22.5
-size_z: 22.5
+target: seh
+
+# Scoring backend: 'dock' (Uni-Dock GPU) or 'proxy' (MPNN/SVM/RF proxy model)
+scoring_method: dock
+
+# Uni-Dock binary path (null = $UNIDOCK_BIN env var, or 'unidock' on PATH)
+unidock_bin: null
+
+# Equal weights matching RxnFlow
+qed_weight: 0.5
+dock_weight: 0.5
+sa_weight: 0.0
+
+# No hard constraints (baselines don't use them)
+lipinski: false
+sa_threshold: 10.0  # effectively disabled

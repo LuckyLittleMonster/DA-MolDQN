@@ -2,11 +2,20 @@
 src/build
 src/*.so
 __pycache__
-Experiments/test_*
-Experiments/models/test_*
+
+# Experiments (outputs, models, logs)
+Experiments/
+outputs/
+
+# Data (large files, managed separately)
+Data/
+
+# Reference repos (submodules / external)
+refs/
+
+# Misc
 tem/*
-synnet/checkpoints/*/
-rl_sync_not_working/
+*/checkpoints/*
 skills
 docs/
 .*/

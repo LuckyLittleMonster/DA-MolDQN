@@ -1,0 +1,43 @@
+name: multi_deprecated
+
+# DEPRECATED: Layered constraints (Lipinski, PAINS, SA threshold)
+# + weighted-sum scalarization. Use reward=multi instead.
+
+# Multi-objective strategy
+strategy: layered  # layered, chebyshev, lagrangian
+
+# Primary objective
+primary: qed  # qed or dock
+primary_weight: 0.5
+
+# Docking (if primary=dock or used as constraint)
+# Available: seh (sEH, PDB 1ZD5), drd2 (DRD2, PDB 3PBL), gsk3b (GSK3β, PDB 1UV5)
+target: seh
+dock_weight: 0.5
+
+# Scoring backend: 'dock' (Uni-Dock GPU) or 'proxy' (MPNN/SVM/RF proxy model)
+scoring_method: dock
+
+# SA score
+sa_weight: 0.2
+sa_threshold: 5.0  # hard constraint: SA < threshold
+
+# Drug-likeness constraints (Lipinski)
+lipinski: true  # enforce Lipinski Rule of 5
+max_mw: 500
+max_logp: 5.0
+max_hbd: 5
+max_hba: 10
+
+# QED threshold (if used as constraint rather than primary)
+qed_threshold: 0.4
+
+# Chebyshev scalarization
+reference_point:
+  qed: 0.0
+  sa: 10.0
+  dock: 0.0
+
+# Lagrangian
+lambda_init: 0.1
+lambda_lr: 0.01

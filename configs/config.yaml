@@ -20,8 +20,7 @@ grad_steps: 4
 
 # Epsilon schedule
 eps_start: 1.0
-eps_decay: 0.995
-eps_min: 0.05
+eps_decay: 0.98
 
 # Molecules
 init_mol:
@@ -34,8 +33,9 @@ init_mol:
   - c1ccc(C=O)cc1
   - CCCC
 init_mol_path: null
-mol_json: null
-num_molecules: null
+mol_json: Data/paroutes/n1_targets_128.json
+num_molecules: 64
+init_mol_offset: 0
 
 # Infrastructure
 device: cuda

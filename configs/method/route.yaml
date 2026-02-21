@@ -16,6 +16,10 @@ route_emb_dim: 256
 hidden_dim: 256
 max_route_len: 10
 
+# Variable-length routes
+enable_variable_length: true
+min_route_len: 2
+
 # Cascade validation
 cascade_workers: 8
 cascade_topk: 64

@@ -1,0 +1,39 @@
+name: admet
+
+# ADMET multi-property reward using FastADMETModel
+# Combines QED + SA + ADMET predictions into a single reward.
+
+# Core objective weights
+qed_weight: 0.3       # QED (RDKit, instant)
+sa_weight: 0.1        # SA score (lower=better, normalized)
+
+# ADMET property weights (from FastADMETModel predictions)
+# Absorption
+hia_weight: 0.15      # HIA_Hou (prob→1, AUROC=0.994) — human intestinal absorption
+solubility_weight: 0.05  # Solubility_AqSolDB (>-4, R^2=0.817)
+
+# Toxicity (penalties — prob→0 is good)
+herg_weight: 0.15     # hERG (prob→0, AUROC=0.839) — cardiac toxicity veto
+ames_weight: 0.10     # AMES (prob→0, AUROC=0.882) — mutagenicity veto
+dili_weight: 0.05     # DILI (prob→0, AUROC=0.881) — liver toxicity
+clintox_weight: 0.05  # ClinTox (prob→0, AUROC=0.928) — clinical failure
+
+# Metabolism penalty
+cyp3a4_weight: 0.05   # CYP3A4_Veith (prob→0, AUROC=0.912) — DDI risk
+
+# Solubility threshold for bonus/penalty
+solubility_threshold: -4.0  # log(mol/L)
+
+# Lipinski (same as multi.yaml)
+lipinski: true
+max_mw: 500
+max_logp: 5.0
+max_hbd: 5
+max_hba: 10
+
+# SA hard constraint
+sa_threshold: 5.0
+
+# Docking (optional, for admet+dock)
+target: null
+dock_weight: 0.0
