@@ -45,6 +45,8 @@ def make_dock_scorer(cfg_reward, num_workers=4):
       'dock' (default) -> UniDockScorer (real Uni-Dock GPU docking)
       'proxy'          -> ProxyDockAdapter (MPNN/SVM/RF proxy models)
     """
+    if cfg_reward.name == 'qed':
+        return None
     scoring_method = cfg_reward.get('scoring_method', 'dock')
 
     if scoring_method == 'proxy':

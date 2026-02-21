@@ -8,6 +8,7 @@
 #   sbatch train_route.sh drd2 multi 1         # T4: MOO product
 #   sbatch train_route.sh gsk3b dock 1         # T5: HN-GFN-matching (pure dock)
 #   sbatch train_route.sh gsk3b multi 1        # T6: MOO product
+#   sbatch train_route.sh - qed 1             # QED only (no target)
 
 #SBATCH --job-name=rt_train
 #SBATCH --partition=maple_night
@@ -28,7 +29,14 @@ TARGET=${1:?Usage: sbatch train_route.sh <TARGET> <REWARD> [TRIAL]}
 REWARD=${2:?Usage: sbatch train_route.sh <TARGET> <REWARD> [TRIAL]}
 TRIAL=${3:-1}
 
-EXP_NAME="route_${TARGET}_${REWARD}_train"
+# Build experiment name and reward args (QED has no target)
+if [ "${REWARD}" = "qed" ]; then
+    EXP_NAME="route_qed_train"
+    REWARD_ARGS="reward=qed"
+else
+    EXP_NAME="route_${TARGET}_${REWARD}_train"
+    REWARD_ARGS="reward=${REWARD} reward.scoring_method=proxy reward.target=${TARGET}"
+fi
 
 cd /shared/data1/Users/l1062811/git/DA-MolDQN
 mkdir -p Experiments/logs
@@ -48,9 +56,7 @@ echo "======================================"
 PYTHONUNBUFFERED=1 conda run -n rl4 --live-stream \
     python main.py \
         method=route \
-        reward=${REWARD} \
-        reward.scoring_method=proxy \
-        reward.target=${TARGET} \
+        ${REWARD_ARGS} \
         exp_name=${EXP_NAME} \
         trial=${TRIAL} \
         episodes=500 \
