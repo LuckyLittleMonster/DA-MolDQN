@@ -9,9 +9,3 @@ strategy: product  # 'product' (baseline) or 'layered' (constrained)
 # Target protein
 # Available: seh (sEH, PDB 1ZD5), drd2 (DRD2, PDB 3PBL), gsk3b (GSK3β, PDB 1UV5)
 target: seh
-
-# Scoring backend: 'dock' (Uni-Dock GPU) or 'proxy' (MPNN/SVM/RF proxy model)
-scoring_method: dock
-
-# Uni-Dock binary path (null = $UNIDOCK_BIN env var, or 'unidock' on PATH)
-unidock_bin: null

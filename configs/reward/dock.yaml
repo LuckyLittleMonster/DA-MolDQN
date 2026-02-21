@@ -1,22 +1,12 @@
 name: dock
 
-# RxnFlow-compatible docking reward: 0.5*QED + 0.5*Vina_norm
-# Matches RxnFlow's LIT-PCBA setup.
-# NO Lipinski, NO PAINS, NO SA penalty.
+# Pure docking reward: dock score only, no QED, no SA.
+# Matches RGFN (DRD2/sEH proxy) and HN-GFN (GSK3β proxy) baselines.
 
+# Target protein — directory name under Data/docking_targets/
+# Available: seh (sEH, PDB 1ZD5), drd2 (DRD2, PDB 3PBL), gsk3b (GSK3β, PDB 1UV5)
 target: seh
 
-# Scoring backend: 'dock' (Uni-Dock GPU) or 'proxy' (MPNN/SVM/RF proxy model)
-scoring_method: dock
-
-# Uni-Dock binary path (null = $UNIDOCK_BIN env var, or 'unidock' on PATH)
-unidock_bin: null
-
-# Equal weights matching RxnFlow
-qed_weight: 0.5
-dock_weight: 0.5
+# Pure dock score
+dock_weight: 1.0
 sa_weight: 0.0
-
-# No hard constraints (baselines don't use them)
-lipinski: false
-sa_threshold: 10.0  # effectively disabled

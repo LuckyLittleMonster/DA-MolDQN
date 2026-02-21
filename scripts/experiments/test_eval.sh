@@ -2,10 +2,11 @@
 # Phase 2: Test evaluation (100 episodes, 64 test mols, load checkpoint)
 # Usage: sbatch test_eval.sh <METHOD> <TARGET> <REWARD> <CHECKPOINT> [TRIAL]
 # Examples:
-#   sbatch test_eval.sh route seh dock_baseline Experiments/models/route_seh_dock_baseline_train_1_checkpoint.pth
+#   sbatch test_eval.sh route seh dock Experiments/models/route_seh_dock_train_1_checkpoint.pth
 
 #SBATCH --job-name=test_eval
-#SBATCH --partition=maple
+#SBATCH --partition=maple_night
+#SBATCH --qos=part_maple_night
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=72

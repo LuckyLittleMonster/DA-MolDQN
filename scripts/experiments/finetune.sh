@@ -4,12 +4,13 @@
 # Usage: sbatch finetune.sh <METHOD> <TARGET> <REWARD> <CHECKPOINT> <START_IDX> <END_IDX> [TRIAL]
 # Examples:
 #   # Fine-tune train bottom-25% (indices identified from training results)
-#   sbatch finetune.sh route seh dock_baseline ckpt.pth 0 63 1
+#   sbatch finetune.sh route seh dock ckpt.pth 0 63 1
 #   # Fine-tune specific test mols
 #   sbatch finetune.sh reasyn drd2 dock ckpt.pth 64 127 1
 
 #SBATCH --job-name=finetune
-#SBATCH --partition=maple
+#SBATCH --partition=maple_night
+#SBATCH --qos=part_maple_night
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=72

@@ -15,9 +15,6 @@ primary_weight: 0.5
 target: seh
 dock_weight: 0.5
 
-# Scoring backend: 'dock' (Uni-Dock GPU) or 'proxy' (MPNN/SVM/RF proxy model)
-scoring_method: dock
-
 # SA score
 sa_weight: 0.2
 sa_threshold: 5.0  # hard constraint: SA < threshold

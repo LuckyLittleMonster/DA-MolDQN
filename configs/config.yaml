@@ -43,3 +43,9 @@ gpu: 0
 log_freq: 5
 save_freq: 50
 load_checkpoint: null
+
+# Docking infrastructure (shared across all reward modes)
+# Override per-run: reward.scoring_method=proxy reward.unidock_bin=/path/to/unidock
+reward:
+  scoring_method: dock    # 'dock' (Uni-Dock GPU) or 'proxy' (MPNN/SVM/RF)
+  unidock_bin: null        # null = $UNIDOCK_BIN env var, or 'unidock' on PATH

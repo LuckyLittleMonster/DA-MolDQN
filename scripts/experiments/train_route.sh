@@ -2,15 +2,16 @@
 # Phase 1: Route-DQN training (500 episodes, 64 train mols)
 # Usage: sbatch train_route.sh <TARGET> <REWARD> [TRIAL]
 # Examples:
-#   sbatch train_route.sh seh dock_baseline 1    # T1: RxnFlow-matching
-#   sbatch train_route.sh seh multi 1            # T2: MOO product
-#   sbatch train_route.sh drd2 dock 1            # T3: RGFN-matching
-#   sbatch train_route.sh drd2 multi 1           # T4: MOO product
-#   sbatch train_route.sh gsk3b dock 1           # T5: HN-GFN-matching
-#   sbatch train_route.sh gsk3b multi 1          # T6: MOO product
+#   sbatch train_route.sh seh dock_rxnflow 1  # T1: RxnFlow-matching (0.5*QED+0.5*Vina)
+#   sbatch train_route.sh seh multi 1          # T2: MOO product
+#   sbatch train_route.sh drd2 dock 1          # T3: RGFN-matching (pure dock)
+#   sbatch train_route.sh drd2 multi 1         # T4: MOO product
+#   sbatch train_route.sh gsk3b dock 1         # T5: HN-GFN-matching (pure dock)
+#   sbatch train_route.sh gsk3b multi 1        # T6: MOO product
 
 #SBATCH --job-name=rt_train
-#SBATCH --partition=maple
+#SBATCH --partition=maple_night
+#SBATCH --qos=part_maple_night
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=72

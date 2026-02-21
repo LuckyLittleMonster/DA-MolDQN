@@ -2,11 +2,12 @@
 # Phase 1b: Random baseline (100 episodes, 64 train mols, eps=1.0 always)
 # Usage: sbatch random_baseline.sh <METHOD> <TARGET> <REWARD> [TRIAL]
 # Examples:
-#   sbatch random_baseline.sh route seh dock_baseline 1
+#   sbatch random_baseline.sh route seh dock 1
 #   sbatch random_baseline.sh reasyn drd2 dock 1
 
 #SBATCH --job-name=random
-#SBATCH --partition=maple
+#SBATCH --partition=maple_night
+#SBATCH --qos=part_maple_night
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=72

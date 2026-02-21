@@ -18,7 +18,7 @@ def compute_reward(smiles, step, max_steps, gamma, cfg_reward,
             smiles, step, max_steps, gamma,
             qed_weight=cfg_reward.qed_weight,
             sa_weight=cfg_reward.sa_weight)
-    elif name in ('dock', 'dock_deprecated'):
+    elif name in ('dock', 'dock_rxnflow', 'dock_deprecated'):
         return compute_reward_dock(
             smiles, step, max_steps, gamma,
             dock_scorer=dock_scorer,
