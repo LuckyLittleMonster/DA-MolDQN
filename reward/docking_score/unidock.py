@@ -134,7 +134,7 @@ class UniDockScorer:
     # Public API
     # ------------------------------------------------------------------
 
-    def batch_dock(self, smiles_list):
+    def batch_dock(self, smiles_list, **kwargs):
         """Dock a batch of SMILES and return Vina scores.
 
         Parameters

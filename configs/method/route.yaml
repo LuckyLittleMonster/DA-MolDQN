@@ -23,3 +23,11 @@ min_route_len: 2
 # Cascade validation
 cascade_workers: 8
 cascade_topk: 64
+
+# Experimental improvements (enable_exp=true activates all 4)
+# 1. Potential-based reward shaping: F = gamma*QED(s')-QED(s)
+# 2. Prioritized experience replay (PER) with IS weights
+# 3. Action subsampling: subsample_k BBs from L2 compat set
+# 4. Double DQN: online selects action, target evaluates
+enable_exp: false
+subsample_k: 512

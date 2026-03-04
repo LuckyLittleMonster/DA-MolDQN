@@ -20,6 +20,140 @@ import torch.nn.functional as F
 from rdkit import Chem
 from rdkit.Chem import rdFingerprintGenerator
 
+
+# ── Prioritized Experience Replay ─────────────────────────────────────
+
+class SumTree:
+    """Binary tree where each leaf stores a priority value.
+
+    Parent nodes store the sum of children, enabling O(log n) proportional
+    sampling via tree traversal.
+    """
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.tree = np.zeros(2 * capacity - 1, dtype=np.float64)
+        self.data = [None] * capacity
+        self.write_pos = 0
+        self.size = 0
+
+    @property
+    def total(self) -> float:
+        return self.tree[0]
+
+    @property
+    def max_priority(self) -> float:
+        end = self.capacity - 1 + self.size
+        if self.size == 0:
+            return 1.0
+        return float(self.tree[self.capacity - 1:end].max())
+
+    def add(self, priority: float, data):
+        idx = self.write_pos + self.capacity - 1
+        self.data[self.write_pos] = data
+        self._update(idx, priority)
+        self.write_pos = (self.write_pos + 1) % self.capacity
+        self.size = min(self.size + 1, self.capacity)
+
+    def _update(self, idx: int, priority: float):
+        change = priority - self.tree[idx]
+        self.tree[idx] = priority
+        while idx > 0:
+            idx = (idx - 1) // 2
+            self.tree[idx] += change
+
+    def update(self, idx: int, priority: float):
+        self._update(idx, priority)
+
+    def get(self, cumsum: float):
+        """Sample a leaf by cumulative sum. Returns (tree_idx, priority, data)."""
+        idx = 0
+        while idx < self.capacity - 1:  # not a leaf
+            left = 2 * idx + 1
+            if cumsum <= self.tree[left]:
+                idx = left
+            else:
+                cumsum -= self.tree[left]
+                idx = left + 1
+        data_idx = idx - (self.capacity - 1)
+        return idx, self.tree[idx], self.data[data_idx]
+
+
+class PrioritizedReplayBuffer:
+    """Prioritized Experience Replay buffer using SumTree.
+
+    Args:
+        capacity: Maximum buffer size.
+        alpha: Priority exponent (0 = uniform, 1 = full prioritization).
+        beta_start: Initial IS weight exponent.
+        beta_end: Final IS weight exponent (annealed over training).
+        eps: Small constant added to TD-error for non-zero priority.
+    """
+
+    def __init__(self, capacity: int, alpha: float = 0.6,
+                 beta_start: float = 0.4, beta_end: float = 1.0,
+                 eps: float = 1e-6):
+        self.tree = SumTree(capacity)
+        self.alpha = alpha
+        self.beta_start = beta_start
+        self.beta_end = beta_end
+        self.beta = beta_start
+        self.eps = eps
+        self.capacity = capacity
+
+    def __len__(self) -> int:
+        return self.tree.size
+
+    def anneal_beta(self, progress: float):
+        """Anneal beta from beta_start to beta_end. progress in [0, 1]."""
+        self.beta = self.beta_start + progress * (self.beta_end - self.beta_start)
+
+    def add(self, transition):
+        """Add transition with max priority (ensures new samples get replayed)."""
+        priority = max(self.tree.max_priority, 1.0) ** self.alpha
+        self.tree.add(priority, transition)
+
+    def sample(self, batch_size: int):
+        """Sample batch proportional to priorities.
+
+        Returns:
+            batch: list of transitions
+            tree_indices: list of SumTree indices (for priority update)
+            is_weights: np.ndarray of importance sampling weights
+        """
+        batch = []
+        tree_indices = []
+        priorities = []
+
+        segment = self.tree.total / batch_size
+        for i in range(batch_size):
+            lo = segment * i
+            hi = segment * (i + 1)
+            cumsum = random.uniform(lo, hi)
+            idx, priority, data = self.tree.get(cumsum)
+            if data is None:
+                # Edge case: empty slot, resample
+                cumsum = random.uniform(0, self.tree.total)
+                idx, priority, data = self.tree.get(cumsum)
+            batch.append(data)
+            tree_indices.append(idx)
+            priorities.append(priority)
+
+        # Importance sampling weights
+        priorities = np.array(priorities, dtype=np.float64)
+        probs = priorities / (self.tree.total + 1e-10)
+        is_weights = (self.tree.size * probs) ** (-self.beta)
+        is_weights /= is_weights.max()  # normalize
+
+        return batch, tree_indices, is_weights.astype(np.float32)
+
+    def update_priorities(self, tree_indices: list[int],
+                          td_errors: np.ndarray):
+        """Update priorities based on TD-errors."""
+        for idx, td_err in zip(tree_indices, td_errors):
+            priority = (abs(td_err) + self.eps) ** self.alpha
+            self.tree.update(idx, priority)
+
 from .route import (
     SynthesisRoute, cascade_validate, update_route,
     extend_route, truncate_route,
@@ -30,6 +164,27 @@ from .policy_network import (
     PositionPolicyNetwork,
     RouteBBScoringNetwork,
 )
+
+
+def _mp_scan_applicable(smi):
+    """mp.Pool worker: find applicable bi-reactions for a SMILES.
+
+    Uses route._mp_tp (set before Pool creation via fork).
+    Returns (smi, list[(rxn_idx, l2_array)]).
+    """
+    from .route import _mp_tp
+    mol = Chem.MolFromSmiles(smi)
+    if mol is None:
+        return smi, []
+    applicable = []
+    bi_reactions = _mp_tp.bi_reactions
+    bi_compat = _mp_tp.bi_compat
+    for idx in range(len(bi_reactions)):
+        if bi_reactions[idx].is_mol_reactant(mol):
+            l2 = bi_compat.get(idx)
+            if l2 is not None and len(l2) > 0:
+                applicable.append((idx, l2))
+    return smi, applicable
 
 
 class RouteDQN:
@@ -73,6 +228,8 @@ class RouteDQN:
         mp_pool=None,
         enable_variable_length=True,
         min_route_len=2,
+        enable_exp=False,
+        subsample_k=512,
     ):
         self.tp = tp
         self.device = device
@@ -187,8 +344,23 @@ class RouteDQN:
         )
         self.optimizer = torch.optim.Adam(self._all_params, lr=lr)
 
-        # Replay buffer
-        self.replay_buffer: list[dict] = []
+        # Experimental improvements
+        self.enable_exp = enable_exp
+        self.subsample_k = subsample_k
+
+        # Replay buffer (PER when enable_exp, else uniform)
+        if enable_exp:
+            self.replay_buffer = PrioritizedReplayBuffer(
+                capacity=replay_size, alpha=0.6,
+                beta_start=0.4, beta_end=1.0)
+            self._uniform_replay = False
+            print(f"  [EXP] PER enabled (alpha=0.6, beta=0.4->1.0)")
+            print(f"  [EXP] Double DQN enabled")
+            print(f"  [EXP] Action subsampling: k={subsample_k}")
+            print(f"  [EXP] Reward shaping: F=gamma*QED(s')-QED(s)")
+        else:
+            self._uniform_replay = True
+        self.replay_buffer_list: list[dict] = []  # uniform fallback
         self.replay_pos = 0
 
         # Cascade validation: prefer mp_pool (true parallelism) over threads
@@ -200,6 +372,9 @@ class RouteDQN:
                 if cascade_workers > 0 else None)
 
         self._train_steps = 0
+
+        # Extend optimization: applicability cache (mp_pool reused from cascade)
+        self._applicable_cache: dict[str, list[tuple]] = {}
 
         # Log param counts
         n_params = sum(p.numel() for p in self._all_params)
@@ -569,7 +744,14 @@ class RouteDQN:
                 if not step.is_uni:
                     l2 = self.tp.bi_compat.get(step.bi_rxn_idx)
                     if l2 is not None and len(l2) > 0:
-                        l2_masks[i, l2] = True
+                        # Action subsampling: subsample L2 BBs if too many
+                        if (self.enable_exp
+                                and len(l2) > self.subsample_k):
+                            subset = np.random.choice(
+                                l2, size=self.subsample_k, replace=False)
+                            l2_masks[i, subset] = True
+                        else:
+                            l2_masks[i, l2] = True
             elif atype == 'extend':
                 # Use final product FP as position context
                 pos_fps_list.append(
@@ -614,7 +796,16 @@ class RouteDQN:
         timings['cascade'] = time.perf_counter() - t0
 
         # --- Phase 5: Select BB / handle extend / truncate ---
+        t0 = time.perf_counter()
         q_bb_cpu = q_bb_all.cpu()
+
+        # Collect extend route indices and batch-process them
+        extend_indices = [i for i in range(n) if action_types[i] == 'extend']
+        extend_results = {}
+        if extend_indices:
+            extend_results = self._handle_extend_batch(
+                extend_indices, routes, route_states, explore)
+
         block_indices = []
         extend_bi_rxn_indices = []
         for i in range(n):
@@ -624,8 +815,7 @@ class RouteDQN:
                 block_indices.append(-1)
                 extend_bi_rxn_indices.append(-1)
             elif atype == 'extend':
-                bi_rxn_idx, blk_idx = self._handle_extend(
-                    routes[i], route_states[i], explore[i])
+                bi_rxn_idx, blk_idx = extend_results.get(i, (-1, -1))
                 block_indices.append(blk_idx)
                 extend_bi_rxn_indices.append(bi_rxn_idx)
             else:  # swap
@@ -640,6 +830,7 @@ class RouteDQN:
                         vb, key=lambda idx: q_bb_cpu[i, idx].item())
                     block_indices.append(best_idx)
                 extend_bi_rxn_indices.append(-1)
+        timings['extend'] = time.perf_counter() - t0
 
         return {
             'positions': positions,
@@ -654,68 +845,173 @@ class RouteDQN:
             'timings': timings,
         }
 
-    def _handle_extend(self, route: SynthesisRoute,
-                       route_state: torch.Tensor,
-                       do_explore: bool) -> tuple[int, int]:
-        """Select (bi_rxn_idx, block_idx) for an extend action.
+    def _handle_extend_batch(
+        self, extend_indices: list[int],
+        routes: list[SynthesisRoute],
+        route_states: torch.Tensor,
+        explore: np.ndarray,
+    ) -> dict[int, tuple[int, int]]:
+        """Batch extend handling for all routes choosing 'extend'.
 
-        Finds bi-molecular reactions applicable to the current final product,
-        then scores compatible BBs using Q_bb.
+        Optimized over per-route _handle_extend():
+        1. Thread-parallel HasSubstructMatch (RDKit C++ releases GIL)
+        2. Dedup: same final_product scanned only once
+        3. Single batched Q_bb GPU call for all (route, reaction) pairs
+
+        Args:
+            extend_indices: Global indices of routes choosing 'extend'.
+            routes: All routes in the batch.
+            route_states: (n, route_emb_dim) on GPU.
+            explore: (n,) bool array, True = epsilon-greedy exploration.
 
         Returns:
-            (bi_rxn_idx, block_idx) — best pair, or (-1, -1) if no valid
-            extension is found.
+            dict mapping global_route_idx -> (bi_rxn_idx, block_idx).
         """
-        final_mol = Chem.MolFromSmiles(route.final_product_smi)
-        if final_mol is None:
-            return -1, -1
+        bi_reactions = self.tp.bi_reactions
+        bi_compat = self.tp.bi_compat
+        n_bi = len(bi_reactions)
 
-        # Find applicable bi-reactions
-        applicable_rxns = []
-        for idx, bi_rxn in enumerate(self.tp.bi_reactions):
-            if bi_rxn.is_mol_reactant(final_mol):
-                l2 = self.tp.bi_compat.get(idx)
-                if l2 is not None and len(l2) > 0:
-                    applicable_rxns.append((idx, l2))
+        # --- Step 1: HasSubstructMatch (mp.Pool or sequential, with caching) ---
+        smi_list = [routes[i].final_product_smi for i in extend_indices]
+        smi_to_applicable = {}
+        uncached_smis = []
+        for smi in set(smi_list):
+            if smi in self._applicable_cache:
+                smi_to_applicable[smi] = self._applicable_cache[smi]
+            else:
+                uncached_smis.append(smi)
 
-        if not applicable_rxns:
-            return -1, -1
+        if uncached_smis:
+            if self._mp_pool is not None and len(uncached_smis) > 1:
+                # mp.Pool: true multiprocessing (GIL not released by RDKit)
+                results_list = self._mp_pool.map(
+                    _mp_scan_applicable, uncached_smis)
+                for smi, applicable in results_list:
+                    smi_to_applicable[smi] = applicable
+                    self._applicable_cache[smi] = applicable
+            else:
+                # Sequential fallback
+                for smi in uncached_smis:
+                    mol = Chem.MolFromSmiles(smi)
+                    if mol is None:
+                        applicable = []
+                    else:
+                        applicable = []
+                        for idx in range(n_bi):
+                            if bi_reactions[idx].is_mol_reactant(mol):
+                                l2 = bi_compat.get(idx)
+                                if l2 is not None and len(l2) > 0:
+                                    applicable.append((idx, l2))
+                    smi_to_applicable[smi] = applicable
+                    self._applicable_cache[smi] = applicable
 
-        if do_explore:
-            # Random exploration: pick random (rxn, BB) pair
-            rxn_idx, l2 = random.choice(applicable_rxns)
-            blk_idx = int(random.choice(l2))
-            return rxn_idx, blk_idx
+        # --- Step 2: Handle exploration + collect scoring tasks ---
+        results = {}  # global_idx -> (bi_rxn_idx, blk_idx)
+        scoring_tasks = []  # (global_i, applicable_rxns)
 
-        # Score all applicable (rxn, BB) pairs using Q_bb
-        final_fp = self._compute_fp_tensor(route.final_product_smi)
-        best_score = float('-inf')
-        best_pair = (-1, -1)
+        for global_i, smi in zip(extend_indices, smi_list):
+            applicables = smi_to_applicable[smi]
+            if not applicables:
+                results[global_i] = (-1, -1)
+                continue
+            if explore[global_i]:
+                rxn_idx, l2 = random.choice(applicables)
+                blk_idx = int(random.choice(l2))
+                results[global_i] = (rxn_idx, blk_idx)
+            else:
+                scoring_tasks.append((global_i, applicables))
 
-        for rxn_idx, l2 in applicable_rxns:
-            tmpl_idx = self.tp.bi_reactions[rxn_idx].index
-            tmpl_emb = self.template_embs(
-                torch.tensor(max(tmpl_idx, 0), device=self.device))
+        if not scoring_tasks:
+            for gi in extend_indices:
+                if gi not in results:
+                    results[gi] = (-1, -1)
+            return results
 
-            # Build mask for this rxn's L2 candidates
-            compat_mask = torch.zeros(
-                self.n_blocks, dtype=torch.bool, device=self.device)
-            compat_mask[l2] = True
+        # --- Step 3: Batch Q_bb scoring ---
+        all_route_states = []
+        all_final_fps = []
+        all_tmpl_ids = []
+        all_l2_arrays = []
+        scoring_map = []  # (global_i, rxn_idx) per batch entry
 
+        fp_cache = {}
+        for global_i, applicables in scoring_tasks:
+            smi = routes[global_i].final_product_smi
+            if smi not in fp_cache:
+                fp_cache[smi] = self._compute_fp_tensor(smi)
+            final_fp = fp_cache[smi]
+            rs = route_states[global_i]
+
+            for rxn_idx, l2 in applicables:
+                all_route_states.append(rs)
+                all_final_fps.append(final_fp)
+                all_tmpl_ids.append(max(bi_reactions[rxn_idx].index, 0))
+                all_l2_arrays.append(l2)
+                scoring_map.append((global_i, rxn_idx))
+
+        total_pairs = len(scoring_map)
+        if total_pairs == 0:
+            for gi in extend_indices:
+                if gi not in results:
+                    results[gi] = (-1, -1)
+            return results
+
+        # Build batched tensors
+        batch_rs = torch.stack(all_route_states)
+        batch_fp = torch.stack(all_final_fps)
+        batch_te = self.template_embs(
+            torch.tensor(all_tmpl_ids, dtype=torch.long, device=self.device))
+
+        # Build compat masks via scatter (vectorized, avoids Python loop)
+        row_indices = []
+        col_indices = []
+        for j, l2 in enumerate(all_l2_arrays):
+            n_l2 = len(l2)
+            row_indices.append(np.full(n_l2, j, dtype=np.int64))
+            col_indices.append(np.asarray(l2, dtype=np.int64))
+        row_cat = np.concatenate(row_indices)
+        col_cat = np.concatenate(col_indices)
+        batch_cm = torch.zeros(
+            total_pairs, self.n_blocks, dtype=torch.bool, device=self.device)
+        batch_cm[row_cat, col_cat] = True
+
+        # Chunked Q_bb inference + vectorized post-processing
+        MAX_BATCH = 4096
+        # Pre-build route group indices for vectorized argmax
+        scoring_global_ids = torch.tensor(
+            [gi for gi, _ in scoring_map], dtype=torch.long)
+        scoring_rxn_ids = [rxn for _, rxn in scoring_map]
+        best_per_route = {}  # global_i -> (score, rxn_idx, blk_idx)
+
+        for cs in range(0, total_pairs, MAX_BATCH):
+            ce = min(cs + MAX_BATCH, total_pairs)
             with torch.no_grad():
-                q_scores = self.q_bb(
-                    route_state.unsqueeze(0),
-                    final_fp.unsqueeze(0),
-                    tmpl_emb.unsqueeze(0),
-                    compat_mask.unsqueeze(0))
+                q_chunk = self.q_bb(
+                    batch_rs[cs:ce], batch_fp[cs:ce],
+                    batch_te[cs:ce], batch_cm[cs:ce])
 
-            max_score = q_scores.max().item()
-            if max_score > best_score:
-                best_score = max_score
-                best_blk = q_scores.squeeze(0).argmax().item()
-                best_pair = (rxn_idx, best_blk)
+            # Vectorized: get max score and argmax per row on GPU
+            max_scores, max_blk_ids = q_chunk.max(dim=1)
+            max_scores_cpu = max_scores.cpu()
+            max_blk_cpu = max_blk_ids.cpu()
 
-        return best_pair
+            for j in range(ce - cs):
+                global_i = scoring_global_ids[cs + j].item()
+                score = max_scores_cpu[j].item()
+                if (global_i not in best_per_route
+                        or score > best_per_route[global_i][0]):
+                    best_per_route[global_i] = (
+                        score, scoring_rxn_ids[cs + j], max_blk_cpu[j].item())
+
+        for global_i, (_, rxn_idx, blk_idx) in best_per_route.items():
+            results[global_i] = (rxn_idx, blk_idx)
+
+        # Fill remaining with defaults
+        for gi in extend_indices:
+            if gi not in results:
+                results[gi] = (-1, -1)
+
+        return results
 
     def _cascade_validate_batch(
         self, routes: list[SynthesisRoute], positions: list[int],
@@ -827,11 +1123,20 @@ class RouteDQN:
 
     def store_transition(self, transition: dict):
         """Store a transition in replay buffer."""
-        if len(self.replay_buffer) < self.replay_size:
-            self.replay_buffer.append(transition)
+        if self.enable_exp:
+            self.replay_buffer.add(transition)
         else:
-            self.replay_buffer[self.replay_pos] = transition
-        self.replay_pos = (self.replay_pos + 1) % self.replay_size
+            if len(self.replay_buffer_list) < self.replay_size:
+                self.replay_buffer_list.append(transition)
+            else:
+                self.replay_buffer_list[self.replay_pos] = transition
+            self.replay_pos = (self.replay_pos + 1) % self.replay_size
+
+    @property
+    def replay_len(self) -> int:
+        if self.enable_exp:
+            return len(self.replay_buffer)
+        return len(self.replay_buffer_list)
 
     # ------------------------------------------------------------------
     # Training
@@ -839,6 +1144,11 @@ class RouteDQN:
 
     def train_step(self, batch_size: int = 32) -> dict:
         """One DQN gradient step for both Q_pos and Q_bb.
+
+        When enable_exp=True, applies:
+        - Prioritized Experience Replay (PER) with IS weights
+        - Double DQN (online selects action, target evaluates)
+        - Action subsampling IS correction in Q_bb targets
 
         Transitions contain:
             route_state: (route_emb_dim,) numpy
@@ -853,10 +1163,20 @@ class RouteDQN:
             next_position_mask: (max_route_len,) bool numpy
             done: bool
         """
-        if len(self.replay_buffer) < batch_size:
+        if self.replay_len < batch_size:
             return {}
 
-        batch = random.sample(self.replay_buffer, batch_size)
+        # --- Sample from replay buffer ---
+        tree_indices = None
+        is_weights_t = None
+
+        if self.enable_exp:
+            batch, tree_indices, is_weights = self.replay_buffer.sample(
+                batch_size)
+            is_weights_t = torch.tensor(
+                is_weights, dtype=torch.float32, device=self.device)
+        else:
+            batch = random.sample(self.replay_buffer_list, batch_size)
 
         # Collate (with padding for backward-compat position masks)
         route_states = torch.tensor(
@@ -905,15 +1225,35 @@ class RouteDQN:
             1, positions.unsqueeze(1)).squeeze(1)
 
         with torch.no_grad():
-            q_pos_next = self.q_pos_target(
-                next_route_states, next_position_masks)
             has_valid_pos = next_position_masks.any(dim=1)
-            q_pos_next_max = q_pos_next.max(dim=1).values
+
+            if self.enable_exp:
+                # Double DQN: online network selects action, target evaluates
+                q_pos_next_online = self.q_pos(
+                    next_route_states, next_position_masks)
+                best_actions = q_pos_next_online.argmax(dim=1, keepdim=True)
+                q_pos_next_target = self.q_pos_target(
+                    next_route_states, next_position_masks)
+                q_pos_next_max = q_pos_next_target.gather(
+                    1, best_actions).squeeze(1)
+            else:
+                q_pos_next = self.q_pos_target(
+                    next_route_states, next_position_masks)
+                q_pos_next_max = q_pos_next.max(dim=1).values
+
             q_pos_next_max = q_pos_next_max.masked_fill(~has_valid_pos, 0.0)
             q_pos_target_vals = (
                 rewards + (1 - dones) * self.gamma * q_pos_next_max)
 
-        loss_pos = F.smooth_l1_loss(q_pos_current, q_pos_target_vals)
+        td_errors_pos = (q_pos_current - q_pos_target_vals).detach()
+
+        if self.enable_exp:
+            # PER: weight loss by importance sampling weights
+            loss_pos = (is_weights_t
+                        * F.smooth_l1_loss(q_pos_current, q_pos_target_vals,
+                                           reduction='none')).mean()
+        else:
+            loss_pos = F.smooth_l1_loss(q_pos_current, q_pos_target_vals)
 
         # --- Q_bb loss ---
         # Truncate actions have block_idx=-1; exclude from Q_bb loss
@@ -934,8 +1274,14 @@ class RouteDQN:
                 rewards + (1 - dones) * self.gamma * q_pos_next_max)
 
         if valid_bb.any():
-            loss_bb = F.smooth_l1_loss(
-                q_bb_current[valid_bb], q_bb_target_vals[valid_bb])
+            if self.enable_exp:
+                elementwise = F.smooth_l1_loss(
+                    q_bb_current[valid_bb], q_bb_target_vals[valid_bb],
+                    reduction='none')
+                loss_bb = (is_weights_t[valid_bb] * elementwise).mean()
+            else:
+                loss_bb = F.smooth_l1_loss(
+                    q_bb_current[valid_bb], q_bb_target_vals[valid_bb])
         else:
             loss_bb = torch.tensor(0.0, device=self.device)
 
@@ -945,6 +1291,11 @@ class RouteDQN:
         loss.backward()
         torch.nn.utils.clip_grad_norm_(self._all_params, max_norm=10.0)
         self.optimizer.step()
+
+        # PER: update priorities with TD-errors
+        if self.enable_exp and tree_indices is not None:
+            td_errors = td_errors_pos.abs().cpu().numpy()
+            self.replay_buffer.update_priorities(tree_indices, td_errors)
 
         # Soft update targets
         with torch.no_grad():

@@ -53,6 +53,14 @@ def make_dock_scorer(cfg_reward, num_workers=4):
         target = cfg_reward.get('target', None)
         if target is None:
             raise ValueError("reward.target must be set for proxy scoring")
+        # Multi-target proxy (e.g. gsk3b_jnk3 -> [gsk3b, jnk3])
+        targets = cfg_reward.get('targets', None)
+        if targets is not None:
+            from .proxy import MultiProxyDockAdapter
+            target_list = list(targets)
+            adapter = MultiProxyDockAdapter(target_list, device='cuda')
+            print(f"  Multi-proxy scorer: targets={target_list}")
+            return adapter
         from .proxy import ProxyDockAdapter
         adapter = ProxyDockAdapter(target, device='cuda')
         print(f"  Proxy scorer: target={target}")

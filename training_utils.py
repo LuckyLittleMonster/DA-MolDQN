@@ -42,7 +42,10 @@ def load_molecules(cfg, project_root):
             path = pathlib.Path(project_root) / path
         with open(path) as f:
             data = json.load(f)
-        smiles = [d['smiles'] for d in data]
+        if data and isinstance(data[0], dict):
+            smiles = [d['smiles'] for d in data]
+        else:
+            smiles = list(data)
     elif cfg.get('init_mol_path'):
         with open(cfg.init_mol_path) as f:
             smiles = [line.strip() for line in f if line.strip()]

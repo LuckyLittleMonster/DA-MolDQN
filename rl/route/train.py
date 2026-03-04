@@ -103,9 +103,11 @@ class RouteTrainer(RLTrainer):
         self.last_episodes_buf = []
         self.phase_times = {
             'encode': 0.0, 'q_pos': 0.0, 'cascade': 0.0, 'q_bb': 0.0,
+            'extend': 0.0,
             'env_step': 0.0, 'next_encode': 0.0, 'store': 0.0, 'train': 0.0,
         }
         self.timing_steps = 0
+        self.oracle_counts = []  # Track oracle consumption per episode
 
     # ── Setup ─────────────────────────────────────────────────────
 
@@ -324,6 +326,8 @@ class RouteTrainer(RLTrainer):
             enable_variable_length=cfg.method.get(
                 'enable_variable_length', True),
             min_route_len=cfg.method.get('min_route_len', 2),
+            enable_exp=cfg.method.get('enable_exp', False),
+            subsample_k=cfg.method.get('subsample_k', 512),
         )
 
     # ── Checkpoint ────────────────────────────────────────────────
@@ -334,8 +338,9 @@ class RouteTrainer(RLTrainer):
             self.dqn.load_checkpoint(self.cfg.load_checkpoint)
 
     def save(self, episode, history):
-        self.dqn.save(str(self.model_save_dir
-                          / f'{self.prefix}_checkpoint.pth'))
+        if not self.cfg.get('no_save_checkpoint', False):
+            self.dqn.save(str(self.model_save_dir
+                              / f'{self.prefix}_checkpoint.pth'))
 
         best_products_sorted = sorted(
             self.best_products,
@@ -349,6 +354,7 @@ class RouteTrainer(RLTrainer):
                 'qeds': self.all_qeds,
                 'sas': self.all_sas,
                 'docks': self.all_docks,
+                'oracle_counts': self.oracle_counts,
                 'best_products': best_products_sorted,
                 'route_top5': dict(self.route_top5),
                 'last_episodes': list(self.last_episodes_buf),
@@ -364,6 +370,14 @@ class RouteTrainer(RLTrainer):
         episode_rewards = [0.0] * n
         episode_qeds_final = [0.0] * n
         episode_trajectories = [[] for _ in range(n)]
+        enable_exp = self.dqn.enable_exp
+
+        # Reward shaping: track QED before each step
+        if enable_exp:
+            prev_qeds = []
+            for route in routes:
+                mol = Chem.MolFromSmiles(route.final_product_smi)
+                prev_qeds.append(QEDModule.qed(mol) if mol else 0.0)
 
         for step in range(cfg.max_steps):
             batch_result = self.dqn.act_batch(
@@ -421,6 +435,12 @@ class RouteTrainer(RLTrainer):
                     if len(routes[i]) > self.dqn.min_route_len:
                         next_pos_mask[self.dqn.TRUNCATE_POS] = True
 
+                # Reward shaping: F = gamma * QED(s') - QED(s)
+                shaped_reward = result['rewards'][i]
+                if enable_exp:
+                    new_qed = result['QED'][i]
+                    shaped_reward += (cfg.gamma * new_qed - prev_qeds[i])
+
                 transition = {
                     'route_state': route_states_np[i],
                     'position': positions[i],
@@ -429,7 +449,7 @@ class RouteTrainer(RLTrainer):
                     'block_mask': np.zeros(1, dtype=bool),
                     'position_fp': pos_fps[i],
                     'template_idx': template_indices[i],
-                    'reward': result['rewards'][i],
+                    'reward': shaped_reward,
                     'next_route_state': next_route_states[i],
                     'next_position_mask': next_pos_mask,
                     'done': result['done'],
@@ -457,6 +477,11 @@ class RouteTrainer(RLTrainer):
                     dock=result['dock_score'][i],
                     reward=result['rewards'][i],
                     success=result['success'][i]))
+            # Update prev_qeds for reward shaping
+            if enable_exp:
+                for i in range(len(routes)):
+                    prev_qeds[i] = result['QED'][i]
+
             self.phase_times['store'] += time.perf_counter() - t0
 
             t0 = time.perf_counter()
@@ -466,6 +491,11 @@ class RouteTrainer(RLTrainer):
             self.phase_times['train'] += time.perf_counter() - t0
 
             self.timing_steps += 1
+
+        # PER beta annealing (progress = episode / total_episodes)
+        if enable_exp:
+            progress = (episode + 1) / cfg.episodes
+            self.dqn.replay_buffer.anneal_beta(progress)
 
         # ── Episode stats ─────────────────────────────────────────
         mean_reward = np.mean(episode_rewards)
@@ -480,6 +510,10 @@ class RouteTrainer(RLTrainer):
         self.all_qeds.append(mean_qed)
         self.all_sas.append(mean_sa)
         self.all_docks.append(mean_dock)
+
+        # Track oracle consumption (unique molecules scored by proxy)
+        oracle_count = self.dock_scorer.cache_size if self.dock_scorer else 0
+        self.oracle_counts.append(oracle_count)
 
         # Track best products and route snapshots
         ep_route_snapshots = []
@@ -538,10 +572,11 @@ class RouteTrainer(RLTrainer):
             'dock': mean_dock,
             'best_dock': best_dock,
             'n_success': sum(result['success']),
-            'replay_size': len(self.dqn.replay_buffer),
+            'replay_size': self.dqn.replay_len,
             'routes': routes,
             'ep_dock_scores': ep_dock_scores,
             'episode_qeds_final': episode_qeds_final,
+            'oracle_count': oracle_count,
         }
 
     # ── Logging ───────────────────────────────────────────────────
@@ -553,6 +588,10 @@ class RouteTrainer(RLTrainer):
             dock_str = (f" | Dock: {metrics['dock']:.1f} "
                         f"(best {metrics['best_dock']:.1f})")
 
+        oracle_str = ""
+        if 'oracle_count' in metrics:
+            oracle_str = f" | Oracle: {metrics['oracle_count']}"
+
         print(f"Ep {episode+1:4d}/{cfg.episodes} | "
               f"R: {metrics['reward']:.4f} | "
               f"QED: {metrics['qed']:.3f} "
@@ -560,7 +599,7 @@ class RouteTrainer(RLTrainer):
               f"SA: {metrics['sa']:.2f}{dock_str} | "
               f"Eps: {metrics['eps']:.3f} | "
               f"Success: {metrics['n_success']}/{self.env.n_routes} | "
-              f"Buf: {metrics['replay_size']} | "
+              f"Buf: {metrics['replay_size']}{oracle_str} | "
               f"Time: {metrics['elapsed']:.1f}s")
 
         routes = metrics['routes']
@@ -584,6 +623,7 @@ class RouteTrainer(RLTrainer):
                   f"Q_pos={avg_ms['q_pos']:.1f}ms "
                   f"cascade={avg_ms['cascade']:.1f}ms "
                   f"Q_bb={avg_ms['q_bb']:.1f}ms "
+                  f"extend={avg_ms.get('extend', 0):.1f}ms "
                   f"env={avg_ms['env_step']:.1f}ms "
                   f"next_enc={avg_ms['next_encode']:.1f}ms "
                   f"store={avg_ms['store']:.1f}ms "
@@ -633,6 +673,102 @@ class RouteTrainer(RLTrainer):
                     print(f"    {j+1}. QED={t['qed']:.3f} "
                           f"ep{t['episode']:4d} | {t['smiles'][:60]}")
                     print(f"       Path: {path_str[:120]}")
+
+        # ── Oracle consumption summary ───────────────────────────
+        if self.oracle_counts:
+            total_oracle = self.oracle_counts[-1]
+            print(f"\n{'='*60}")
+            print(f"Oracle Consumption")
+            print(f"{'='*60}")
+            print(f"  Total unique proxy calls: {total_oracle}")
+            # Show oracle count at key episodes
+            for ep_idx in [9, 24, 49, 74, 99]:
+                if ep_idx < len(self.oracle_counts):
+                    print(f"  After ep {ep_idx+1:3d}: {self.oracle_counts[ep_idx]} oracles")
+
+        # ── Hypervolume computation ──────────────────────────────
+        self._compute_hypervolume()
+
+    # ── Hypervolume ─────────────────────────────────────────────
+
+    def _compute_hypervolume(self):
+        """Compute HV from all scored molecules using per-target proxy scores.
+
+        4-obj: (GSK3B, JNK3, QED, SA_norm), ref=(0,0,0,0)
+        2-obj: (GSK3B, JNK3), ref=(0,0)
+        """
+        if not self.dock_scorer or not hasattr(self.dock_scorer, 'get_all_scored'):
+            print("\n  [HV] No multi-target scorer available, skipping HV.")
+            return
+
+        try:
+            from botorch.utils.multi_objective.hypervolume import Hypervolume
+            from botorch.utils.multi_objective.pareto import is_non_dominated
+        except ImportError:
+            print("\n  [HV] botorch not installed, skipping HV computation.")
+            return
+
+        per_target = self.dock_scorer.get_all_scored()
+        if not per_target:
+            print("\n  [HV] No scored molecules found.")
+            return
+
+        from reward.core import _load_sascorer
+        sascorer = _load_sascorer()
+
+        # Build 4-obj matrix: (GSK3B, JNK3, QED, SA_norm) for each scored mol
+        points_4d = []
+        points_2d = []
+        for smi, scores in per_target.items():
+            mol = Chem.MolFromSmiles(smi)
+            if mol is None:
+                continue
+            gsk3b = scores.get('gsk3b', 0.0)
+            jnk3 = scores.get('jnk3', 0.0)
+            qed = QEDModule.qed(mol)
+            sa_raw = sascorer.calculateScore(mol)
+            sa_norm = max(0.0, min(1.0, (10.0 - sa_raw) / 9.0))
+            points_4d.append([gsk3b, jnk3, qed, sa_norm])
+            points_2d.append([gsk3b, jnk3])
+
+        if not points_4d:
+            print("\n  [HV] No valid molecules for HV computation.")
+            return
+
+        pts_4d = torch.tensor(points_4d)
+        pts_2d = torch.tensor(points_2d)
+
+        # 4-obj HV
+        ref_4d = torch.zeros(4)
+        hv4 = Hypervolume(ref_4d)
+        pareto_4d = pts_4d[is_non_dominated(pts_4d)]
+        hv_4d = hv4.compute(pareto_4d) if len(pareto_4d) > 0 else 0.0
+
+        # 2-obj HV
+        ref_2d = torch.zeros(2)
+        hv2 = Hypervolume(ref_2d)
+        pareto_2d = pts_2d[is_non_dominated(pts_2d)]
+        hv_2d = hv2.compute(pareto_2d) if len(pareto_2d) > 0 else 0.0
+
+        print(f"\n{'='*60}")
+        print(f"Hypervolume (ref=(0,...,0))")
+        print(f"{'='*60}")
+        print(f"  Total scored molecules: {len(points_4d)}")
+        print(f"  4-obj Pareto front: {len(pareto_4d)} molecules")
+        print(f"  4-obj HV: {hv_4d:.6f}")
+        print(f"  2-obj Pareto front: {len(pareto_2d)} molecules")
+        print(f"  2-obj HV: {hv_2d:.6f}")
+        print(f"  (Baseline 4-obj: Genetic-GFN=0.642, HN-GFN=0.416)")
+        print(f"  (Baseline 2-obj: Genetic-GFN=0.718, HN-GFN=0.669)")
+
+        # Show Pareto front extremes
+        if len(pareto_4d) > 0:
+            print(f"\n  4-obj Pareto extremes:")
+            for dim, name in enumerate(['GSK3B', 'JNK3', 'QED', 'SA']):
+                best_idx = pareto_4d[:, dim].argmax()
+                vals = pareto_4d[best_idx]
+                print(f"    Best {name}: [{vals[0]:.3f}, {vals[1]:.3f}, "
+                      f"{vals[2]:.3f}, {vals[3]:.3f}]")
 
     # ── Cleanup ───────────────────────────────────────────────────
 

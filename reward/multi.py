@@ -7,7 +7,8 @@ from .core import _load_sascorer, _check_lipinski, _check_pains
 
 
 def compute_reward_multi(smiles, step, max_steps, gamma,
-                         cfg_reward, dock_scorer=None, dock_score=None):
+                         cfg_reward, dock_scorer=None, dock_score=None,
+                         mol=None):
     """Multi-objective reward.
 
     Supports two strategies:
@@ -16,7 +17,8 @@ def compute_reward_multi(smiles, step, max_steps, gamma,
 
     Returns unified reward dict.
     """
-    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return {'reward': 0.0, 'qed': 0.0, 'sa': 10.0, 'dock_score': 0.0,
                 'logp': 0.0, 'valid': False, 'lipinski': False, 'pains': False}
@@ -31,7 +33,7 @@ def compute_reward_multi(smiles, step, max_steps, gamma,
     if dock_score is not None:
         dock_norm = max(0.0, min(1.0, -dock_score / 12.0))
     elif dock_scorer is not None:
-        scores = dock_scorer.batch_dock([smiles])
+        scores = dock_scorer.batch_dock([smiles], mols=[mol])
         dock_score = scores[0]
         dock_norm = max(0.0, min(1.0, -dock_score / 12.0))
 

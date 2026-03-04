@@ -141,13 +141,14 @@ class RLTrainer(ABC):
 
         Subclasses typically override this to save in their own format.
         """
-        state = self.get_checkpoint_state()
-        state['episode'] = episode
-        state['eps'] = self.eps
-        state['best_metric'] = self.best_metric
-        state['config'] = OmegaConf.to_container(self.cfg, resolve=True)
-        save_checkpoint(
-            self.model_save_dir / f'{self.prefix}_checkpoint.pth', **state)
+        if not self.cfg.get('no_save_checkpoint', False):
+            state = self.get_checkpoint_state()
+            state['episode'] = episode
+            state['eps'] = self.eps
+            state['best_metric'] = self.best_metric
+            state['config'] = OmegaConf.to_container(self.cfg, resolve=True)
+            save_checkpoint(
+                self.model_save_dir / f'{self.prefix}_checkpoint.pth', **state)
 
         save_pickle(
             self.exp_dir / f'{self.prefix}_history.pickle',
@@ -169,6 +170,12 @@ class RLTrainer(ABC):
         try:
             self.setup()
             self.try_load_checkpoint()
+
+            # Finetune: override checkpoint eps/best with config values
+            if self.cfg.get('finetune'):
+                self.eps = self.cfg.eps_start
+                self.best_metric = None
+                print(f"  Finetune mode: eps reset to {self.eps}, best_metric cleared")
 
             history = []
 

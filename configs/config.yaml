@@ -43,6 +43,7 @@ gpu: 0
 log_freq: 5
 save_freq: 50
 load_checkpoint: null
+finetune: false
 
 # Docking infrastructure (shared across all reward modes)
 # Override per-run: reward.scoring_method=proxy reward.unidock_bin=/path/to/unidock

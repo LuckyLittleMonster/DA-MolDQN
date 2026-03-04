@@ -2,6 +2,7 @@
 
 import random
 import torch
+from rdkit import Chem
 
 from dqn import make_observation
 from reward import compute_reward
@@ -86,10 +87,11 @@ def run_episode(smiles, models, fpindex, rxn_matrix, dqn, target_dqn,
         selected_obs = obs_list[action_idx]
         synthesis_per_step.append(synthesis_map.get(selected_smiles, ''))
 
-        # 5. Compute reward
+        # 5. Compute reward (parse mol once, pass to both dock + reward)
+        selected_mol = Chem.MolFromSmiles(selected_smiles)
         rdict = compute_reward(
             selected_smiles, step, max_steps, gamma, cfg_reward,
-            dock_scorer=dock_scorer)
+            dock_scorer=dock_scorer, mol=selected_mol)
         reward = rdict['reward']
         score = rdict['dock_score'] if cfg_reward.name in ('dock', 'dock_deprecated', 'multi', 'multi_deprecated') else rdict['qed']
         rewards.append(reward)

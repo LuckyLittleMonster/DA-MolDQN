@@ -32,7 +32,7 @@ def _get_admet_model(device=None):
 
 def compute_reward_admet(smiles, step, max_steps, gamma, cfg_reward,
                          dock_scorer=None, dock_score=None,
-                         admet_preds=None):
+                         admet_preds=None, mol=None):
     """ADMET multi-property reward using FastADMETModel predictions.
 
     Combines QED + SA + ADMET absorption/toxicity/metabolism into a single
@@ -40,7 +40,8 @@ def compute_reward_admet(smiles, step, max_steps, gamma, cfg_reward,
 
     Returns unified reward dict.
     """
-    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return {'reward': 0.0, 'qed': 0.0, 'sa': 10.0, 'dock_score': 0.0, 'valid': False}
 
@@ -118,7 +119,7 @@ def compute_reward_admet(smiles, step, max_steps, gamma, cfg_reward,
         raw += cfg_reward.get('dock_weight', 0.0) * dock_norm
         metrics['dock_score'] = dock_score
     elif dock_scorer is not None:
-        scores = dock_scorer.batch_dock([smiles])
+        scores = dock_scorer.batch_dock([smiles], mols=[mol])
         dock_val = scores[0]
         dock_norm = max(0.0, min(1.0, -dock_val / 12.0))
         raw += cfg_reward.get('dock_weight', 0.0) * dock_norm

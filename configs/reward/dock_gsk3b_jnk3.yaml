@@ -1,0 +1,14 @@
+name: dock
+
+# GSK3B+JNK3 2-obj: P(GSK3B) x P(JNK3)
+# Matches HN-GFN / Genetic GFN 2-objective benchmark.
+# Combined proxy = P(GSK3B)*P(JNK3) -> pseudo_vina -> dock_norm
+# reward = dock_norm (pure combined proxy, no QED/SA)
+
+target: gsk3b_jnk3
+targets:
+  - gsk3b
+  - jnk3
+
+dock_weight: 1.0
+sa_weight: 0.0

@@ -10,14 +10,19 @@ from .admet.reward import compute_reward_admet, _get_admet_model
 
 def compute_reward(smiles, step, max_steps, gamma, cfg_reward,
                    dock_scorer=None, dock_score=None,
-                   admet_preds=None):
-    """Unified reward dispatch based on cfg_reward.name."""
+                   admet_preds=None, mol=None):
+    """Unified reward dispatch based on cfg_reward.name.
+
+    Args:
+        mol: Optional pre-parsed RDKit Mol object. Avoids redundant
+             MolFromSmiles calls when the caller already has a mol.
+    """
     name = cfg_reward.name
     if name == 'qed':
         return compute_reward_qed(
             smiles, step, max_steps, gamma,
             qed_weight=cfg_reward.qed_weight,
-            sa_weight=cfg_reward.sa_weight)
+            sa_weight=cfg_reward.sa_weight, mol=mol)
     elif name in ('dock', 'dock_rxnflow', 'dock_deprecated'):
         return compute_reward_dock(
             smiles, step, max_steps, gamma,
@@ -25,19 +30,19 @@ def compute_reward(smiles, step, max_steps, gamma, cfg_reward,
             dock_weight=cfg_reward.dock_weight,
             sa_weight=cfg_reward.sa_weight,
             qed_weight=cfg_reward.get('qed_weight', 0.0),
-            dock_score=dock_score)
+            dock_score=dock_score, mol=mol)
     elif name in ('multi', 'multi_deprecated'):
         return compute_reward_multi(
             smiles, step, max_steps, gamma,
             cfg_reward=cfg_reward,
             dock_scorer=dock_scorer,
-            dock_score=dock_score)
+            dock_score=dock_score, mol=mol)
     elif name == 'admet':
         return compute_reward_admet(
             smiles, step, max_steps, gamma,
             cfg_reward=cfg_reward,
             dock_scorer=dock_scorer,
             dock_score=dock_score,
-            admet_preds=admet_preds)
+            admet_preds=admet_preds, mol=mol)
     else:
         raise ValueError(f"Unknown reward mode: {name}")

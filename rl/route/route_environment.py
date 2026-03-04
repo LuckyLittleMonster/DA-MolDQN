@@ -78,8 +78,10 @@ class RouteEnvironment:
 
         # Batch docking: collect all products that need docking first
         products_to_dock = []
+        product_mols_to_dock = []
         product_indices = []
         new_products = []
+        new_mols = []  # Pre-parsed mol objects (created once, reused)
 
         for i, (route, pos, blk) in enumerate(
                 zip(self.routes, positions, block_indices)):
@@ -100,14 +102,22 @@ class RouteEnvironment:
 
             new_products.append(new_product)
 
+            # Parse mol once, reuse for docking + reward
             if new_product is not None:
-                products_to_dock.append(new_product)
-                product_indices.append(i)
+                mol = Chem.MolFromSmiles(new_product)
+                new_mols.append(mol)
+                if mol is not None:
+                    products_to_dock.append(new_product)
+                    product_mols_to_dock.append(mol)
+                    product_indices.append(i)
+            else:
+                new_mols.append(None)
 
         # Batch dock all successful products at once
         dock_results = {}
         if products_to_dock and self.dock_scorer is not None:
-            scores = self.dock_scorer.batch_dock(products_to_dock)
+            scores = self.dock_scorer.batch_dock(
+                products_to_dock, mols=product_mols_to_dock)
             for idx, smi, score in zip(product_indices, products_to_dock, scores):
                 dock_results[idx] = score
 
@@ -132,7 +142,8 @@ class RouteEnvironment:
                 dock_score = dock_results.get(i)
                 admet_preds = admet_results.get(i)
                 rdict = self._calc_reward(
-                    new_product, dock_score=dock_score,
+                    new_product, mol=new_mols[i],
+                    dock_score=dock_score,
                     admet_preds=admet_preds)
                 reward = rdict['reward']
                 qed = rdict['qed']
@@ -199,7 +210,7 @@ class RouteEnvironment:
 
         return l3_valid
 
-    def _calc_reward(self, product_smi: str,
+    def _calc_reward(self, product_smi: str, mol=None,
                      dock_score: float | None = None,
                      admet_preds: dict | None = None,
                      ) -> dict:
@@ -221,7 +232,8 @@ class RouteEnvironment:
                 cfg_reward=self.cfg_reward,
                 dock_scorer=self.dock_scorer,
                 dock_score=dock_score,
-                admet_preds=admet_preds)
+                admet_preds=admet_preds,
+                mol=mol)
         except Exception:
             return {'reward': -0.5, 'qed': 0.0, 'sa': 10.0,
                     'dock_score': 0.0, 'valid': False}

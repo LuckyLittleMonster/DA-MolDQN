@@ -49,7 +49,7 @@ class ReaSynTrainer(RLTrainer):
     def __init__(self, cfg):
         super().__init__(cfg)
         self.is_dock = cfg.reward.name in (
-            'dock', 'dock_deprecated',
+            'dock', 'dock_rxnflow', 'dock_deprecated',
             'multi', 'multi_deprecated')
 
         # Models
@@ -87,6 +87,7 @@ class ReaSynTrainer(RLTrainer):
         self.best_paths = []
         self.recent_episodes = deque(maxlen=5)
         self.synthesis_map = {}
+        self.oracle_counts = []  # Track oracle consumption per episode
 
     # ── Setup ─────────────────────────────────────────────────────
 
@@ -119,9 +120,10 @@ class ReaSynTrainer(RLTrainer):
         scoring_method = cfg.reward.get('scoring_method', 'dock')
         self.dock_config = (make_dock_config(cfg.reward)
                             if scoring_method != 'proxy' else None)
-        needs_dock = (cfg.reward.name not in ('qed',)
-                      and cfg.reward.get('target') is not None)
-        self.use_sync_dock = needs_dock
+        # Always use sync collection with lightweight ReaSynActionWorkers.
+        # Even QED benefits: avoids heavy RLWorker (each loads full model
+        # copies + action_cache → OOM at ~140GB with 16 workers).
+        self.use_sync_dock = True
 
         # Weight sharing directory + cache (no CUDA)
         self.weight_dir = tempfile.mkdtemp(prefix="reasyn_dqn_")
@@ -304,17 +306,18 @@ class ReaSynTrainer(RLTrainer):
               f"best={self.best_metric})")
 
     def save(self, episode, history):
-        save_checkpoint(
-            self.model_save_dir / f'{self.prefix}_checkpoint.pth',
-            dqn=self.dqn.state_dict(),
-            target_dqn=self.target_dqn.state_dict(),
-            optimizer=self.optimizer.state_dict(),
-            episode=episode,
-            eps=self.eps,
-            best_score_ever=(self.best_metric
-                             if self.best_metric is not None else 0.0),
-            config=OmegaConf.to_container(self.cfg, resolve=True),
-        )
+        if not self.cfg.get('no_save_checkpoint', False):
+            save_checkpoint(
+                self.model_save_dir / f'{self.prefix}_checkpoint.pth',
+                dqn=self.dqn.state_dict(),
+                target_dqn=self.target_dqn.state_dict(),
+                optimizer=self.optimizer.state_dict(),
+                episode=episode,
+                eps=self.eps,
+                best_score_ever=(self.best_metric
+                                 if self.best_metric is not None else 0.0),
+                config=OmegaConf.to_container(self.cfg, resolve=True),
+            )
         save_pickle(self.exp_dir / f'{self.prefix}_history.pickle',
                      self.reasyn_history)
         save_pickle(self.exp_dir / f'{self.prefix}_paths.pickle',
@@ -453,6 +456,11 @@ class ReaSynTrainer(RLTrainer):
         mean_score = np.mean(ep_scores) if ep_scores else 0.0
         avg_loss = total_loss / n_updates if n_updates > 0 else 0.0
 
+        # Track oracle consumption (unique molecules scored by proxy)
+        oracle_count = (self.dock_scorer_main.cache_size
+                        if self.dock_scorer_main else 0)
+        self.oracle_counts.append(oracle_count)
+
         # Update history
         best_ever = (self.best_metric
                      if self.best_metric is not None else 0.0)
@@ -477,6 +485,7 @@ class ReaSynTrainer(RLTrainer):
             'loss': avg_loss,
             'replay_size': len(self.replay),
             'results': results,  # for cache hit stats in log_episode
+            'oracle_count': oracle_count,
         }
 
     # ── Collection modes ──────────────────────────────────────────
@@ -594,8 +603,15 @@ class ReaSynTrainer(RLTrainer):
                 all_synthesis[i].append(
                     self.synthesis_map.get(candidates[idx], ''))
 
-            # 3. Batch dock all selected molecules
-            dock_results = self.dock_scorer_main.batch_dock(selected_smiles)
+            # 3. Parse mols once — reuse for docking + reward
+            selected_mols = [Chem.MolFromSmiles(smi) for smi in selected_smiles]
+
+            # 3a. Batch dock all selected molecules (skip for QED-only)
+            if self.dock_scorer_main is not None:
+                dock_results = self.dock_scorer_main.batch_dock(
+                    selected_smiles, mols=selected_mols)
+            else:
+                dock_results = [0.0] * n_mols
 
             # 3b. Batch ADMET prediction
             admet_batch = {}
@@ -618,9 +634,11 @@ class ReaSynTrainer(RLTrainer):
                     cfg_reward=cfg.reward,
                     dock_scorer=None,
                     dock_score=dock_val,
-                    admet_preds=admet_batch.get(i))
+                    admet_preds=admet_batch.get(i),
+                    mol=selected_mols[i])
                 all_rewards[i].append(rdict['reward'])
-                all_scores[i].append(dock_val)
+                score_val = dock_val if self.is_dock else rdict.get('qed', 0.0)
+                all_scores[i].append(score_val)
 
                 # Delayed storage
                 if prev_obs[i] is not None:
@@ -739,11 +757,11 @@ class ReaSynTrainer(RLTrainer):
                 total_calls = sum(r.get('reasyn_calls', 0) for r in results)
                 total_all = total_hits + total_calls
                 hr = total_hits / total_all if total_all > 0 else 0.0
-            dock_info = (f" | DkC:{self.dock_scorer_main.cache_size}"
-                         if self.dock_scorer_main else "")
+            oracle_info = (f" | Orc:{self.dock_scorer_main.cache_size}"
+                          if self.dock_scorer_main else "")
             cache_str = (f" | {hr:6.1%}  | "
                          f"{self.global_cache.num_molecules:4d} | "
-                         f"{self.global_cache.num_edges:5d}{dock_info}")
+                         f"{self.global_cache.num_edges:5d}{oracle_info}")
 
         if self.is_dock:
             print(f"{episode:4d} | {mean_reward:7.3f} | "
@@ -766,6 +784,9 @@ class ReaSynTrainer(RLTrainer):
 
         # Full-mode synthesis routes for final molecules
         self._run_full_synthesis()
+
+        # Save oracle counts to history
+        self.reasyn_history['oracle_counts'] = self.oracle_counts
 
         # Final save
         save_pickle(self.exp_dir / f'{self.prefix}_history.pickle',
@@ -805,6 +826,97 @@ class ReaSynTrainer(RLTrainer):
                           f"{bp['init_smiles'][:30]} -> "
                           f"{bp['final_smiles'][:30]} "
                           f"(ep {bp['episode']})")
+
+        # ── Oracle consumption summary ───────────────────────────
+        if self.oracle_counts:
+            total_oracle = self.oracle_counts[-1]
+            print(f"\n{'='*60}")
+            print(f"Oracle Consumption")
+            print(f"{'='*60}")
+            print(f"  Total unique proxy calls: {total_oracle}")
+            for ep_idx in [9, 24, 49, 74, 99, 199, 299, 399, 499]:
+                if ep_idx < len(self.oracle_counts):
+                    print(f"  After ep {ep_idx+1:3d}: "
+                          f"{self.oracle_counts[ep_idx]} oracles")
+
+        # ── Hypervolume computation ──────────────────────────────
+        self._compute_hypervolume()
+
+    def _compute_hypervolume(self):
+        """Compute HV from all scored molecules using per-target proxy scores.
+
+        4-obj: (GSK3B, JNK3, QED, SA_norm), ref=(0,0,0,0)
+        2-obj: (GSK3B, JNK3), ref=(0,0)
+        """
+        if (not self.dock_scorer_main
+                or not hasattr(self.dock_scorer_main, 'get_all_scored')):
+            print("\n  [HV] No multi-target scorer available, skipping HV.")
+            return
+
+        try:
+            from botorch.utils.multi_objective.hypervolume import Hypervolume
+            from botorch.utils.multi_objective.pareto import is_non_dominated
+            import torch as th
+        except ImportError:
+            print("\n  [HV] botorch not installed, skipping HV computation.")
+            return
+
+        per_target = self.dock_scorer_main.get_all_scored()
+        if not per_target:
+            print("\n  [HV] No scored molecules found.")
+            return
+
+        sascorer = _load_sascorer()
+
+        points_4d = []
+        points_2d = []
+        for smi, scores in per_target.items():
+            mol = Chem.MolFromSmiles(smi)
+            if mol is None:
+                continue
+            gsk3b = scores.get('gsk3b', 0.0)
+            jnk3 = scores.get('jnk3', 0.0)
+            qed = QEDModule.qed(mol)
+            sa_raw = sascorer.calculateScore(mol)
+            sa_norm = max(0.0, min(1.0, (10.0 - sa_raw) / 9.0))
+            points_4d.append([gsk3b, jnk3, qed, sa_norm])
+            points_2d.append([gsk3b, jnk3])
+
+        if not points_4d:
+            print("\n  [HV] No valid molecules for HV computation.")
+            return
+
+        pts_4d = th.tensor(points_4d)
+        pts_2d = th.tensor(points_2d)
+
+        ref_4d = th.zeros(4)
+        hv4 = Hypervolume(ref_4d)
+        pareto_4d = pts_4d[is_non_dominated(pts_4d)]
+        hv_4d = hv4.compute(pareto_4d) if len(pareto_4d) > 0 else 0.0
+
+        ref_2d = th.zeros(2)
+        hv2 = Hypervolume(ref_2d)
+        pareto_2d = pts_2d[is_non_dominated(pts_2d)]
+        hv_2d = hv2.compute(pareto_2d) if len(pareto_2d) > 0 else 0.0
+
+        print(f"\n{'='*60}")
+        print(f"Hypervolume (ref=(0,...,0))")
+        print(f"{'='*60}")
+        print(f"  Total scored molecules: {len(points_4d)}")
+        print(f"  4-obj Pareto front: {len(pareto_4d)} molecules")
+        print(f"  4-obj HV: {hv_4d:.6f}")
+        print(f"  2-obj Pareto front: {len(pareto_2d)} molecules")
+        print(f"  2-obj HV: {hv_2d:.6f}")
+        print(f"  (Baseline 4-obj: Genetic-GFN=0.642, HN-GFN=0.416)")
+        print(f"  (Baseline 2-obj: Genetic-GFN=0.718, HN-GFN=0.669)")
+
+        if len(pareto_4d) > 0:
+            print(f"\n  4-obj Pareto extremes:")
+            for dim, name in enumerate(['GSK3B', 'JNK3', 'QED', 'SA']):
+                best_idx = pareto_4d[:, dim].argmax()
+                vals = pareto_4d[best_idx]
+                print(f"    Best {name}: [{vals[0]:.3f}, {vals[1]:.3f}, "
+                      f"{vals[2]:.3f}, {vals[3]:.3f}]")
 
     def _run_full_synthesis(self):
         """Run Full ReaSyn (8x4 + editflow, fp32) on final molecules."""

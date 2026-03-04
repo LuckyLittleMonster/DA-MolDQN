@@ -7,9 +7,10 @@ from .core import _load_sascorer
 
 
 def compute_reward_qed(smiles, step, max_steps, gamma,
-                       qed_weight=0.8, sa_weight=0.2):
+                       qed_weight=0.8, sa_weight=0.2, mol=None):
     """QED-based reward. Returns unified reward dict."""
-    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return {'reward': 0.0, 'qed': 0.0, 'sa': 10.0, 'dock_score': 0.0, 'valid': False}
     sascorer = _load_sascorer()

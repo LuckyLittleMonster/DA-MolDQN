@@ -5,13 +5,17 @@ __pycache__
 
 # Experiments (outputs, models, logs)
 Experiments/
+Experiments_*/
 outputs/
+scripts/
 
 # Data (large files, managed separately)
 Data/
 
 # Reference repos (submodules / external)
 refs/
+rl_sync_not_working/
+bk/
 
 # Misc
 tem/*

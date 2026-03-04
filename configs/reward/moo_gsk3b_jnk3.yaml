@@ -1,0 +1,14 @@
+name: multi
+
+# GSK3B+JNK3 4-obj MOO: P(GSK3B) x P(JNK3) x QED x SA_norm
+# Matches HN-GFN / Genetic GFN benchmark (NeurIPS'23/'24).
+# Combined proxy = P(GSK3B)*P(JNK3) -> pseudo_vina -> dock_norm
+# Then: reward = dock_norm * QED * SA_norm (product strategy)
+
+strategy: product
+
+# Multi-target: combined as product
+target: gsk3b_jnk3
+targets:
+  - gsk3b
+  - jnk3
