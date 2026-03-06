@@ -1,0 +1,3158 @@
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineSystem.cmake:12 (find_program)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_UNAME"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "uname"
+    candidate_directories:
+      - "/bin/"
+      - "/usr/bin/"
+      - "/usr/local/bin/"
+    found: "/bin/uname"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineSystem.cmake:212 (message)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      The system is: Linux - 5.14.0-362.18.1.el9_3.0.1.aarch64+64k - aarch64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeUnixFindMake.cmake:5 (find_program)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_MAKE_PROGRAM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gmake"
+      - "make"
+      - "smake"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/gmake"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompiler.cmake:73 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:64 (_cmake_find_compiler)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_C_COMPILER"
+    description: "C compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "cc"
+      - "gcc"
+      - "cl"
+      - "bcc"
+      - "xlc"
+      - "icx"
+      - "clang"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/cc"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCCompilerId.c.in"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/"
+    found: "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCCompilerId.c.in"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /bin/cc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+      
+      The C compiler identification is GNU, found in:
+        /shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/4.2.3/CompilerIdC/a.out
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_AR"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ar"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/ar"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_RANLIB"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ranlib"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/ranlib"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_STRIP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "strip"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/strip"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_LINKER"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ld"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/ld"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_NM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "nm"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/nm"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJDUMP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "objdump"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/objdump"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJCOPY"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "objcopy"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/objcopy"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_READELF"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "readelf"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/readelf"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_DLLTOOL"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "dlltool"
+    candidate_directories:
+      - "/bin/"
+    searched_directories:
+      - "/bin/dlltool"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_ADDR2LINE"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "addr2line"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/addr2line"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_TAPI"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "tapi"
+    candidate_directories:
+      - "/bin/"
+    searched_directories:
+      - "/bin/tapi"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/Compiler/GNU-FindBinUtils.cmake:18 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:201 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_C_COMPILER_AR"
+    description: "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ar-11.4"
+      - "gcc-ar-11"
+      - "gcc-ar11"
+      - "gcc-ar"
+    candidate_directories:
+      - "/bin/"
+    searched_directories:
+      - "/bin/gcc-ar-11.4"
+      - "/bin/gcc-ar-11"
+      - "/bin/gcc-ar11"
+    found: "/bin/gcc-ar"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/Compiler/GNU-FindBinUtils.cmake:30 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:201 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_C_COMPILER_RANLIB"
+    description: "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ranlib-11.4"
+      - "gcc-ranlib-11"
+      - "gcc-ranlib11"
+      - "gcc-ranlib"
+    candidate_directories:
+      - "/bin/"
+    searched_directories:
+      - "/bin/gcc-ranlib-11.4"
+      - "/bin/gcc-ranlib-11"
+      - "/bin/gcc-ranlib11"
+    found: "/bin/gcc-ranlib"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompiler.cmake:54 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:69 (_cmake_find_compiler)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER"
+    description: "CXX compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "c++"
+      - "CC"
+      - "g++"
+      - "aCC"
+      - "cl"
+      - "bcc"
+      - "xlC"
+      - "icpx"
+      - "icx"
+      - "clang++"
+    candidate_directories:
+      - "/bin/"
+    found: "/bin/c++"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCXXCompilerId.cpp.in"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/"
+    found: "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCXXCompilerId.cpp.in"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is GNU, found in:
+        /shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/4.2.3/CompilerIdCXX/a.out
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/Compiler/GNU-FindBinUtils.cmake:18 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_AR"
+    description: "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ar-11.4"
+      - "gcc-ar-11"
+      - "gcc-ar11"
+      - "gcc-ar"
+    candidate_directories:
+      - "/bin/"
+    searched_directories:
+      - "/bin/gcc-ar-11.4"
+      - "/bin/gcc-ar-11"
+      - "/bin/gcc-ar11"
+    found: "/bin/gcc-ar"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/Compiler/GNU-FindBinUtils.cmake:30 (find_program)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
+      - "CMakeLists.txt:3 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_RANLIB"
+    description: "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ranlib-11.4"
+      - "gcc-ranlib-11"
+      - "gcc-ranlib11"
+      - "gcc-ranlib"
+    candidate_directories:
+      - "/bin/"
+    searched_directories:
+      - "/bin/gcc-ranlib-11.4"
+      - "/bin/gcc-ranlib-11"
+      - "/bin/gcc-ranlib11"
+    found: "/bin/gcc-ranlib"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt"
+      binary: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt'
+        
+        Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_f550e/fast
+        gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt'
+        /bin/gmake  -f CMakeFiles/cmTC_f550e.dir/build.make CMakeFiles/cmTC_f550e.dir/build
+        gmake[2]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt'
+        Building C object CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o
+        /bin/cc   -v -o CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o -c /home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/bin/cc
+        Target: aarch64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_f550e.dir/'
+         /usr/libexec/gcc/aarch64-redhat-linux/11/cc1 -quiet -v /home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_f550e.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mlittle-endian -mabi=lp64 -version -o /tmp/cc67xNVw.s
+        GNU C17 (GCC) version 11.4.1 20230605 (Red Hat 11.4.1-2) (aarch64-redhat-linux)
+        	compiled by GNU C version 11.4.1 20230605 (Red Hat 11.4.1-2), GMP version 6.2.0, MPFR version 4.1.0-p9, MPC version 1.2.1, isl version none
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-redhat-linux/11/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-redhat-linux/11/../../../../aarch64-redhat-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/gcc/aarch64-redhat-linux/11/include
+         /usr/local/include
+         /usr/include
+        End of search list.
+        GNU C17 (GCC) version 11.4.1 20230605 (Red Hat 11.4.1-2) (aarch64-redhat-linux)
+        	compiled by GNU C version 11.4.1 20230605 (Red Hat 11.4.1-2), GMP version 6.2.0, MPFR version 4.1.0-p9, MPC version 1.2.1, isl version none
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: d53f2deb13f98c3d3a80a99dd1a6aa66
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_f550e.dir/'
+         as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o /tmp/cc67xNVw.s
+        GNU assembler version 2.35.2 (aarch64-redhat-linux) using BFD version version 2.35.2-42.el9_3.1
+        COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_f550e
+        /home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f550e.dir/link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=/bin/cc
+        COLLECT_LTO_WRAPPER=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper
+        Target: aarch64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) 
+        COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_f550e' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'cmTC_f550e.'
+         /usr/libexec/gcc/aarch64-redhat-linux/11/collect2 -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccXRLqxo.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_f550e /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o
+        collect2 version 11.4.1 20230605 (Red Hat 11.4.1-2)
+        /bin/ld -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccXRLqxo.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_f550e /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o
+        GNU ld version 2.35.2-42.el9_3.1
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_f550e' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'cmTC_f550e.'
+        /bin/cc  -v -Wl,-v CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o -o cmTC_f550e
+        gmake[2]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt'
+        gmake[1]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:217 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/lib/gcc/aarch64-redhat-linux/11/include]
+          add: [/usr/local/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/lib/gcc/aarch64-redhat-linux/11/include] ==> [/usr/lib/gcc/aarch64-redhat-linux/11/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/lib/gcc/aarch64-redhat-linux/11/include;/usr/local/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
+        ignore line: [Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt']
+        ignore line: []
+        ignore line: [Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_f550e/fast]
+        ignore line: [gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt']
+        ignore line: [/bin/gmake  -f CMakeFiles/cmTC_f550e.dir/build.make CMakeFiles/cmTC_f550e.dir/build]
+        ignore line: [gmake[2]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-DNSkyt']
+        ignore line: [Building C object CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/bin/cc   -v -o CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o -c /home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCCompilerABI.c]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/bin/cc]
+        ignore line: [Target: aarch64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_f550e.dir/']
+        ignore line: [ /usr/libexec/gcc/aarch64-redhat-linux/11/cc1 -quiet -v /home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_f550e.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mlittle-endian -mabi=lp64 -version -o /tmp/cc67xNVw.s]
+        ignore line: [GNU C17 (GCC) version 11.4.1 20230605 (Red Hat 11.4.1-2) (aarch64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.4.1 20230605 (Red Hat 11.4.1-2)  GMP version 6.2.0  MPFR version 4.1.0-p9  MPC version 1.2.1  isl version none]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-redhat-linux/11/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-redhat-linux/11/../../../../aarch64-redhat-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/gcc/aarch64-redhat-linux/11/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C17 (GCC) version 11.4.1 20230605 (Red Hat 11.4.1-2) (aarch64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.4.1 20230605 (Red Hat 11.4.1-2)  GMP version 6.2.0  MPFR version 4.1.0-p9  MPC version 1.2.1  isl version none]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: d53f2deb13f98c3d3a80a99dd1a6aa66]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_f550e.dir/']
+        ignore line: [ as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o /tmp/cc67xNVw.s]
+        ignore line: [GNU assembler version 2.35.2 (aarch64-redhat-linux) using BFD version version 2.35.2-42.el9_3.1]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_f550e]
+        ignore line: [/home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f550e.dir/link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/bin/cc]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper]
+        ignore line: [Target: aarch64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) ]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_f550e' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'cmTC_f550e.']
+        link line: [ /usr/libexec/gcc/aarch64-redhat-linux/11/collect2 -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccXRLqxo.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_f550e /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o]
+          arg [/usr/libexec/gcc/aarch64-redhat-linux/11/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccXRLqxo.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-linux-aarch64.so.1] ==> ignore
+          arg [-X] ==> ignore
+          arg [-EL] ==> ignore
+          arg [-maarch64linux] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_f550e] ==> ignore
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o]
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o]
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11/../../..] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../..]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/crtend.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/crtend.o]
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o]
+        ignore line: [collect2 version 11.4.1 20230605 (Red Hat 11.4.1-2)]
+        ignore line: [/bin/ld -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccXRLqxo.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_f550e /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_f550e.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o]
+        linker tool for 'C': /bin/ld
+        collapse obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o] ==> [/usr/lib64/crt1.o]
+        collapse obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o] ==> [/usr/lib64/crti.o]
+        collapse obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o] ==> [/usr/lib64/crtn.o]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11] ==> [/usr/lib/gcc/aarch64-redhat-linux/11]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../..] ==> [/usr/lib]
+        implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+        implicit objs: [/usr/lib64/crt1.o;/usr/lib64/crti.o;/usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o;/usr/lib/gcc/aarch64-redhat-linux/11/crtend.o;/usr/lib64/crtn.o]
+        implicit dirs: [/usr/lib/gcc/aarch64-redhat-linux/11;/usr/lib64;/lib64;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/Internal/CMakeDetermineLinkerId.cmake:38 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Running the C compiler's linker: "/bin/ld" "-v"
+      GNU ld version 2.35.2-42.el9_3.1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu"
+      binary: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu'
+        
+        Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_8a6eb/fast
+        gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu'
+        /bin/gmake  -f CMakeFiles/cmTC_8a6eb.dir/build.make CMakeFiles/cmTC_8a6eb.dir/build
+        gmake[2]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu'
+        Building CXX object CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o
+        /bin/c++   -v -o CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o -c /home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=/bin/c++
+        Target: aarch64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_8a6eb.dir/'
+         /usr/libexec/gcc/aarch64-redhat-linux/11/cc1plus -quiet -v -D_GNU_SOURCE /home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_8a6eb.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mlittle-endian -mabi=lp64 -version -o /tmp/cce4bnTU.s
+        GNU C++17 (GCC) version 11.4.1 20230605 (Red Hat 11.4.1-2) (aarch64-redhat-linux)
+        	compiled by GNU C version 11.4.1 20230605 (Red Hat 11.4.1-2), GMP version 6.2.0, MPFR version 4.1.0-p9, MPC version 1.2.1, isl version none
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-redhat-linux/11/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-redhat-linux/11/../../../../aarch64-redhat-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11
+         /usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11/aarch64-redhat-linux
+         /usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11/backward
+         /usr/lib/gcc/aarch64-redhat-linux/11/include
+         /usr/local/include
+         /usr/include
+        End of search list.
+        GNU C++17 (GCC) version 11.4.1 20230605 (Red Hat 11.4.1-2) (aarch64-redhat-linux)
+        	compiled by GNU C version 11.4.1 20230605 (Red Hat 11.4.1-2), GMP version 6.2.0, MPFR version 4.1.0-p9, MPC version 1.2.1, isl version none
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: 8dc5ac993830ae3cb63e5f9b79d32bfa
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_8a6eb.dir/'
+         as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o /tmp/cce4bnTU.s
+        GNU assembler version 2.35.2 (aarch64-redhat-linux) using BFD version version 2.35.2-42.el9_3.1
+        COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_8a6eb
+        /home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8a6eb.dir/link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=/bin/c++
+        COLLECT_LTO_WRAPPER=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper
+        Target: aarch64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) 
+        COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_8a6eb' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'cmTC_8a6eb.'
+         /usr/libexec/gcc/aarch64-redhat-linux/11/collect2 -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccvbYZaE.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_8a6eb /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o
+        collect2 version 11.4.1 20230605 (Red Hat 11.4.1-2)
+        /bin/ld -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccvbYZaE.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_8a6eb /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o
+        GNU ld version 2.35.2-42.el9_3.1
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_8a6eb' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'cmTC_8a6eb.'
+        /bin/c++  -v -Wl,-v CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_8a6eb
+        gmake[2]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu'
+        gmake[1]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:217 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11]
+          add: [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11/aarch64-redhat-linux]
+          add: [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11/backward]
+          add: [/usr/lib/gcc/aarch64-redhat-linux/11/include]
+          add: [/usr/local/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11] ==> [/usr/include/c++/11]
+        collapse include dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11/aarch64-redhat-linux] ==> [/usr/include/c++/11/aarch64-redhat-linux]
+        collapse include dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11/backward] ==> [/usr/include/c++/11/backward]
+        collapse include dir [/usr/lib/gcc/aarch64-redhat-linux/11/include] ==> [/usr/lib/gcc/aarch64-redhat-linux/11/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/include/c++/11;/usr/include/c++/11/aarch64-redhat-linux;/usr/include/c++/11/backward;/usr/lib/gcc/aarch64-redhat-linux/11/include;/usr/local/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
+        ignore line: [Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu']
+        ignore line: []
+        ignore line: [Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_8a6eb/fast]
+        ignore line: [gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu']
+        ignore line: [/bin/gmake  -f CMakeFiles/cmTC_8a6eb.dir/build.make CMakeFiles/cmTC_8a6eb.dir/build]
+        ignore line: [gmake[2]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-3CXlqu']
+        ignore line: [Building CXX object CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/bin/c++   -v -o CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o -c /home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/bin/c++]
+        ignore line: [Target: aarch64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_8a6eb.dir/']
+        ignore line: [ /usr/libexec/gcc/aarch64-redhat-linux/11/cc1plus -quiet -v -D_GNU_SOURCE /home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_8a6eb.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mlittle-endian -mabi=lp64 -version -o /tmp/cce4bnTU.s]
+        ignore line: [GNU C++17 (GCC) version 11.4.1 20230605 (Red Hat 11.4.1-2) (aarch64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.4.1 20230605 (Red Hat 11.4.1-2)  GMP version 6.2.0  MPFR version 4.1.0-p9  MPC version 1.2.1  isl version none]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-redhat-linux/11/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-redhat-linux/11/../../../../aarch64-redhat-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11]
+        ignore line: [ /usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11/aarch64-redhat-linux]
+        ignore line: [ /usr/lib/gcc/aarch64-redhat-linux/11/../../../../include/c++/11/backward]
+        ignore line: [ /usr/lib/gcc/aarch64-redhat-linux/11/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C++17 (GCC) version 11.4.1 20230605 (Red Hat 11.4.1-2) (aarch64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.4.1 20230605 (Red Hat 11.4.1-2)  GMP version 6.2.0  MPFR version 4.1.0-p9  MPC version 1.2.1  isl version none]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: 8dc5ac993830ae3cb63e5f9b79d32bfa]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_8a6eb.dir/']
+        ignore line: [ as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o /tmp/cce4bnTU.s]
+        ignore line: [GNU assembler version 2.35.2 (aarch64-redhat-linux) using BFD version version 2.35.2-42.el9_3.1]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_8a6eb]
+        ignore line: [/home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8a6eb.dir/link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper]
+        ignore line: [Target: aarch64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) ]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_8a6eb' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-dumpdir' 'cmTC_8a6eb.']
+        link line: [ /usr/libexec/gcc/aarch64-redhat-linux/11/collect2 -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccvbYZaE.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_8a6eb /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o]
+          arg [/usr/libexec/gcc/aarch64-redhat-linux/11/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccvbYZaE.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-linux-aarch64.so.1] ==> ignore
+          arg [-X] ==> ignore
+          arg [-EL] ==> ignore
+          arg [-maarch64linux] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_8a6eb] ==> ignore
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o]
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o]
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11/../../..] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../..]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/crtend.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/crtend.o]
+          arg [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o] ==> obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o]
+        ignore line: [collect2 version 11.4.1 20230605 (Red Hat 11.4.1-2)]
+        ignore line: [/bin/ld -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccvbYZaE.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_8a6eb /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_8a6eb.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o]
+        linker tool for 'CXX': /bin/ld
+        collapse obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o] ==> [/usr/lib64/crt1.o]
+        collapse obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o] ==> [/usr/lib64/crti.o]
+        collapse obj [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o] ==> [/usr/lib64/crtn.o]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11] ==> [/usr/lib/gcc/aarch64-redhat-linux/11]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../..] ==> [/usr/lib]
+        implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+        implicit objs: [/usr/lib64/crt1.o;/usr/lib64/crti.o;/usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o;/usr/lib/gcc/aarch64-redhat-linux/11/crtend.o;/usr/lib64/crtn.o]
+        implicit dirs: [/usr/lib/gcc/aarch64-redhat-linux/11;/usr/lib64;/lib64;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/Internal/CMakeDetermineLinkerId.cmake:38 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Running the CXX compiler's linker: "/bin/ld" "-v"
+      GNU ld version 2.35.2-42.el9_3.1
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindPythonInterp.cmake:144 (find_program)"
+      - "/home/l1062811/data/rdkit/Code/cmake/Modules/FindNumPy.cmake:10 (find_package)"
+      - "CMakeLists.txt:41 (find_package)"
+    mode: "program"
+    variable: "PYTHON_EXECUTABLE"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    candidate_directories:
+      - "/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/"
+      - "/usr/bin/"
+      - "/usr/sbin/"
+      - "/usr/"
+      - "/bin/"
+      - "/sbin/"
+      - "/home/l1062811/data/envs/rl4/bin/"
+      - "/home/l1062811/data/envs/rl4/sbin/"
+      - "/home/l1062811/data/envs/rl4/"
+      - "/usr/X11R6/bin/"
+      - "/usr/X11R6/sbin/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/bin/"
+      - "/usr/pkg/sbin/"
+      - "/usr/pkg/"
+      - "/opt/bin/"
+      - "/opt/sbin/"
+      - "/opt/"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindPythonInterp.cmake:174 (find_program)"
+      - "/home/l1062811/data/rdkit/Code/cmake/Modules/FindNumPy.cmake:10 (find_package)"
+      - "CMakeLists.txt:41 (find_package)"
+    mode: "program"
+    variable: "PYTHON_EXECUTABLE"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "python"
+    candidate_directories:
+      - "/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/"
+      - "/usr/bin/"
+      - "/usr/sbin/"
+      - "/usr/"
+      - "/bin/"
+      - "/sbin/"
+      - "/home/l1062811/data/envs/rl4/bin/"
+      - "/home/l1062811/data/envs/rl4/sbin/"
+      - "/home/l1062811/data/envs/rl4/"
+      - "/usr/X11R6/bin/"
+      - "/usr/X11R6/sbin/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/bin/"
+      - "/usr/pkg/sbin/"
+      - "/usr/pkg/"
+      - "/opt/bin/"
+      - "/opt/sbin/"
+      - "/opt/"
+    found: "/bin/python"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/rdkit/Code/cmake/Modules/FindNumPy.cmake:20 (FIND_PATH)"
+      - "CMakeLists.txt:41 (find_package)"
+    mode: "path"
+    variable: "PYTHON_NUMPY_INCLUDE_PATH"
+    description: "Directory where the arrayobject.h header file can be found. This file is part of the numarray package"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "numpy/arrayobject.h"
+    candidate_directories:
+      - "/bin/"
+      - "/usr/local/include/"
+      - "/usr/local/"
+      - "/usr/include/"
+      - "/usr/"
+      - "/include/"
+      - "/home/l1062811/data/envs/rl4/include/"
+      - "/home/l1062811/data/envs/rl4/"
+      - "/usr/X11R6/include/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/include/"
+      - "/usr/pkg/"
+      - "/opt/include/"
+      - "/opt/"
+      - "/usr/include/X11/"
+      - "/usr/lib64/python3.9/site-packages/numpy/core/include/"
+    searched_directories:
+      - "/bin/numpy/arrayobject.h"
+      - "/usr/local/include/numpy/arrayobject.h"
+      - "/usr/local/numpy/arrayobject.h"
+    found: "/usr/include/"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_INCLUDE_PATH:
+        - "/usr/include/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2330 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_IOSTREAMS_LIBRARY_RELEASE"
+    description: "Boost iostreams library (release)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_iostreams-gcc11-s-64-1_82"
+      - "boost_iostreams-gcc11-s-64"
+      - "boost_iostreams-gcc11-s"
+      - "boost_iostreams-s-64-1_82"
+      - "boost_iostreams-s-64"
+      - "boost_iostreams-s"
+      - "boost_iostreams"
+      - "boost_iostreams"
+    candidate_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    searched_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    found: "/shared/data1/Users/l1062811/envs/hpc311alf/lib/libboost_iostreams.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2385 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_IOSTREAMS_LIBRARY_DEBUG"
+    description: "Boost iostreams library (debug)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_iostreams-gcc11-sd-64-1_82"
+      - "boost_iostreams-gcc11-sd-64"
+      - "boost_iostreams-gcc11-sd"
+      - "boost_iostreams-sd-64-1_82"
+      - "boost_iostreams-sd-64"
+      - "boost_iostreams-sd"
+      - "boost_iostreams"
+      - "boost_iostreams"
+    candidate_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    searched_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    found: "/shared/data1/Users/l1062811/envs/hpc311alf/lib/libboost_iostreams.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2330 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_REGEX_LIBRARY_RELEASE"
+    description: "Boost regex library (release)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_regex-gcc11-s-64-1_82"
+      - "boost_regex-gcc11-s-64"
+      - "boost_regex-gcc11-s"
+      - "boost_regex-s-64-1_82"
+      - "boost_regex-s-64"
+      - "boost_regex-s"
+      - "boost_regex"
+      - "boost_regex"
+    candidate_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    searched_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    found: "/shared/data1/Users/l1062811/envs/hpc311alf/lib/libboost_regex.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2385 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_REGEX_LIBRARY_DEBUG"
+    description: "Boost regex library (debug)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_regex-gcc11-sd-64-1_82"
+      - "boost_regex-gcc11-sd-64"
+      - "boost_regex-gcc11-sd"
+      - "boost_regex-sd-64-1_82"
+      - "boost_regex-sd-64"
+      - "boost_regex-sd"
+      - "boost_regex"
+      - "boost_regex"
+    candidate_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    searched_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    found: "/shared/data1/Users/l1062811/envs/hpc311alf/lib/libboost_regex.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2330 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_FILESYSTEM_LIBRARY_RELEASE"
+    description: "Boost filesystem library (release)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_filesystem-gcc11-s-64-1_82"
+      - "boost_filesystem-gcc11-s-64"
+      - "boost_filesystem-gcc11-s"
+      - "boost_filesystem-s-64-1_82"
+      - "boost_filesystem-s-64"
+      - "boost_filesystem-s"
+      - "boost_filesystem"
+      - "boost_filesystem"
+    candidate_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    searched_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    found: "/shared/data1/Users/l1062811/envs/hpc311alf/lib/libboost_filesystem.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2385 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_FILESYSTEM_LIBRARY_DEBUG"
+    description: "Boost filesystem library (debug)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_filesystem-gcc11-sd-64-1_82"
+      - "boost_filesystem-gcc11-sd-64"
+      - "boost_filesystem-gcc11-sd"
+      - "boost_filesystem-sd-64-1_82"
+      - "boost_filesystem-sd-64"
+      - "boost_filesystem-sd"
+      - "boost_filesystem"
+      - "boost_filesystem"
+    candidate_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    searched_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    found: "/shared/data1/Users/l1062811/envs/hpc311alf/lib/libboost_filesystem.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2330 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_SYSTEM_LIBRARY_RELEASE"
+    description: "Boost system library (release)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_system-gcc11-s-64-1_82"
+      - "boost_system-gcc11-s-64"
+      - "boost_system-gcc11-s"
+      - "boost_system-s-64-1_82"
+      - "boost_system-s-64"
+      - "boost_system-s"
+      - "boost_system"
+      - "boost_system"
+    candidate_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    searched_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    found: "/shared/data1/Users/l1062811/envs/hpc311alf/lib/libboost_system.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2385 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_SYSTEM_LIBRARY_DEBUG"
+    description: "Boost system library (debug)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_system-gcc11-sd-64-1_82"
+      - "boost_system-gcc11-sd-64"
+      - "boost_system-gcc11-sd"
+      - "boost_system-sd-64-1_82"
+      - "boost_system-sd-64"
+      - "boost_system-sd"
+      - "boost_system"
+      - "boost_system"
+    candidate_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    searched_directories:
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+      - "/shared/data1/Users/l1062811/envs/hpc311alf/lib/"
+    found: "/shared/data1/Users/l1062811/envs/hpc311alf/lib/libboost_system.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindPkgConfig.cmake:517 (find_program)"
+      - "/home/l1062811/data/rdkit/Code/cmake/Modules/FindCairo.cmake:40 (FIND_PACKAGE)"
+      - "CMakeLists.txt:96 (find_package)"
+    mode: "program"
+    variable: "PKG_CONFIG_EXECUTABLE"
+    description: "pkg-config executable"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "pkg-config"
+      - "pkgconf"
+    candidate_directories:
+      - "/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/"
+      - "/usr/bin/"
+      - "/usr/sbin/"
+      - "/usr/"
+      - "/bin/"
+      - "/sbin/"
+      - "/home/l1062811/data/envs/rl4/bin/"
+      - "/home/l1062811/data/envs/rl4/sbin/"
+      - "/home/l1062811/data/envs/rl4/"
+      - "/usr/X11R6/bin/"
+      - "/usr/X11R6/sbin/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/bin/"
+      - "/usr/pkg/sbin/"
+      - "/usr/pkg/"
+      - "/opt/bin/"
+      - "/opt/sbin/"
+      - "/opt/"
+    found: "/bin/pkg-config"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindPkgConfig.cmake:761 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindPkgConfig.cmake:811 (_pkg_find_libs)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindPkgConfig.cmake:1149 (_pkg_recalculate)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindPkgConfig.cmake:1166 (_pkg_check_modules_internal)"
+      - "/home/l1062811/data/rdkit/Code/cmake/Modules/FindCairo.cmake:41 (PKG_CHECK_MODULES)"
+      - "CMakeLists.txt:96 (find_package)"
+    mode: "library"
+    variable: "pkgcfg_lib_PC_CAIRO_cairo"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "cairo"
+    candidate_directories:
+      - "/usr/lib64/"
+    found: "/usr/lib64/libcairo.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/rdkit/Code/cmake/Modules/FindCairo.cmake:43 (FIND_PATH)"
+      - "CMakeLists.txt:96 (find_package)"
+    mode: "path"
+    variable: "CAIRO_INCLUDE_DIRS"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "cairo.h"
+    candidate_directories:
+      - "/usr/include/cairo/"
+      - "/usr/include/"
+      - "/usr/include/cairo/cairo/"
+      - "/usr/include/cairo/"
+      - "/usr/include/glib-2.0/cairo/"
+      - "/usr/include/glib-2.0/"
+      - "/usr/lib64/glib-2.0/include/cairo/"
+      - "/usr/lib64/glib-2.0/include/"
+      - "/usr/include/sysprof-4/cairo/"
+      - "/usr/include/sysprof-4/"
+      - "/usr/include/pixman-1/cairo/"
+      - "/usr/include/pixman-1/"
+      - "/usr/include/freetype2/cairo/"
+      - "/usr/include/freetype2/"
+      - "/usr/include/libpng16/cairo/"
+      - "/usr/include/libpng16/"
+      - "/usr/include/harfbuzz/cairo/"
+      - "/usr/include/harfbuzz/"
+      - "/usr/include/libxml2/cairo/"
+      - "/usr/include/libxml2/"
+      - "/bin/cairo/"
+      - "/bin/"
+      - "/usr/local/include/cairo/"
+      - "/usr/local/include/"
+      - "/usr/local/cairo/"
+      - "/usr/local/"
+      - "/usr/include/cairo/"
+      - "/usr/include/"
+      - "/usr/cairo/"
+      - "/usr/"
+      - "/include/cairo/"
+      - "/include/"
+      - "/home/l1062811/data/envs/rl4/include/cairo/"
+      - "/home/l1062811/data/envs/rl4/include/"
+      - "/home/l1062811/data/envs/rl4/cairo/"
+      - "/home/l1062811/data/envs/rl4/"
+      - "/usr/X11R6/include/cairo/"
+      - "/usr/X11R6/include/"
+      - "/usr/X11R6/cairo/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/include/cairo/"
+      - "/usr/pkg/include/"
+      - "/usr/pkg/cairo/"
+      - "/usr/pkg/"
+      - "/opt/include/cairo/"
+      - "/opt/include/"
+      - "/opt/cairo/"
+      - "/opt/"
+      - "/usr/include/X11/cairo/"
+      - "/usr/include/X11/"
+    found: "/usr/include/cairo/"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_INCLUDE_PATH:
+        - "/usr/include/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/rdkit/Code/cmake/Modules/FindCairo.cmake:51 (FIND_LIBRARY)"
+      - "CMakeLists.txt:96 (find_package)"
+    mode: "library"
+    variable: "CAIRO_LIBRARIES"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "cairo"
+    candidate_directories:
+      - "/usr/lib64/"
+      - "/bin/"
+      - "/usr/local/lib64/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+      - "/usr/lib64/"
+      - "/usr/lib/"
+      - "/usr/"
+      - "/lib64/"
+      - "/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/"
+      - "/opt/"
+      - "/usr/lib64/X11/"
+    found: "/usr/lib64/libcairo.so"
+    search_context:
+      ENV{PATH}:
+        - "/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/CheckCSourceCompiles.cmake:103 (cmake_check_source_compiles)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindThreads.cmake:160 (check_c_source_compiles)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindThreads.cmake:226 (_threads_check_libc)"
+      - "CMakeLists.txt:129 (find_package)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-dQ6Zcf"
+      binary: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-dQ6Zcf"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/l1062811/data/rdkit/Code/cmake/Modules"
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-dQ6Zcf'
+        
+        Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_adf4d/fast
+        gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-dQ6Zcf'
+        /bin/gmake  -f CMakeFiles/cmTC_adf4d.dir/build.make CMakeFiles/cmTC_adf4d.dir/build
+        gmake[2]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-dQ6Zcf'
+        Building C object CMakeFiles/cmTC_adf4d.dir/src.c.o
+        /bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_adf4d.dir/src.c.o -c /shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-dQ6Zcf/src.c
+        Linking C executable cmTC_adf4d
+        /home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_adf4d.dir/link.txt --verbose=1
+        /bin/cc CMakeFiles/cmTC_adf4d.dir/src.c.o -o cmTC_adf4d
+        gmake[2]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-dQ6Zcf'
+        gmake[1]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-dQ6Zcf'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "find_package-v1"
+    backtrace:
+      - "CMakeLists.txt:41 (find_package)"
+    name: "NumPy"
+    configs:
+      -
+        filename: "NumPyConfig.cmake"
+        kind: "cmake"
+      -
+        filename: "numpy-config.cmake"
+        kind: "cmake"
+    version_request:
+      exact: false
+    settings:
+      required: "required_explicit"
+      quiet: false
+      global: false
+      policy_scope: true
+      bypass_provider: false
+      names:
+        - "NumPy"
+      path_suffixes:
+        - ""
+      paths:
+        CMAKE_FIND_USE_CMAKE_PATH: true
+        CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+        CMAKE_FIND_USE_INSTALL_PREFIX: true
+        CMAKE_FIND_USE_PACKAGE_ROOT_PATH: true
+        CMAKE_FIND_USE_CMAKE_PACKAGE_REGISTRY: true
+        CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY: true
+        CMAKE_FIND_ROOT_PATH_MODE: "BOTH"
+    candidates:
+      -
+        path: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/pkgRedirects/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/pkgRedirects/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/l1062811/.local/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/l1062811/.local/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/apps/slurm/aarch64/24.05.4-maple/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/apps/slurm/aarch64/24.05.4-maple/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/apps/slurm/aarch64/current-MAPLE/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/apps/slurm/aarch64/current-MAPLE/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/l1062811/data/envs/rl4/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/l1062811/data/envs/rl4/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/l1062811/data/miniconda3-maple/condabin/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/l1062811/data/miniconda3-maple/condabin/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/share/Modules/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/share/Modules/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/local/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/local/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/NumPyConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/numpy-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+    found: null
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_MODULE_PATH:
+        - "/home/l1062811/data/rdkit/Code/cmake/Modules"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2330 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_IOSTREAMS_LIBRARY_RELEASE"
+    description: "Boost iostreams library (release)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_iostreams-gcc11-s-64-1_84"
+      - "boost_iostreams-gcc11-s-64"
+      - "boost_iostreams-gcc11-s"
+      - "boost_iostreams-s-64-1_84"
+      - "boost_iostreams-s-64"
+      - "boost_iostreams-s"
+      - "boost_iostreams"
+      - "boost_iostreams"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+    searched_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+    found: "/home/l1062811/data/envs/rl4/lib/libboost_iostreams.so"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2385 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_IOSTREAMS_LIBRARY_DEBUG"
+    description: "Boost iostreams library (debug)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_iostreams-gcc11-sd-64-1_84"
+      - "boost_iostreams-gcc11-sd-64"
+      - "boost_iostreams-gcc11-sd"
+      - "boost_iostreams-sd-64-1_84"
+      - "boost_iostreams-sd-64"
+      - "boost_iostreams-sd"
+      - "boost_iostreams"
+      - "boost_iostreams"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+    searched_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+    found: "/home/l1062811/data/envs/rl4/lib/libboost_iostreams.so"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2330 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_REGEX_LIBRARY_RELEASE"
+    description: "Boost regex library (release)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_regex-gcc11-s-64-1_84"
+      - "boost_regex-gcc11-s-64"
+      - "boost_regex-gcc11-s"
+      - "boost_regex-s-64-1_84"
+      - "boost_regex-s-64"
+      - "boost_regex-s"
+      - "boost_regex"
+      - "boost_regex"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+    searched_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+    found: "/home/l1062811/data/envs/rl4/lib/libboost_regex.so"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2385 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_REGEX_LIBRARY_DEBUG"
+    description: "Boost regex library (debug)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_regex-gcc11-sd-64-1_84"
+      - "boost_regex-gcc11-sd-64"
+      - "boost_regex-gcc11-sd"
+      - "boost_regex-sd-64-1_84"
+      - "boost_regex-sd-64"
+      - "boost_regex-sd"
+      - "boost_regex"
+      - "boost_regex"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+    searched_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+    found: "/home/l1062811/data/envs/rl4/lib/libboost_regex.so"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2330 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_FILESYSTEM_LIBRARY_RELEASE"
+    description: "Boost filesystem library (release)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_filesystem-gcc11-s-64-1_84"
+      - "boost_filesystem-gcc11-s-64"
+      - "boost_filesystem-gcc11-s"
+      - "boost_filesystem-s-64-1_84"
+      - "boost_filesystem-s-64"
+      - "boost_filesystem-s"
+      - "boost_filesystem"
+      - "boost_filesystem"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+    searched_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+    found: "/home/l1062811/data/envs/rl4/lib/libboost_filesystem.so"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2385 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_FILESYSTEM_LIBRARY_DEBUG"
+    description: "Boost filesystem library (debug)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_filesystem-gcc11-sd-64-1_84"
+      - "boost_filesystem-gcc11-sd-64"
+      - "boost_filesystem-gcc11-sd"
+      - "boost_filesystem-sd-64-1_84"
+      - "boost_filesystem-sd-64"
+      - "boost_filesystem-sd"
+      - "boost_filesystem"
+      - "boost_filesystem"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+    searched_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+    found: "/home/l1062811/data/envs/rl4/lib/libboost_filesystem.so"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2330 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_SYSTEM_LIBRARY_RELEASE"
+    description: "Boost system library (release)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_system-gcc11-s-64-1_84"
+      - "boost_system-gcc11-s-64"
+      - "boost_system-gcc11-s"
+      - "boost_system-s-64-1_84"
+      - "boost_system-s-64"
+      - "boost_system-s"
+      - "boost_system"
+      - "boost_system"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+    searched_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+    found: "/home/l1062811/data/envs/rl4/lib/libboost_system.so"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:807 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindBoost.cmake:2385 (_Boost_FIND_LIBRARY)"
+      - "CMakeLists.txt:47 (find_package)"
+    mode: "library"
+    variable: "Boost_SYSTEM_LIBRARY_DEBUG"
+    description: "Boost system library (debug)"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "boost_system-gcc11-sd-64-1_84"
+      - "boost_system-gcc11-sd-64"
+      - "boost_system-gcc11-sd"
+      - "boost_system-sd-64-1_84"
+      - "boost_system-sd-64"
+      - "boost_system-sd"
+      - "boost_system"
+      - "boost_system"
+    candidate_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+    searched_directories:
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+    found: "/home/l1062811/data/envs/rl4/lib/libboost_system.so"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:333 (try_compile)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "CMakeLists.txt:132 (find_package)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-kLA99J"
+      binary: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-kLA99J"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/l1062811/data/rdkit-Release_2025_09_5/Code/cmake/Modules"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-kLA99J'
+        
+        Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_4fe42/fast
+        /bin/gmake  -f CMakeFiles/cmTC_4fe42.dir/build.make CMakeFiles/cmTC_4fe42.dir/build
+        gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-kLA99J'
+        Building C object CMakeFiles/cmTC_4fe42.dir/OpenMPTryFlag.c.o
+        /bin/cc   -fopenmp -o CMakeFiles/cmTC_4fe42.dir/OpenMPTryFlag.c.o -c /shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-kLA99J/OpenMPTryFlag.c
+        Linking C executable cmTC_4fe42
+        /home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4fe42.dir/link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=/bin/cc
+        COLLECT_LTO_WRAPPER=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper
+        Target: aarch64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) 
+        COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        Reading specs from /usr/lib/gcc/aarch64-redhat-linux/11/libgomp.spec
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_4fe42' '-mlittle-endian' '-mabi=lp64' '-pthread' '-dumpdir' 'cmTC_4fe42.'
+         /usr/libexec/gcc/aarch64-redhat-linux/11/collect2 -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/cc3w5Ey3.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_4fe42 /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. CMakeFiles/cmTC_4fe42.dir/OpenMPTryFlag.c.o -lgomp -lgcc --push-state --as-needed -lgcc_s --pop-state -lpthread -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_4fe42' '-mlittle-endian' '-mabi=lp64' '-pthread' '-dumpdir' 'cmTC_4fe42.'
+        /bin/cc  -fopenmp -v CMakeFiles/cmTC_4fe42.dir/OpenMPTryFlag.c.o -o cmTC_4fe42
+        gmake[1]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-kLA99J'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:377 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "CMakeLists.txt:132 (find_package)"
+    message: |
+      Parsed C OpenMP implicit link information from above output:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-kLA99J']
+        ignore line: []
+        ignore line: [Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_4fe42/fast]
+        ignore line: [/bin/gmake  -f CMakeFiles/cmTC_4fe42.dir/build.make CMakeFiles/cmTC_4fe42.dir/build]
+        ignore line: [gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-kLA99J']
+        ignore line: [Building C object CMakeFiles/cmTC_4fe42.dir/OpenMPTryFlag.c.o]
+        ignore line: [/bin/cc   -fopenmp -o CMakeFiles/cmTC_4fe42.dir/OpenMPTryFlag.c.o -c /shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-kLA99J/OpenMPTryFlag.c]
+        ignore line: [Linking C executable cmTC_4fe42]
+        ignore line: [/home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4fe42.dir/link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/bin/cc]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper]
+        ignore line: [Target: aarch64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) ]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [Reading specs from /usr/lib/gcc/aarch64-redhat-linux/11/libgomp.spec]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_4fe42' '-mlittle-endian' '-mabi=lp64' '-pthread' '-dumpdir' 'cmTC_4fe42.']
+        link line: [ /usr/libexec/gcc/aarch64-redhat-linux/11/collect2 -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/cc3w5Ey3.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux -o cmTC_4fe42 /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbegin.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. CMakeFiles/cmTC_4fe42.dir/OpenMPTryFlag.c.o -lgomp -lgcc --push-state --as-needed -lgcc_s --pop-state -lpthread -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-redhat-linux/11/crtend.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o]
+          arg [/usr/libexec/gcc/aarch64-redhat-linux/11/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/cc3w5Ey3.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lpthread] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-linux-aarch64.so.1] ==> ignore
+          arg [-X] ==> ignore
+          arg [-EL] ==> ignore
+          arg [-maarch64linux] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_4fe42] ==> ignore
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11/../../..] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../..]
+          arg [CMakeFiles/cmTC_4fe42.dir/OpenMPTryFlag.c.o] ==> ignore
+          arg [-lgomp] ==> lib [gomp]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [-lpthread] ==> lib [pthread]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11] ==> [/usr/lib/gcc/aarch64-redhat-linux/11]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../..] ==> [/usr/lib]
+        implicit libs: [gomp;gcc;gcc_s;pthread;c;gcc;gcc_s]
+        implicit objs: []
+        implicit dirs: [/usr/lib/gcc/aarch64-redhat-linux/11;/usr/lib64;/lib64;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:395 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "CMakeLists.txt:132 (find_package)"
+    mode: "library"
+    variable: "OpenMP_gomp_LIBRARY"
+    description: "Path to the gomp library for OpenMP"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gomp"
+    candidate_directories:
+      - "/usr/lib/gcc/aarch64-redhat-linux/11/"
+      - "/usr/lib64/"
+      - "/lib64/"
+      - "/usr/lib64/"
+      - "/usr/lib/"
+      - "/home/l1062811/.local/bin/"
+      - "/apps/slurm/aarch64/24.05.4-maple/bin/"
+      - "/apps/slurm/aarch64/24.05.4-maple/sbin/"
+      - "/apps/slurm/aarch64/current-MAPLE/sbin/"
+      - "/apps/slurm/aarch64/current-MAPLE/bin/"
+      - "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/"
+      - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli/"
+      - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli/"
+      - "/home/l1062811/data/envs/rl4/bin/"
+      - "/home/l1062811/data/miniconda3-maple/condabin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+      - "/usr/local/lib64/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+      - "/usr/lib64/"
+      - "/usr/lib/"
+      - "/usr/"
+      - "/lib64/"
+      - "/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/"
+      - "/opt/"
+      - "/usr/lib64/X11/"
+    found: "/usr/lib/gcc/aarch64-redhat-linux/11/libgomp.so"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:395 (find_library)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "CMakeLists.txt:132 (find_package)"
+    mode: "library"
+    variable: "OpenMP_pthread_LIBRARY"
+    description: "Path to the pthread library for OpenMP"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "pthread"
+    candidate_directories:
+      - "/usr/lib/gcc/aarch64-redhat-linux/11/"
+      - "/usr/lib64/"
+      - "/lib64/"
+      - "/usr/lib64/"
+      - "/usr/lib/"
+      - "/home/l1062811/.local/bin/"
+      - "/apps/slurm/aarch64/24.05.4-maple/bin/"
+      - "/apps/slurm/aarch64/24.05.4-maple/sbin/"
+      - "/apps/slurm/aarch64/current-MAPLE/sbin/"
+      - "/apps/slurm/aarch64/current-MAPLE/bin/"
+      - "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/"
+      - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli/"
+      - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli/"
+      - "/home/l1062811/data/envs/rl4/bin/"
+      - "/home/l1062811/data/miniconda3-maple/condabin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+      - "/usr/local/lib64/"
+      - "/usr/local/lib/"
+      - "/usr/local/"
+      - "/usr/lib64/"
+      - "/usr/lib/"
+      - "/usr/"
+      - "/lib64/"
+      - "/lib/"
+      - "/home/l1062811/data/envs/rl4/lib/"
+      - "/home/l1062811/data/envs/rl4/"
+      - "/opt/"
+      - "/usr/lib64/X11/"
+    searched_directories:
+      - "/usr/lib/gcc/aarch64-redhat-linux/11/"
+    found: "/usr/lib64/libpthread.a"
+    search_context:
+      ENV{PATH}:
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/sbin"
+        - "/apps/slurm/aarch64/current-MAPLE/bin"
+        - "."
+        - "/shared/data1/Users/l1062811/cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/.local/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/bin"
+        - "/apps/slurm/aarch64/24.05.4-maple/sbin"
+        - "/home/l1062811/.cursor-server/bin/linux-arm64/7d96c2a03bb088ad367615e9da1a3fe20fbbc6a0/bin/remote-cli"
+        - "/home/l1062811/data/envs/rl4/bin"
+        - "/home/l1062811/data/miniconda3-maple/condabin"
+        - "/usr/share/Modules/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home/l1062811/data/envs/rl4"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:333 (try_compile)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "CMakeLists.txt:132 (find_package)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-71fmBy"
+      binary: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-71fmBy"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-fpermissive -fPIC -shared -O3 -I/usr/include -I/home/l1062811/data/envs/rl4/include"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/l1062811/data/rdkit-Release_2025_09_5/Code/cmake/Modules"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-71fmBy'
+        
+        Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_9e8a2/fast
+        /bin/gmake  -f CMakeFiles/cmTC_9e8a2.dir/build.make CMakeFiles/cmTC_9e8a2.dir/build
+        gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-71fmBy'
+        Building CXX object CMakeFiles/cmTC_9e8a2.dir/OpenMPTryFlag.cpp.o
+        /bin/c++   -fpermissive -fPIC -shared -O3 -I/usr/include -I/home/l1062811/data/envs/rl4/include -fopenmp -o CMakeFiles/cmTC_9e8a2.dir/OpenMPTryFlag.cpp.o -c /shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-71fmBy/OpenMPTryFlag.cpp
+        Linking CXX executable cmTC_9e8a2
+        /home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9e8a2.dir/link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=/bin/c++
+        COLLECT_LTO_WRAPPER=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper
+        Target: aarch64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) 
+        COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        Reading specs from /usr/lib/gcc/aarch64-redhat-linux/11/libgomp.spec
+        COLLECT_GCC_OPTIONS='-fpermissive' '-fPIC' '-shared' '-O3' '-I' '/usr/include' '-I' '/home/l1062811/data/envs/rl4/include' '-fopenmp' '-v' '-o' 'cmTC_9e8a2' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread' '-dumpdir' 'cmTC_9e8a2.'
+         /usr/libexec/gcc/aarch64-redhat-linux/11/collect2 -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccrqDUUe.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -shared -X -EL -maarch64linux -o cmTC_9e8a2 /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbeginS.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. CMakeFiles/cmTC_9e8a2.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lgomp -lgcc_s -lpthread -lc -lgcc_s /usr/lib/gcc/aarch64-redhat-linux/11/crtendS.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o
+        COLLECT_GCC_OPTIONS='-fpermissive' '-fPIC' '-shared' '-O3' '-I' '/usr/include' '-I' '/home/l1062811/data/envs/rl4/include' '-fopenmp' '-v' '-o' 'cmTC_9e8a2' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread' '-dumpdir' 'cmTC_9e8a2.'
+        /bin/c++ -fpermissive -fPIC -shared -O3 -I/usr/include -I/home/l1062811/data/envs/rl4/include -fopenmp -v CMakeFiles/cmTC_9e8a2.dir/OpenMPTryFlag.cpp.o -o cmTC_9e8a2
+        gmake[1]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-71fmBy'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:377 (message)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "CMakeLists.txt:132 (find_package)"
+    message: |
+      Parsed CXX OpenMP implicit link information from above output:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-71fmBy']
+        ignore line: []
+        ignore line: [Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_9e8a2/fast]
+        ignore line: [/bin/gmake  -f CMakeFiles/cmTC_9e8a2.dir/build.make CMakeFiles/cmTC_9e8a2.dir/build]
+        ignore line: [gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-71fmBy']
+        ignore line: [Building CXX object CMakeFiles/cmTC_9e8a2.dir/OpenMPTryFlag.cpp.o]
+        ignore line: [/bin/c++   -fpermissive -fPIC -shared -O3 -I/usr/include -I/home/l1062811/data/envs/rl4/include -fopenmp -o CMakeFiles/cmTC_9e8a2.dir/OpenMPTryFlag.cpp.o -c /shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-71fmBy/OpenMPTryFlag.cpp]
+        ignore line: [Linking CXX executable cmTC_9e8a2]
+        ignore line: [/home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9e8a2.dir/link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper]
+        ignore line: [Target: aarch64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.rockylinux.org/ --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --without-isl --enable-multilib --with-linker-hash-style=gnu --enable-gnu-indirect-function --build=aarch64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 11.4.1 20230605 (Red Hat 11.4.1-2) (GCC) ]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/11/:/usr/libexec/gcc/aarch64-redhat-linux/:/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-redhat-linux/11/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/aarch64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [Reading specs from /usr/lib/gcc/aarch64-redhat-linux/11/libgomp.spec]
+        ignore line: [COLLECT_GCC_OPTIONS='-fpermissive' '-fPIC' '-shared' '-O3' '-I' '/usr/include' '-I' '/home/l1062811/data/envs/rl4/include' '-fopenmp' '-v' '-o' 'cmTC_9e8a2' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread' '-dumpdir' 'cmTC_9e8a2.']
+        link line: [ /usr/libexec/gcc/aarch64-redhat-linux/11/collect2 -plugin /usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccrqDUUe.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -shared -X -EL -maarch64linux -o cmTC_9e8a2 /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crti.o /usr/lib/gcc/aarch64-redhat-linux/11/crtbeginS.o -L/usr/lib/gcc/aarch64-redhat-linux/11 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/aarch64-redhat-linux/11/../../.. CMakeFiles/cmTC_9e8a2.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lgomp -lgcc_s -lpthread -lc -lgcc_s /usr/lib/gcc/aarch64-redhat-linux/11/crtendS.o /usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64/crtn.o]
+          arg [/usr/libexec/gcc/aarch64-redhat-linux/11/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/libexec/gcc/aarch64-redhat-linux/11/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/libexec/gcc/aarch64-redhat-linux/11/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccrqDUUe.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lpthread] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-shared] ==> ignore
+          arg [-X] ==> ignore
+          arg [-EL] ==> ignore
+          arg [-maarch64linux] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_9e8a2] ==> ignore
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/usr/lib/gcc/aarch64-redhat-linux/11/../../..] ==> dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../..]
+          arg [CMakeFiles/cmTC_9e8a2.dir/OpenMPTryFlag.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgomp] ==> lib [gomp]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lpthread] ==> lib [pthread]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11] ==> [/usr/lib/gcc/aarch64-redhat-linux/11]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/usr/lib/gcc/aarch64-redhat-linux/11/../../..] ==> [/usr/lib]
+        implicit libs: [stdc++;m;gomp;gcc_s;pthread;c;gcc_s]
+        implicit objs: []
+        implicit dirs: [/usr/lib/gcc/aarch64-redhat-linux/11;/usr/lib64;/lib64;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:574 (try_compile)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:714 (_OPENMP_GET_SPEC_DATE)"
+      - "CMakeLists.txt:132 (find_package)"
+    description: "Detecting C OpenMP version"
+    directories:
+      source: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-vWgSGU"
+      binary: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-vWgSGU"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/l1062811/data/rdkit-Release_2025_09_5/Code/cmake/Modules"
+    buildResult:
+      variable: "OpenMP_SPECTEST_C_"
+      cached: true
+      stdout: |
+        Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-vWgSGU'
+        
+        Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_99014/fast
+        /bin/gmake  -f CMakeFiles/cmTC_99014.dir/build.make CMakeFiles/cmTC_99014.dir/build
+        gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-vWgSGU'
+        Building C object CMakeFiles/cmTC_99014.dir/OpenMPCheckVersion.c.o
+        /bin/cc   -fopenmp -o CMakeFiles/cmTC_99014.dir/OpenMPCheckVersion.c.o -c /shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-vWgSGU/OpenMPCheckVersion.c
+        Linking C executable cmTC_99014
+        /home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_99014.dir/link.txt --verbose=1
+        /bin/cc  -fopenmp CMakeFiles/cmTC_99014.dir/OpenMPCheckVersion.c.o -o cmTC_99014
+        gmake[1]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-vWgSGU'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:574 (try_compile)"
+      - "/home/l1062811/data/envs/rl4/share/cmake-4.2/Modules/FindOpenMP.cmake:714 (_OPENMP_GET_SPEC_DATE)"
+      - "CMakeLists.txt:132 (find_package)"
+    description: "Detecting CXX OpenMP version"
+    directories:
+      source: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-tjRnfM"
+      binary: "/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-tjRnfM"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-fpermissive -fPIC -shared -O3 -I/usr/include -I/home/l1062811/data/envs/rl4/include"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/l1062811/data/rdkit-Release_2025_09_5/Code/cmake/Modules"
+    buildResult:
+      variable: "OpenMP_SPECTEST_CXX_"
+      cached: true
+      stdout: |
+        Change Dir: '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-tjRnfM'
+        
+        Run Build Command(s): /home/l1062811/data/envs/rl4/bin/cmake -E env VERBOSE=1 /bin/gmake -f Makefile cmTC_09a7f/fast
+        /bin/gmake  -f CMakeFiles/cmTC_09a7f.dir/build.make CMakeFiles/cmTC_09a7f.dir/build
+        gmake[1]: Entering directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-tjRnfM'
+        Building CXX object CMakeFiles/cmTC_09a7f.dir/OpenMPCheckVersion.cpp.o
+        /bin/c++   -fpermissive -fPIC -shared -O3 -I/usr/include -I/home/l1062811/data/envs/rl4/include -fopenmp -o CMakeFiles/cmTC_09a7f.dir/OpenMPCheckVersion.cpp.o -c /shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-tjRnfM/OpenMPCheckVersion.cpp
+        Linking CXX executable cmTC_09a7f
+        /home/l1062811/data/envs/rl4/bin/cmake -E cmake_link_script CMakeFiles/cmTC_09a7f.dir/link.txt --verbose=1
+        /bin/c++ -fpermissive -fPIC -shared -O3 -I/usr/include -I/home/l1062811/data/envs/rl4/include -fopenmp CMakeFiles/cmTC_09a7f.dir/OpenMPCheckVersion.cpp.o -o cmTC_09a7f
+        gmake[1]: Leaving directory '/shared/data1/Users/l1062811/git/DA-MolDQN/src/build_py311/CMakeFiles/CMakeScratch/TryCompile-tjRnfM'
+        
+      exitCode: 0
+...

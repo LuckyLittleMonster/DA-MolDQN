@@ -62,6 +62,18 @@ void IncrementalMorganFingerprint::setBaseMol(const ROMol &mol) {
     }
 }
 
+IMFCache IncrementalMorganFingerprint::cacheState() const {
+    return {hash_value_table, bond_addition_hvt, atom_addition_hvt, baseMol, invariants};
+}
+
+void IncrementalMorganFingerprint::restoreState(const IMFCache &cache) {
+    hash_value_table = cache.hash_value_table;
+    bond_addition_hvt = cache.bond_addition_hvt;
+    atom_addition_hvt = cache.atom_addition_hvt;
+    baseMol = cache.baseMol;
+    invariants = cache.invariants;
+}
+
 boost::python::list IncrementalMorganFingerprint::getBaseMolMorganFingerprint() {
     return convertTableToSparseList(hash_value_table);
 }
@@ -267,6 +279,45 @@ boost::python::object IncrementalMorganFingerprint::getMorganFingerprintAsNumPyB
     python::handle<> res(arr);
     return python::object(res);
 }
+
+// Pure C++ dense FP methods — no Python objects, safe without GIL
+
+std::vector<uint8_t> IncrementalMorganFingerprint::convertTableToDenseVector(Table_T &table) {
+    auto s = convertTableToSet(table);
+    std::vector<uint8_t> dense(this->length, 0);
+    for (auto &val : s) {
+        dense[val % this->length] = 1;
+    }
+    return dense;
+}
+
+std::vector<uint8_t> IncrementalMorganFingerprint::getBaseMolMorganFingerprintDense() {
+    return convertTableToDenseVector(hash_value_table);
+}
+
+std::vector<uint8_t> IncrementalMorganFingerprint::getIncrementalMorganFingerprintDense(const RDKit::ROMol &new_mol, const std::list<int> &fromAtoms) {
+    Table_T new_hash_value_table;
+    if (new_mol.getNumAtoms() > this->baseMol.getNumAtoms()) {
+        new_hash_value_table = this->atom_addition_hvt;
+    } else if (new_mol.getNumBonds() > this->baseMol.getNumBonds()) {
+        new_hash_value_table = this->bond_addition_hvt;
+    } else {
+        new_hash_value_table = this->hash_value_table;
+    }
+    this->calcIncrementalFingerprint(new_mol, fromAtoms, new_hash_value_table);
+    return convertTableToDenseVector(new_hash_value_table);
+}
+
+std::vector<uint8_t> IncrementalMorganFingerprint::getMorganFingerprintDense(const RDKit::ROMol &new_mol) {
+    auto v = RDKit::MorganFingerprints::getFingerprint(new_mol, radius, nullptr, nullptr, useChirality, useBondTypes, true, onlyNonzeroInvariants, nullptr, 0);
+    std::vector<uint8_t> dense(this->length, 0);
+    for (auto &val : v->getNonzeroElements()) {
+        dense[val.first % this->length] = 1;
+    }
+    delete v;
+    return dense;
+}
+
 
 // std::set<uint32_t> IncrementalMorganFingerprint::convertTableToSet(Table_T &table) {
 //     std::set<uint32_t> s;

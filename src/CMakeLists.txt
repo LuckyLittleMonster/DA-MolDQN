@@ -27,7 +27,11 @@ if(DEFINED ENV{CONDA_PREFIX})
     set(BOOST_ROOT "$ENV{CONDA_PREFIX}")  # Note: must be BOOST_ROOT (all caps), not Boost_ROOT
     set(Boost_NO_SYSTEM_PATHS ON)
     set(Boost_USE_STATIC_LIBS OFF)  # Conda uses dynamic libraries
-    set(Boost_PYTHON_VERSION "310")
+    # Detect Python version from conda env
+    execute_process(COMMAND $ENV{CONDA_PREFIX}/bin/python -c "import sys; print(f'{sys.version_info.major}{sys.version_info.minor}')"
+        OUTPUT_VARIABLE PYTHON_VERSION_TAG OUTPUT_STRIP_TRAILING_WHITESPACE)
+    set(Boost_PYTHON_VERSION "${PYTHON_VERSION_TAG}")
+    message(STATUS "Detected Python version tag: ${PYTHON_VERSION_TAG}")
     message(STATUS "Using conda environment: $ENV{CONDA_PREFIX}")
 else()
     message(FATAL_ERROR "CONDA_PREFIX environment variable is not set.")
@@ -36,6 +40,7 @@ endif()
 
 find_package(NumPy REQUIRED)
 include_directories(${PYTHON_NUMPY_INCLUDE_PATH})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${PYTHON_NUMPY_INCLUDE_PATH}")
 message(STATUS "PYTHON_NUMPY_INCLUDE_PATH='${PYTHON_NUMPY_INCLUDE_PATH}'")
 
 # Find Boost components (without python/numpy - we'll handle those manually)
@@ -72,8 +77,8 @@ endif()
 
 # Manually add Python and NumPy Boost libraries
 if(DEFINED ENV{CONDA_PREFIX})
-    set(BOOST_PYTHON_LIB "$ENV{CONDA_PREFIX}/lib/libboost_python310.so")
-    set(BOOST_NUMPY_LIB "$ENV{CONDA_PREFIX}/lib/libboost_numpy310.so")
+    set(BOOST_PYTHON_LIB "$ENV{CONDA_PREFIX}/lib/libboost_python${Boost_PYTHON_VERSION}.so")
+    set(BOOST_NUMPY_LIB "$ENV{CONDA_PREFIX}/lib/libboost_numpy${Boost_PYTHON_VERSION}.so")
     
     if(EXISTS "${BOOST_PYTHON_LIB}")
         message(STATUS "Found Boost Python: ${BOOST_PYTHON_LIB}")
@@ -124,6 +129,9 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
 find_package (Threads)
 set(RDKit_THREAD_LIBS Threads::Threads)
 
+find_package(OpenMP REQUIRED)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+
 # set( LIBS ${RDKIT_LIBRARIES} Boost::iostreams Boost::regex Boost::python Boost::numpy ${RDKit_THREAD_LIBS}
 #      ${CAIRO_LIBRARIES} )
 set( LIBS ${RDKIT_LIBRARIES} 
@@ -158,4 +166,4 @@ elseif(DEFINED ENV{CONDA_PREFIX})
 else()
     message(FATAL_ERROR "Cannot determine Boost include directory for target!")
 endif()
-target_link_libraries( cenv.so ${LIBS} ${RDKit_LIBS})
+target_link_libraries( cenv.so ${LIBS} ${RDKit_LIBS} OpenMP::OpenMP_CXX)

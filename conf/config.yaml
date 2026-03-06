@@ -1,0 +1,50 @@
+defaults:
+  - reward: bde_ip
+  - mol: default
+  - dqn: default
+  - etkdg: turbo
+
+experiment: da
+note: null
+trial: 1
+iteration: 200000
+
+eps_threshold: 1.0
+eps_decay: 0.999
+update_episodes: 1
+max_steps_per_episode: 40
+discount_factor: 1.0
+min_batch_size: 128
+max_batch_size: 128
+
+init_mol: null
+init_mol_path: null
+num_init_mol: null
+init_mol_start: 0
+
+gpu_list: [0]
+torch_num_threads: 1
+starter: null
+mp_master_port: "6500"
+mp_world_size: 1
+init_method: "file:///tmp/da_moldqn_sharedfile"
+backend: nccl
+
+checkpoint: null
+use_checkpoint_eps: false
+
+cache: [bde, ip]
+
+maintain_OH: null
+record_top_path: 10
+record_last_path: 5
+record_all_path: false
+
+test: false
+save_reward_freq: 100
+save_model_freq: 1000
+save_path_freq: 1000
+
+hydra:
+  job:
+    chdir: false

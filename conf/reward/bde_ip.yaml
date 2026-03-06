@@ -1,0 +1,6 @@
+type: bde_ip
+reward_weight: [0.8, 0.2, 0.5]
+bde_factor: 0.9
+ip_factor: 0.8
+lru_cache_capacity: 128
+reward_of_invalid_mol: -1000

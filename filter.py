@@ -1,7 +1,7 @@
 import os
 import shutil
 from datetime import datetime
-import hyp
+
 import math
 import utils
 import numpy as np
@@ -20,7 +20,7 @@ from similarity_filter import AntiOxidantDataSet
 import sascorer
 import pandas as pd
 import csv
-import hyp
+
 
 
 parser = argparse.ArgumentParser()

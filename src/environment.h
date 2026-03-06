@@ -7,6 +7,7 @@
 #include <GraphMol/SmilesParse/SmilesParse.h>
 #include <GraphMol/SmilesParse/SmilesWrite.h>
 #include <GraphMol/Substruct/SubstructMatch.h>
+#include <GraphMol/DistGeomHelpers/Embedder.h>
 #include <RDGeneral/BoostEndInclude.h>
 #include <RDGeneral/BoostStartInclude.h>
 #include <RDGeneral/Exceptions.h>
@@ -31,8 +32,23 @@
 #include <unordered_map>
 #include <vector>
 #include <unistd.h>
+#include <atomic>
 
 #include "incremental_morgan_fingerprint.h"
+
+// Free function: parallel ETKDG embedding using OpenMP
+boost::python::tuple embed_molecules_parallel(
+    boost::python::list py_molecules,
+    int maxAttempts = 7,
+    int nThreads = 72,
+    int maxIterations = 0,
+    int timeout = 1);
+
+// Result container for batch valid action computation (no Python objects, GIL-free)
+struct BatchActionResult {
+    std::vector<boost::shared_ptr<RDKit::ROMol>> actions;
+    std::vector<std::vector<uint8_t>> fingerprints;
+};
 
 struct Flags {
     bool allow_removal = true; // downgrade bond
@@ -81,4 +97,24 @@ public:
     void bond_replace(boost::shared_ptr<RDKit::ROMol> mol, int get_morgan_fingerprint, int maintain_OH, boost::python::list &valid_actions, boost::python::list &fingerprints);
     int count_OH(boost::shared_ptr<RDKit::ROMol> mol);
     bool check_OH(int maintain_OH, boost::shared_ptr<RDKit::ROMol> mol);
+
+    // Batch: compute valid actions for multiple molecules in parallel (OpenMP)
+    boost::python::tuple get_valid_actions_batch(
+        boost::python::list py_molecules,
+        boost::python::list py_maintain_OH_flags,
+        int nThreads = 72);
+
+    // Internal methods: C++ containers only, no Python objects, safe without GIL
+    void atom_addition_internal(boost::shared_ptr<RDKit::ROMol> mol, int maintain_OH, BatchActionResult &result);
+    void bond_addition_internal(boost::shared_ptr<RDKit::ROMol> mol, int maintain_OH, BatchActionResult &result);
+    void bond_replace_internal(boost::shared_ptr<RDKit::ROMol> mol, int maintain_OH, BatchActionResult &result);
+
+    // Single-row bond_addition: processes only atom_i's row (j > atom_i)
+    // mol must have ring info initialized; working_state is pre-kekulized copy
+    void bond_addition_row_internal(
+        boost::shared_ptr<RDKit::ROMol> mol,
+        const RDKit::RWMol &working_state,
+        int atom_i,
+        int maintain_OH,
+        BatchActionResult &result);
 };

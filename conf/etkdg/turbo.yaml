@@ -1,0 +1,4 @@
+max_iterations: 0
+timeout: 1
+max_attempts_cache: 1
+max_attempts_uncache: 1

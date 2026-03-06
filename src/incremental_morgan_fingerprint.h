@@ -50,6 +50,15 @@ using uint = uint;
 using Map_T = std::vector<std::pair<boost::dynamic_bitset<>, uint32_t>>;
 using Table_T = std::vector<Map_T>;
 
+// Cached fingerprint state for restoring setBaseMol results without recomputation
+struct IMFCache {
+    Table_T hash_value_table;
+    Table_T bond_addition_hvt;
+    Table_T atom_addition_hvt;
+    RDKit::RWMol baseMol;
+    std::vector<uint32_t> invariants;
+};
+
 class IncrementalMorganFingerprint {
 
 public:
@@ -60,7 +69,7 @@ public:
     bool useChirality = 0;
     bool useBondTypes = 1;
     bool onlyNonzeroInvariants = 0;
-    bool includeRedundantEnvironments = 1; 
+    bool includeRedundantEnvironments = 1;
 
     RDKit::FingerprintGenerator<std::uint32_t> *fpGenerator = nullptr;
     RDKit::RWMol baseMol;
@@ -68,6 +77,11 @@ public:
     IncrementalMorganFingerprint();
     IncrementalMorganFingerprint(uint radius, uint length);
     void setBaseMol(const RDKit::ROMol &mol);
+
+    // Cache/restore setBaseMol state (cheap memcpy vs expensive recomputation)
+    IMFCache cacheState() const;
+    void restoreState(const IMFCache &cache);
+
     void setFingerprintRadius(uint radius) {
         this->radius = radius;
         fpGenerator = RDKit::MorganFingerprint::getMorganGenerator<std::uint32_t>(radius);
@@ -89,6 +103,11 @@ public:
     boost::python::list getMorganFingerprintByGenerator(const RDKit::ROMol &new_mol);
     boost::python::object getMorganFingerprintAsNumPyByGenerator(const RDKit::ROMol &new_mol);
 
+    // Pure C++ dense FP methods (no Python objects, safe to call without GIL)
+    std::vector<uint8_t> getIncrementalMorganFingerprintDense(const RDKit::ROMol &new_mol, const std::list<int> &fromAtoms);
+    std::vector<uint8_t> getBaseMolMorganFingerprintDense();
+    std::vector<uint8_t> getMorganFingerprintDense(const RDKit::ROMol &new_mol);
+
 private:
 
     void calcFingerprint(const RDKit::ROMol &mol, uint radius,
@@ -105,6 +124,7 @@ private:
     std::set<uint32_t> convertTableToSet(Table_T &);
     boost::python::list convertTableToSparseList(Table_T &);
     boost::python::object convertTableToNumPy(Table_T &);
+    std::vector<uint8_t> convertTableToDenseVector(Table_T &);
 
     uint32_t updateElement(uint atomIdx, uint radius, uint32_t element, const boost::dynamic_bitset<> &,Table_T &res);
     Table_T hash_value_table;
