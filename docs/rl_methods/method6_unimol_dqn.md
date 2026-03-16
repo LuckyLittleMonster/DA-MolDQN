@@ -148,6 +148,27 @@ Overall filtering: 16-32% of actions rejected (varies by episode stage)
 
 **UniMolDQN performs worse than the simpler MolDQN baseline**, despite using a vastly superior molecular representation.
 
+## Performance Profiling (40 molecules on GH200)
+
+| Stage | Time | % of Total |
+|-------|------|-----------|
+| ETKDG conformer generation | 272ms | **96%** |
+| transform_raw (featurize) | 1.6ms | 1% |
+| GPU inference (UniMol) | 9.7ms | 3% |
+| **Total bare-metal** | **283ms** | — |
+| unimol_tools API (for comparison) | 459ms | — |
+
+**ETKDG is the absolute bottleneck** (96% of encoding time). GPU inference is fast (10ms for 40 molecules). The bare-metal pipeline (bypassing unimol_tools' Pool/DataHub/logging overhead) saves ~176ms/batch.
+
+### 3D Pipeline Optimizations Attempted
+
+1. **ConstrainedEmbed**: Reuse parent conformer coordinates → 7.65x speedup for large molecules (>10 atoms), but slower for small molecules (<5 atoms). Hybrid threshold: ≥10 atoms uses ConstrainedEmbed, <10 uses scratch ETKDG.
+2. **3D action filtering**: Distance + bond angle + steric checks on parent conformer → filters 21-32% of invalid actions → fewer ETKDG calls.
+3. **Embedding cache**: SMILES→512-dim cache with disk persistence. Hit rate 34-96% depending on exploration vs exploitation phase.
+4. **nvMolKit GPU ETKDG**: Not feasible due to environment incompatibility and small batch sizes.
+
+Despite these optimizations, UniMolDQN remains ~5-7x slower than MolDQN per step.
+
 ## Why It Failed
 
 ### Finding 1: 3D Representation Does Not Rescue DQN

@@ -157,6 +157,10 @@ The policy barely has time to move away from its initialization before the oracl
 
 ### Fundamental Insight
 
-Method 5 is the definitive experiment: it tests whether RL can improve GP's performance when given the perfect tool (ReaSyn action space) and perfect information (population statistics). The answer is **no**. This eliminates the hypothesis that RL's failure in Methods 1-4 was due to poor action space design. The problem is more fundamental:
+Method 5 is the definitive experiment for **optimization strategy**: it tests whether RL can improve GP's performance when given the perfect tool (ReaSyn action space) and perfect information (population statistics). The answer is **no**. This eliminates the hypothesis that RL's failure in Methods 1-4 was due to poor action space design.
 
 **For molecular optimization with a black-box oracle, population-based evolutionary methods are inherently superior to sequential decision-making (RL).** GP's population diversity, crossover-based recombination, and hard selection are better suited to this problem class than RL's policy learning, which requires temporal structure that molecular optimization does not provide.
+
+### Connection to Method 6
+
+Method 5 eliminated "optimization strategy" as the bottleneck. The remaining hypothesis was that RL's failure was due to poor representation (2D fingerprints) and insufficient model capacity (linear Q). Method 6 (UniMolDQN) tested this by using Uni-Mol 3D encoder + deep Q-head — and also failed, performing worse than simple fingerprint-based DQN. Together, Methods 5 and 6 complete the systematic elimination: **neither strategy, representation, nor capacity is the issue — the MDP formulation itself is ill-suited for molecular optimization.**

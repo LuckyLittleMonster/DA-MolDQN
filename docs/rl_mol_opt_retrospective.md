@@ -31,6 +31,12 @@ If a molecule has good chemical properties, structurally similar molecules shoul
 - **Problem**: GP+ReaSyn without RL performs equally well or better. RL adds exploitation pressure that causes premature convergence without improving results
 - **Status**: Failed - RL guidance provides no benefit
 
+### 6. UniMolDQN — 3D Molecular Encoder DQN
+- **Approach**: Replace Morgan FP with Uni-Mol (frozen, 209M pretrained, 512-dim 3D-aware encoder). Deep Q-head (3-layer MLP) replaces linear Q.
+- **Motivation**: Test whether 3D representation + model capacity can rescue DQN.
+- **Problem**: Worse than fingerprint-based MolDQN on QED (top-1 0.81 vs 0.90). Loss divergence in v2; v3 stabilizes but plateaus in local optima.
+- **Status**: Failed - 3D representation does not rescue DQN
+
 ## Common Failure Patterns
 
 1. **Init mol dependency**: All RL methods require good starting molecules. Cannot discover novel scaffolds independently.
@@ -38,26 +44,29 @@ If a molecule has good chemical properties, structurally similar molecules shoul
 3. **Jumping problem (methods 1,2)**: Large structural changes between RL steps break the local smoothness assumption that makes RL valuable.
 4. **Premature convergence (method 5)**: RL policy collapses entropy, reducing exploration below random GP baseline.
 5. **GP already sufficient**: For methods where ReaSyn provides the action space, GP's random search + selection is already near-optimal.
+6. **Q-value instability with continuous representations (method 6)**: UniMol embeddings (L2 norm ~27, range ±4.7) cause Q-value divergence via max-operator overestimation. Requires L2 normalization + gradient clipping + Double DQN to stabilize, but stabilized model still underperforms.
+7. **Exploration-exploitation trap (method 6)**: Without stability fixes → loss diverges but explores widely (cache hit 34%); with fixes → loss converges but trapped in local optima (cache hit 96%). Neither regime produces good optimization.
 
 ## Root Cause Analysis
 
-### Problem 1: Representation Bottleneck (Fingerprint Limitations)
+### ~~Problem 1: Representation Bottleneck~~ (DISPROVED by Method 6)
 
-Morgan fingerprints are 2D topological substructure counts. They fundamentally cannot capture:
-- **3D conformation**: Docking scores depend on molecular shape in protein pocket
-- **Electrostatic properties**: Charge distribution, H-bond patterns
-- **Flexibility**: Conformational entropy, rotatable bonds in context
-- **Protein-ligand interactions**: Shape complementarity, induced fit
+Initially hypothesized that Morgan fingerprints (2D) cannot capture 3D conformation and electrostatics. **Method 6 tested this directly** by replacing Morgan FP with Uni-Mol (209M pretrained, 3D SE(3)-equivariant encoder, 512-dim). Result: UniMolDQN performs **worse** than fingerprint-based MolDQN (top-1 QED 0.81 vs 0.90). Representation quality is NOT the bottleneck.
 
-Consequence: Two fingerprint-similar molecules can have vastly different docking scores (different 3D conformations), and two fingerprint-dissimilar molecules can dock equally well (similar 3D shapes). The Q-function is trained on a blurred, misleading landscape.
+### ~~Problem 2: Model Capacity Bottleneck~~ (DISPROVED by Method 6)
 
-### Problem 2: Model Capacity Bottleneck (Linear DQN)
+Initially hypothesized that linear Q-network cannot model the non-linear property landscape. **Method 6 tested this directly** with a deep 3-layer MLP Q-head (513→256→128→1). Result: Same or worse performance. Model capacity is NOT the bottleneck.
 
-Linear Q(s,a) = w . phi(s,a) cannot learn non-linear value functions. The molecular property landscape is highly non-linear - small structural changes can cause large property jumps (activity cliffs). A linear model sees these as noise and learns only coarse trends.
+### True Root Cause: The MDP Formulation Itself
 
-### Combined Effect
+With representation (Method 6) and optimization strategy (Method 5) eliminated as causes, the remaining explanation is fundamental:
 
-DQN can neither perceive the landscape accurately (bad representation) nor model it faithfully (insufficient capacity). This reduces RL to near-random search, which cannot compete with GP's simpler but more robust "random mutation + hard selection" strategy.
+**Sequential decision-making (MDP/DQN) is the wrong abstraction for molecular optimization.**
+
+1. **No temporal structure**: Molecular optimization has no meaningful temporal dependencies. The quality of step 20's modification depends only on the current structure, not the path taken. The optimal policy is essentially greedy.
+2. **Sample inefficiency**: RL wastes oracle budget on "learning" a policy, while evolutionary methods use every call for selection.
+3. **Exploration-exploitation dilemma is solved better by populations**: GP maintains diversity through population-based search, crossover, and selection — without requiring learned entropy bonuses or epsilon schedules.
+4. **DQN's max operator causes systematic Q-value overestimation**, especially harmful with continuous representations (embedding norm ~27 → loss divergence, fixed in v3 but still underperforms).
 
 ## GP+ReaSyn Baseline Results (Proxy sEH Docking, seed=42)
 
@@ -73,108 +82,51 @@ DQN can neither perceive the landscape accurately (bad representation) nor model
 
 This serves as the baseline to beat for any future RL approach.
 
-## Requirements for a Viable RL Approach
+## Conclusion: RL Is Not Viable for This Problem Class
 
-1. **3D-aware molecular representation**: Must capture conformation, shape, electrostatics. Candidates: Uni-Mol, SchNet/DimeNet, 3D pharmacophore descriptors, or learned representations from docking-score prediction.
+After systematically testing 6 methods across 4 dimensions:
 
-2. **Sufficient model capacity**: Non-linear Q-network (deep MLP, GNN, or Transformer) that can model the complex property landscape.
+| Dimension | Methods | Result |
+|-----------|---------|--------|
+| Action space design | 1, 2, 3, 4 | All underperform GP |
+| Optimization strategy | 5 (RL guides GP) | No benefit over GP alone |
+| Representation quality | 6 (Uni-Mol 3D encoder) | Worse than fingerprints |
+| Model capacity | 6 (deep Q-head) | No improvement |
 
-3. **Stable action space**: Actions must produce structurally similar molecules (small step size) to maintain RL's advantage. ReaSyn analogs satisfy this but may be too conservative.
-
-4. **Sample efficiency**: Must learn useful policy within the oracle budget (typically 10K calls). Pre-training on property prediction or transfer from related targets could help.
+**Evolutionary methods (GP) with domain-specific constraints (ReaSyn) are inherently better suited for molecular optimization.** Future work should focus on accelerating and improving GP+ReaSyn rather than attempting RL-based approaches.
 
 ## Code Status
 
-### RL+GP (SynOpt) - Independent Module
+### Method 5: RL+GP (SynOpt) - Independent Module
 - `rl/guided_ga.py` - GAPolicy + PPOGAController
 - `rl/strategy.py` - StrategyNetwork + StrategyController
 - `rl/rewards.py` - Composite reward functions (v1 + v2)
 - `rl/population.py` - Diverse selection + ScaffoldTracker
 - `rl/reasyn_projector.py` - ReaSyn wrapper (lazy imports from rl/reasyn/)
 - `scripts/synopt.py` - Main training script
-- `tests/` - 27 tests, all passing
 
-These files are 95% independent from the existing RL systems (`rl/reasyn/`, `rl/route/`). Only `reasyn_projector.py` has lazy dependency on `rl.reasyn.models` and `rl.reasyn.rl.actions`.
+### Method 6: UniMolDQN - 3D Encoder DQN
+- `unimol_dqn.py` - UniMolEncoder (bare-metal), UniMolDQN, EmbeddingCache, MolDQNBaseline
+- `agent_unimol.py` - DQN agent with Double DQN, gradient clipping, replay buffer
+- `conformer3d.py` - ConformerManager (ConstrainedEmbed + 3D action filter)
+- `run_unimol.py` - Main training script (QED comparison)
+- `scripts/experiments/run_unimol_qed_v3.sh` - SLURM experiment scripts
 
-### Existing RL Systems
+### Methods 1-4: Earlier RL Systems
 - `rl/reasyn/` - ReaSyn DQN (44 files, independent)
 - `rl/route/` - Route DQN (7 files, depends on rl/template/)
 - `rl/template/` - Template predictor (6 files, independent)
 
-No reverse dependencies: existing RL code does not import from RL+GP modules.
+## Appendix: Pre-Implementation Research Notes (2026-03-12)
 
-## Research: Next-Generation DQN Architecture (2026-03-12)
+Initial research that motivated Method 6. Kept for reference; the experiment results above supersede these design notes.
 
-### Candidate 3D-Aware Encoders
+- **3D encoder candidates evaluated**: Uni-Mol (selected), SchNet, DimeNet++, EGNN, PaiNN
+- **RxnFlow sample efficiency analysis**: Short trajectories + action subsampling + dot-product architecture
+- **DQN efficiency strategies considered**: N-step returns, PER, embedding cache, multi-conformer augmentation
+- **Original Q-head design**: LayerNorm + Dropout → later removed due to Polyak target conflict (see method6 doc)
 
-| Model | Embedding Dim | Pretrained Data | 安装方式 | 优势 | 劣势 |
-|-------|--------------|-----------------|---------|------|------|
-| **Uni-Mol** | 512 | 209M conformations (QM9+GEOM) | `pip install unimol-tools` | 最强预训练，CLS token直接用，SE(3)-equivariant | ~100ms/mol (需缓存) |
-| SchNet | 128 | QM9 | PyG内置 | 简单连续卷积 | 预训练数据少，无CLS token |
-| DimeNet++ | 256 | QM9 | PyG内置 | 方向信息(angular) | 计算较重 |
-| EGNN | 可配置 | 无预训练 | 需自实现 | 简洁equivariant | 需从零训练 |
-| PaiNN | 128 | QM9 | PyG内置 | 等变消息传递 | 预训练范围窄 |
-
-**推荐**: Uni-Mol — 预训练规模最大(209M)，SMILES输入自动生成3D构象(ETKDG)，CLS token提供分子级512维embedding。
-
-### RxnFlow 样本效率机制分析
-
-RxnFlow (ICLR 2025) 使用标准 TB loss（**非 SubTB**），其样本效率来源：
-
-1. **极短轨迹 (max 3步)**: TB 梯度方差与轨迹长度正相关，短轨迹=低方差=快收敛
-2. **Action space 子采样 + 重要性权重**: 从120万BB中采样1%，通过 `log(1/sampling_ratio)` 校正logit得到无偏梯度估计，计算量降100x
-3. **Dot-product 架构**: `state_emb @ block_emb.T` 一次矩阵乘法同时打分所有BB，BB embedding可预计算/缓存
-4. **EMA sampling model (τ=0.9)**: 解耦探索与学习，防止分布坍缩
-5. **Random action prob (10%)**: 保持探索多样性
-
-关键参数: `num_from_policy=64`, `num_training_steps=10000`, `max_len=3`, `sampling_tau=0.9`
-
-### DQN 对应的样本效率策略
-
-RxnFlow 的 SubTB/短轨迹机制是 GFlowNet 特有的。DQN 框架下对应方案：
-
-- **N-step returns**: 多步TD目标，一条轨迹生成多个不同步长的训练信号
-- **Prioritized Experience Replay (PER)**: 高TD-error样本获得更多训练
-- **Embedding 缓存**: Uni-Mol ~100ms/mol，必须缓存避免重复计算
-- **多构象数据增强**: 同一SMILES的不同3D构象 → 不同embedding → 更多训练信号
-
-### 架构方案
-
-```
-UniMolDQN:
-  Encoder: Uni-Mol (frozen, 512-dim CLS token, pretrained 209M conformations)
-  Q-head: 513 → 512 → 256 → 128 → 1 (LayerNorm + ReLU + Dropout)
-
-Training: Double DQN + PER + N-step returns
-Interface: 与现有 gnn_dqn.py 的 frozen encoder + Q-head 模式完全一致
-```
-
-### 6. UniMolDQN — 3D Molecular Encoder (2026-03-14)
-
-- **Approach**: Replace fingerprint with Uni-Mol 3D encoder (frozen, 512-dim CLS token). Deep Q-head replaces linear Q.
-- **Motivation**: Address both root causes — 3D representation + non-linear capacity.
-
-**v2** (bare-metal encoder + ConstrainedEmbed):
-
-| Seed | Episodes (of 2500) | top1 QED | top10 QED | Loss | Cache Hit | Status |
-|------|---------------------|----------|-----------|------|-----------|--------|
-| 123 | 520 | 0.8650 | 0.8299 | 10.4 (diverging) | 34.8% | CANCELLED 6h |
-| 42 | 780 | 0.8047 | 0.7805 | 23.8 (diverging) | 41.5% | CANCELLED 6h |
-
-**v3** (+ L2-norm + no LayerNorm + grad_clip=1.0 + Double DQN + lr=5e-5):
-
-| Seed | Episodes (of 2500) | top1 QED | top10 QED | Loss | Cache Hit | Status |
-|------|---------------------|----------|-----------|------|-----------|--------|
-| 123 | 500 | 0.8144 | 0.8144 | 0.17 (stable) | 91.8% | TIMEOUT 12h |
-| 42 | 830 | 0.7444 | 0.7435 | 0.03 (converging) | 96.2% | TIMEOUT 12h |
-
-**Analysis**:
-- v2: Loss diverges catastrophically (0.01 → 23.8). High top1 (0.865) achieved via early exploration (Ep 60), not learned policy. Q-network fails to converge.
-- v3: Loss stabilizes with L2-norm + Double DQN, but scores plateau well below QED optimum (~0.948). seed=42 stagnates from Ep 260–830 (top1: 0.697→0.744).
-- Both versions are far below simple GA baselines (QED top1 ~0.93+).
-- 3D encoder did not rescue RL: the core issue may not be representation quality alone.
-
-**Conclusion**: Even with a 3D-aware encoder (Uni-Mol, 209M pretrained) and stabilized training (Double DQN, L2-norm, gradient clipping), DQN-based molecular optimization underperforms simple evolutionary methods on QED. This suggests the problem is more fundamental than representation — likely related to the sequential decision-making formulation itself being poorly suited to molecular optimization.
+Full details: `docs/rl_methods/method6_unimol_dqn.md`
 
 ## Experiment Logs
 
