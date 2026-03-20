@@ -12,8 +12,6 @@ from rdkit.Chem import AllChem
 from rdkit import RDConfig
 import os
 import random
-# disable opt warning
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from rdkit.Chem import Descriptors
 import sys
@@ -30,117 +28,12 @@ import csv
 from eval import EnsembleCalculator, load_models, to_numpy
 
 import numpy as np
-import seaborn as sns
-sns.set(context='talk', style='ticks',
-        color_codes=True, rc={'legend.frameon': False})
 
-import tensorflow as tf
-import tensorflow_addons as tfa
-from tensorflow.keras import layers
-import nfp
-from functools import partial
-from pathlib import Path
-from nfp.preprocessing.features import get_ring_size
-
-# TF may use all memory 
-# https://wiki.ncsa.illinois.edu/display/ISL20/Managing+GPU+memory+when+using+Tensorflow+and+Pytorch
-gpus = tf.config.list_physical_devices('GPU')
-[tf.config.experimental.set_memory_growth(gpu, True) for gpu in gpus]
-
-# disable opt warning
-# tf.config.threading.set_inter_op_parallelism_threads(1)
-# tf.config.threading.set_intra_op_parallelism_threads(1)
-
-# from alfabet import model as bde_model
+from bde_predictor.predict import BDEModel
 from utils import LRUCache
 
 
 REPLAY_BUFFER_CAPACITY = hyp.replay_buffer_size
-
-# bde predictor
-def atom_featurizer(atom):
-    """ Return an integer hash representing the atom type
-    """
-
-    return str((
-        atom.GetSymbol(),
-        atom.GetNumRadicalElectrons(),
-        atom.GetFormalCharge(),
-        atom.GetChiralTag(),
-        atom.GetIsAromatic(),
-        get_ring_size(atom, max_size=6),
-        atom.GetDegree(),
-        atom.GetTotalNumHs(includeNeighbors=True)
-    ))
-
-
-def bond_featurizer(bond, flipped=False):
-    
-    if not flipped:
-        atoms = "{}-{}".format(
-            *tuple((bond.GetBeginAtom().GetSymbol(),
-                    bond.GetEndAtom().GetSymbol())))
-    else:
-        atoms = "{}-{}".format(
-            *tuple((bond.GetEndAtom().GetSymbol(),
-                    bond.GetBeginAtom().GetSymbol())))
-    
-    btype = str(bond.GetBondType())
-    ring = 'R{}'.format(get_ring_size(bond, max_size=6)) if bond.IsInRing() else ''
-    
-    return " ".join([atoms, btype, ring]).strip()
-
-preprocessor = nfp.SmilesBondIndexPreprocessor(
-    atom_features=atom_featurizer, bond_features=bond_featurizer)
-    
-preprocessor.from_json('./BDE-db2/Example-BDE-prediction/model_3_tfrecords_multi_halo_cfc/preprocessor.json')
-
-class Slice(layers.Layer):
-    def call(self, inputs):
-        input_shape = tf.shape(inputs)
-        num_bonds = input_shape[1] / 2
-        output = tf.slice(inputs, [0, 0, 0], [-1, num_bonds, -1])
-        output.set_shape(self.compute_output_shape(inputs.shape))
-        return output
-
-    def compute_output_shape(self, input_shape):
-        return [input_shape[0], None, input_shape[2]]
-    
-custom_objects = {**nfp.custom_objects,'Slice':Slice}
-
-def get_data(smiles):
-    input_dict = preprocessor(smiles)
-    input_dict['n_atom'] = len(input_dict['atom'] )
-    input_dict['n_bond'] = len(input_dict['bond'] )
-    return input_dict
-
-def process_mol(smiles):
-    # test
-    mols = []
-    for s in smiles:
-        mol = Chem.MolFromSmiles(s)
-        mol = Chem.RWMol(mol)
-        mol = Chem.AddHs(mol)
-        mols.append(mol)
-    return mols
-
-#load bde model
-
-
-def get_OH_ids(mols):
-    # mols: the RWMol after Chem.AddHs
-    ids = []
-    for m in mols:
-        oh_ids = []
-        for i, b in enumerate(m.GetBonds()):
-            if b.GetBeginAtom().GetAtomicNum() == 8 and b.GetEndAtom().GetAtomicNum() == 1:
-                # O-H
-                oh_ids.append(i)
-            elif b.GetBeginAtom().GetAtomicNum() == 1 and b.GetEndAtom().GetAtomicNum() == 8:
-                # H-O
-                oh_ids.append(i)
-        ids.append(oh_ids)
-    return ids
 
 # ip predictor
 
@@ -298,8 +191,10 @@ class MultiMolecules(Molecule):
 
             self.bde_scaler = get_scaler('./Data/anti-bde.csv')
 
-            self.bde_model_path = './BDE-db2/Example-BDE-prediction/model_3_multi_halo_cfc/best_model.hdf5'
-            self.bde_model = tf.keras.models.load_model(self.bde_model_path, custom_objects=custom_objects)#, compile=False)
+            self.bde_model = BDEModel(
+                'bde_predictor/weights/alfabet.npz',
+                preprocessor_path='bde_predictor/weights/alfabet_preprocessor.json',
+                device=str(self.device))
 
             self.ip_scaler = get_scaler('./Data/anti-ip.csv')
             self.ip_model_path = [
@@ -385,89 +280,7 @@ class MultiMolecules(Molecule):
             return min(pred.bde_pred), True
 
     def predict_BDE(self, smiles, mols):
-        dataset = (
-            tf.data.Dataset.from_generator(
-                lambda:  (iter(get_data(s) for s in smiles)), 
-                output_signature= { **preprocessor.output_signature,'n_atom': tf.TensorSpec(shape=(), dtype=tf.int32, name=None),\
-                'n_bond': tf.TensorSpec(shape=(), dtype=tf.int32, name=None) })
-            .padded_batch(batch_size=1000, padding_values={**preprocessor.padding_values,'n_atom': tf.constant(0, dtype="int32"),\
-                'n_bond': tf.constant(0, dtype="int32")})
-        )
-        ids = get_OH_ids(mols)
-        predicted_bdes = self.bde_model.predict(dataset, verbose=False)
-        pbdes, valids = [], []
-        for i, oh_ids in enumerate(ids):
-            # debug
-            # pbdes.append(0.0)
-            # valids.append(True)
-            # continue
-
-            try:
-                min_bde = 1000
-                for oh_id in oh_ids:
-                    p = predicted_bdes[i][oh_id][0]
-                    if p < min_bde:
-                        min_bde = p
-                pbdes.append(min_bde)
-                valids.append(True)
-            except Exception as e:
-                print(e)
-                print(f"Error BDE : {smiles[i]}")
-                pbdes.append(0.0)
-                valids.append(False)
-        # print(f'ppredict_BDE:{pbdes}')
-        return pbdes, valids
-
-
-    def _predict_BDE(self, smiles, bacthed=False):
-        """
-            alfabet uses the SMILES string as their input. They convert the smiles to rdkit.ROMol later. 
-        """
-
-
-        if bacthed:
-            pass
-            # try:
-                
-            #     rt = bde_model.predict(smiles)
-            #     pred_all = rt[['molecule', 'bond_index', 'bde_pred','bond_type']][rt.bond_type.str.contains("O-H|H-O")]
-            #     pbdes = []
-            #     valids = []
-
-            #     for s, mol in zip(smiles, mols):
-            #         pred = pred_all.loc[pred_all['molecule'] == s]
-            #         pbde, valid = self.read_bde_from_df(mol, pred)
-            #         pbdes.append(pbde)
-            #         valids.append(valid)
-
-            #     return pbdes, valids
-
-            # except Exception as e:
-            #     print("predict_BDE Exception: ")
-            #     print(e)
-
-        else:
-
-            # predict the bde for each mol individually
-            pbdes = []
-            valids = []
-
-            for s in smiles:
-                try :
-                    rt = bde_model.predict([s])
-                    pred = rt[['molecule', 'bond_index', 'bde_pred','bond_type']][rt.bond_type.str.contains("O-H|H-O")]
-                    pbde, valid = self.read_bde_from_df(pred = pred)
-                    pbdes.append(pbde)
-                    valids.append(valid)
-                except Exception as e:
-                    print(e)
-                    print("Error Seq BDE :")
-                    print(smiles)
-                    pbdes.append(0.0)
-                    valids.append(False)
-                    # raise e
-
-            return pbdes, valids
+        return self.bde_model.predict_oh_bde(smiles)
 
     def rwmol2multi_data(self, mol):
         

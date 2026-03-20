@@ -27,7 +27,7 @@ if(DEFINED ENV{CONDA_PREFIX})
     set(BOOST_ROOT "$ENV{CONDA_PREFIX}")  # Note: must be BOOST_ROOT (all caps), not Boost_ROOT
     set(Boost_NO_SYSTEM_PATHS ON)
     set(Boost_USE_STATIC_LIBS OFF)  # Conda uses dynamic libraries
-    set(Boost_PYTHON_VERSION "310")
+    set(Boost_PYTHON_VERSION "313")
     message(STATUS "Using conda environment: $ENV{CONDA_PREFIX}")
 else()
     message(FATAL_ERROR "CONDA_PREFIX environment variable is not set.")
@@ -72,8 +72,8 @@ endif()
 
 # Manually add Python and NumPy Boost libraries
 if(DEFINED ENV{CONDA_PREFIX})
-    set(BOOST_PYTHON_LIB "$ENV{CONDA_PREFIX}/lib/libboost_python310.so")
-    set(BOOST_NUMPY_LIB "$ENV{CONDA_PREFIX}/lib/libboost_numpy310.so")
+    set(BOOST_PYTHON_LIB "$ENV{CONDA_PREFIX}/lib/libboost_python313.so")
+    set(BOOST_NUMPY_LIB "$ENV{CONDA_PREFIX}/lib/libboost_numpy313.so")
     
     if(EXISTS "${BOOST_PYTHON_LIB}")
         message(STATUS "Found Boost Python: ${BOOST_PYTHON_LIB}")

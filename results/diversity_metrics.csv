@@ -1,0 +1,10 @@
+Metric,MolDQN,MT-MolDQN,DA-MolDQN,AODB,ChEMBL
+Unique Molecules,2519,81,2772,56359,10000
+Unique Scaffolds,256,7,479,21807,3832
+Scaffold Diversity,0.102,0.086,0.173,0.387,0.383
+Internal Diversity,0.8863,0.7735,0.8908,0.9143,0.9214
+Shannon Entropy (norm),0.1150,0.0738,0.1061,0.1517,0.1350
+BRICS Fragments,1754,48,1658,3799,3524
+BRICS Entropy (bits),8.45,4.41,7.95,8.26,8.62
+FBC@512,0.9763,0.2915,0.9609,0.9968,0.9930
+Unexplored@512 (%),2.4,70.8,3.9,0.3,0.7

@@ -1,0 +1,38 @@
+Device: cuda
+Loading model: /shared/data1/Users/l1062811/git/DA-MolDQN/aimnetnse-models/aimnet-nse-cv4.jpt
+Skipped 71 rows with empty IP
+Total molecules: 445
+  Progress: 50/445, failed=0
+  Progress: 100/445, failed=0
+  Progress: 150/445, failed=0
+  Progress: 200/445, failed=0
+  Progress: 250/445, failed=0
+  Progress: 300/445, failed=0
+  Progress: 350/445, failed=0
+  Progress: 400/445, failed=0
+
+Done. Success: 445, Failed: 0
+
+--- Raw AIMNet-NSE (no correction) ---
+
+=======================================================
+  IP: AIMNet_raw vs DFT (proprietary)  (N=445)
+=======================================================
+  MAE   = 31.036 kcal/mol
+  MAPE  = 21.86%
+  MSE   = 1020.788 (kcal/mol)^2
+  RMSE  = 31.950 kcal/mol
+  Bias  = +31.036 kcal/mol  (pred - true)
+
+--- Calibrated AIMNet × 0.8 ---
+
+=======================================================
+  IP: AIMNet×0.8 vs DFT (proprietary)  (N=445)
+=======================================================
+  MAE   = 4.969 kcal/mol
+  MAPE  = 3.53%
+  MSE   = 46.172 (kcal/mol)^2
+  RMSE  = 6.795 kcal/mol
+  Bias  = -3.588 kcal/mol  (pred - true)
+
+Saved 445 results to /shared/data1/Users/l1062811/git/DA-MolDQN/Data/anti-ip-compared.csv
