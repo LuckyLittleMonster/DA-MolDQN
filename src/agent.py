@@ -33,70 +33,16 @@ from src.eval import EnsembleCalculator, load_models, to_numpy
 
 import numpy as np
 
-from bde_predictor.predict import BDEModel
+from src.reward.bde import BDEModel
+from src.reward.ip import (ev2kcal_per_mol, calc_react_idx, get_scaler,
+                           _get_scaler, AimnetNseModel)
+from src.reward.qed import qed_value
+from src.reward.sa import sa_score
+from src.reward.plogp import plogp_value
 from src.utils import LRUCache
 
 
 REPLAY_BUFFER_CAPACITY = hyp.replay_buffer_size
-
-# ip predictor
-
-def ev2kcal_per_mol(ev):
-    return ev * 23.0609
-
-def calc_react_idx(data):
-    ip = data['energy'][0] - data['energy'][1]
-    ea = data['energy'][1] - data['energy'][2]
-    f_el = data['charges'][1] - data['charges'][0]
-    f_nuc = data['charges'][2] - data['charges'][1]
-    chi = 0.5 * (ip + ea)
-    eta = 0.5 * (ip - ea)
-    omega = (chi ** 2) / (2 * eta)
-    f_rad = 0.5 * (f_el + f_nuc)
-    _omega = np.expand_dims(omega, axis=-1)
-    omega_el = f_el * _omega
-    omega_nuc = f_nuc * _omega
-    omega_rad = f_rad * _omega
-    return dict(ip=ip, ea=ea, f_el=f_el, f_nuc=f_nuc, f_rad=f_rad,
-                chi=chi, eta=eta, omega=omega,
-                omega_el=omega_el, omega_nuc=omega_nuc, omega_rad=omega_rad)
-
-
-def _get_scaler(path, real_col_id = 1):
-    real = []
-    # global real
-    with open (path) as f:
-        s = csv.reader(f, delimiter="\t");
-        next(s)
-        for r in s:
-            if r[real_col_id] != '':
-                real.append([float(r[real_col_id])])
-    scaler = preprocessing.MinMaxScaler().fit(real)
-    # print(path)
-    # print(np.array(real).shape)
-    # print(scaler.data_max_)
-    # print(scaler.data_min_)
-    return scaler
-
-def get_scaler(path, real_col_id = 1, use_cache = True):
-    if use_cache:
-        if 'bde' in path:
-            # ./Data/anti-bde.csv
-            # (482, 1)
-            # [96.58618528]
-            # [59.79533261]
-            data = np.array([[96.58618528], [59.79533261]])
-            return preprocessing.MinMaxScaler().fit(data)
-            
-        elif 'ip' in path:
-            # ./Data/anti-ip.csv
-            # (445, 1)
-            # [178.1623553]
-            # [110.8306396]
-            data = np.array([[178.1623553], [110.8306396]])
-            return preprocessing.MinMaxScaler().fit(data)
-    return _get_scaler(path, real_col_id)
-
 
 def count_OH(mol):
     OH_count = 0;
@@ -104,22 +50,6 @@ def count_OH(mol):
         if atom.GetAtomicNum() == 8 and atom.GetNumImplicitHs() > 0: # 8 for 'O'
             OH_count += 1
     return OH_count
-
-
-class AimnetNseModel():
-    """The original model is not pickable and can't be used with spawn. This class is a warpper of EnsembleCalculator."""
-    def __init__(self, path, device):
-        self.path = path
-        self.device = device
-        self.model = load_models([path]).to(device)
-
-    def __setstate__(self, state):
-        self.path = state['path']
-        self.device = state['device']
-        self.model = load_models([self.path]).to(self.device)
-
-    def __getstate__(self):
-        return dict(path = self.path, device = self.device)
 
 class MultiMolecules(Molecule):
     """docstring for DistributedMolecules"""
@@ -196,8 +126,8 @@ class MultiMolecules(Molecule):
             self.bde_scaler = get_scaler('./Data/anti-bde.csv')
 
             self.bde_model = BDEModel(
-                'bde_predictor/weights/alfabet.npz',
-                preprocessor_path='bde_predictor/weights/alfabet_preprocessor.json',
+                'src/reward/bde_predictor/weights/alfabet.npz',
+                preprocessor_path='src/reward/bde_predictor/weights/alfabet_preprocessor.json',
                 device=str(self.device))
 
             self.ip_scaler = get_scaler('./Data/anti-ip.csv')
@@ -623,9 +553,9 @@ class MultiMolecules(Molecule):
         qeds = []
         sas = []
         for molecule in molecules:
-            qed = QED.qed(molecule)
+            qed = qed_value(molecule)
             qeds.append(qed)
-            SA_score = sascorer.calculateScore(molecule)
+            SA_score = sa_score(molecule)
             sas.append(SA_score)
             reward = (qed * self.qed_weight - self.sa_weight * SA_score) * self.discount_factor ** (self.max_steps-self.current_step)
             rs.append(reward)
@@ -634,33 +564,8 @@ class MultiMolecules(Molecule):
     def find_plogp_reward(self, molecules):
         rs = []
         sims = []
-
-        logp_mean = 2.4570953396190123
-        logp_std = 1.434324401111988
-        sa_mean = 3.0525811293166134
-        sa_std = 0.8335207024513095
-        cycle_mean = 0.0485696876403053
-        cycle_std = 0.2860212110245455
-
         for mol in molecules:
-            # mol = Chem.MolFromSmiles(smiles)
-            try:
-                mol.UpdatePropertyCache()
-                cycles = Chem.GetSymmSSSR(mol)
-                if cycles:
-                    max_cycle = max([len(cycle) for cycle in cycles])
-                    cycle = max(0, max_cycle - 6)
-                else:
-                    cycle = 0
-                logp = Descriptors.MolLogP(mol)
-                sa = sascorer.calculateScore(mol)
-                logp = (logp - logp_mean) / logp_std
-                sa = (sa - sa_mean) / sa_std
-                cycle = (cycle - cycle_mean) / cycle_std
-                score = logp - sa - cycle
-            except Chem.AtomValenceException:
-                score = -30
-
+            score = plogp_value(mol)
             sims.append(-1)
             reward = score * self.discount_factor ** (self.max_steps-self.current_step)
             rs.append(reward)
