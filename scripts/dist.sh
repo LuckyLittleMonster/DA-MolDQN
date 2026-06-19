@@ -1,3 +1,0 @@
-echo $SLURM_PROCID
-# echo "srun -N 8 -n 32 -p cypress_a100_night --gres=gpu:4 --exclusive=user -l -u  python main_dist.py --trial 407 --iteration 160000 --max_steps_per_episode 20 --init_mol_path ./Data/anti_400.txt --discount_factor 1.0 --backend gloo --gpu_list 0 1 2 3 --torch_num_threads 1 --num_init_mol 128 --record_path" >> notes.txt
-py-spy record --format speedscope -o output/dist/$SLURM_PROCID.speedscope.json --idle --subprocesses -- python main_dist.py --trial 400 --iteration 1000 --max_steps_per_episode 20 --init_mol_path ./Data/anti_400.txt --discount_factor 1.0 --backend gloo --gpu_list 0 1 2 3 --torch_num_threads 1 --num_init_mol 8 --record_path --reward QED

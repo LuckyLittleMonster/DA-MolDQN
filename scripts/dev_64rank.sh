@@ -8,7 +8,7 @@
 #SBATCH --gres=gpu:gh200:1
 #SBATCH --cpus-per-task=2
 #SBATCH --time=04:00:00
-#SBATCH --output=%x_%j.log
+#SBATCH --output=Experiments/slurm_%x_%j.log
 
 # Parametrized dev 2.0 run. Override via sbatch --export:
 #   REWARD (bde_ip|qed|plogp), EXP, TRIAL, MAINTAIN_OH (exist|null)
@@ -35,3 +35,6 @@ srun conda run -n rl4 --no-capture-output python train.py \
   init_method="${RDV}" \
   experiment="${EXP}" \
   trial="${TRIAL}"
+
+# Move the SLURM log into the unified run folder.
+mv "Experiments/slurm_${SLURM_JOB_NAME}_${SLURM_JOB_ID}.log" "Experiments/${EXP}_${TRIAL}/" 2>/dev/null || true
