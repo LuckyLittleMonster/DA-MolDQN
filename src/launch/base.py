@@ -10,7 +10,15 @@ from __future__ import annotations
 
 import datetime
 import os
+import socket
 from abc import ABC, abstractmethod
+
+
+def find_free_port() -> int:
+    """Ask the OS for a currently-free TCP port (for local env:// rendezvous)."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("", 0))
+        return s.getsockname()[1]
 
 
 class Launcher(ABC):
@@ -24,9 +32,12 @@ class Launcher(ABC):
               init_method: str | None = None, timeout_s: int = 600) -> None:
         import torch.distributed as dist
         if init_method is None:
-            # env:// rendezvous; ensure a master endpoint exists for local runs.
+            # env:// rendezvous. For local runs (single) pick a FREE port so we never
+            # collide on a hard-coded one; torchrun/slurm/fork already set MASTER_PORT,
+            # so this only fires for a single-process run.
             os.environ.setdefault("MASTER_ADDR", "localhost")
-            os.environ.setdefault("MASTER_PORT", "6500")
+            if "MASTER_PORT" not in os.environ:
+                os.environ["MASTER_PORT"] = str(find_free_port())
         dist.init_process_group(
             backend=backend,
             init_method=init_method,

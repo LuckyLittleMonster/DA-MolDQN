@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import os
 
-from src.launch.base import Launcher
+from src.launch.base import Launcher, find_free_port
 
 
 def _fork_worker(fn, cfg, rank: int, world_size: int) -> None:
@@ -47,7 +47,9 @@ class ForkLauncher(Launcher):
 
         mp.set_start_method(self.start_method, force=True)
         os.environ["MASTER_ADDR"] = "localhost"
-        os.environ.setdefault("MASTER_PORT", self.master_port)
+        # Parent picks a free port once; forked children inherit it (same group).
+        # An explicit MASTER_PORT in the environment still takes precedence.
+        os.environ.setdefault("MASTER_PORT", str(find_free_port()))
         procs = [
             mp.Process(target=_fork_worker, args=(fn, cfg, rank, self.world_size))
             for rank in range(self.world_size)
