@@ -6,12 +6,9 @@ import hydra
 
 from src.entry import run_entry
 
-_MODE = "finetune"
-
-
 @hydra.main(version_base=None, config_path="configs", config_name="config")
 def main(cfg):
-    run_entry(cfg, mode="finetune" if "finetune" != "testing" else "test")
+    run_entry(cfg, mode="finetune")
 
 
 if __name__ == "__main__":

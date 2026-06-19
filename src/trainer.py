@@ -66,11 +66,10 @@ class Trainer:
         agent = DistributedAgent(hyp.fingerprint_length + 1, self.gpu_index, self.device, cfg, rank)
 
         init_eps_threshold = cfg.eps_threshold
-        if cfg.checkpoint is not None:
-            if cfg.use_checkpoint_eps:
-                init_eps_threshold = agent.eps_threshold
-            if self.is_test:
-                init_eps_threshold = 0.0  # eps is zero for test
+        if cfg.checkpoint is not None and cfg.use_checkpoint_eps:
+            init_eps_threshold = agent.eps_threshold
+        if self.is_test:
+            init_eps_threshold = 0.0  # eps is zero for test (greedy), regardless of checkpoint
 
         environment = MultiMolecules(
             args=cfg, device=self.device,
@@ -89,6 +88,8 @@ class Trainer:
             reward_list = {'reward': [], 'QED': [], 'SA_score': []}
         elif cfg.reward.lower() == "plogp":
             reward_list = {'reward': [], 'plogp': [], 'sim': []}
+        else:
+            raise ValueError(f"Unknown reward: {cfg.reward!r}")
 
         episode_time_list = []
         bde_cache_hit_rate_list = []

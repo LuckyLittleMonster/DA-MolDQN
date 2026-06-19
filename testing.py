@@ -6,12 +6,9 @@ import hydra
 
 from src.entry import run_entry
 
-_MODE = "testing"
-
-
 @hydra.main(version_base=None, config_path="configs", config_name="config")
 def main(cfg):
-    run_entry(cfg, mode="testing" if "testing" != "testing" else "test")
+    run_entry(cfg, mode="test")
 
 
 if __name__ == "__main__":

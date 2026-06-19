@@ -592,7 +592,8 @@ class DistributedAgent(object):
         self.gpu_index = gpu_index
         self.device = device
         # print(device)
-        torch.cuda.set_device(gpu_index)
+        if self.device.type == 'cuda':
+            torch.cuda.set_device(gpu_index)
 
         self.observation_type = args.observation_type
         self.max_batch_size = args.max_batch_size
@@ -608,12 +609,13 @@ class DistributedAgent(object):
             self.target_dqn = make_transformer_model(**hyp.transformer_params).to(self.device)
         if args.checkpoint is not None:
             if rank == 0:
-                # load pre-trained models
-                dqn_checkpoint = torch.load(f'./Experiments/models/{args.checkpoint}_best_model_dqn.pth')
+                # load pre-trained models from the run folder produced by Recorder:
+                # ./Experiments/{checkpoint}/checkpoints/model_{dqn,target_dqn}.pth
+                dqn_checkpoint = torch.load(f'./Experiments/{args.checkpoint}/checkpoints/model_dqn.pth')
                 dqn_model_state = dqn_checkpoint['model_state_dict']
                 self.dqn.load_state_dict(dqn_model_state)
 
-            target_dqn_checkpoint = torch.load(f'./Experiments/models/{args.checkpoint}_best_model_target_dqn.pth')
+            target_dqn_checkpoint = torch.load(f'./Experiments/{args.checkpoint}/checkpoints/model_target_dqn.pth')
             target_dqn_model_state = target_dqn_checkpoint['model_state_dict']
             self.target_dqn.load_state_dict(target_dqn_model_state)
             self.eps_threshold = target_dqn_checkpoint['eps_threshold']
