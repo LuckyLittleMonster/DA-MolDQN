@@ -4,14 +4,14 @@ import numpy as np
 import torch.optim as opt
 import utils
 import hyp
-import copy
 from dqn import MolDQN, make_transformer_model, GraphTransformer
 from rdkit import Chem
 from rdkit.Chem import QED
 from rdkit.Chem import AllChem
 from rdkit import RDConfig
 import os
-import random
+# disable opt warning
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from rdkit.Chem import Descriptors
 import sys
@@ -27,15 +27,22 @@ import time
 import csv
 from eval import EnsembleCalculator, load_models, to_numpy
 
-import numpy as np
 
-from bde_predictor.predict import BDEModel
+# TF may use all memory 
+# https://wiki.ncsa.illinois.edu/display/ISL20/Managing+GPU+memory+when+using+Tensorflow+and+Pytorch
+import tensorflow as tf
+gpus = tf.config.list_physical_devices('GPU')
+[tf.config.experimental.set_memory_growth(gpu, True) for gpu in gpus]
+
+# disable opt warning
+# tf.config.threading.set_inter_op_parallelism_threads(1)
+# tf.config.threading.set_intra_op_parallelism_threads(1)
+
+from alfabet import model as bde_model
 from utils import LRUCache
 
 
 REPLAY_BUFFER_CAPACITY = hyp.replay_buffer_size
-
-# ip predictor
 
 def ev2kcal_per_mol(ev):
     return ev * 23.0609
@@ -58,7 +65,7 @@ def calc_react_idx(data):
                 omega_el=omega_el, omega_nuc=omega_nuc, omega_rad=omega_rad)
 
 
-def _get_scaler(path, real_col_id = 1):
+def get_scaler(path, real_col_id = 1):
     real = []
     # global real
     with open (path) as f:
@@ -67,32 +74,7 @@ def _get_scaler(path, real_col_id = 1):
         for r in s:
             if r[real_col_id] != '':
                 real.append([float(r[real_col_id])])
-    scaler = preprocessing.MinMaxScaler().fit(real)
-    # print(path)
-    # print(np.array(real).shape)
-    # print(scaler.data_max_)
-    # print(scaler.data_min_)
-    return scaler
-
-def get_scaler(path, real_col_id = 1, use_cache = True):
-    if use_cache:
-        if 'bde' in path:
-            # ./Data/anti-bde.csv
-            # (482, 1)
-            # [96.58618528]
-            # [59.79533261]
-            data = np.array([[96.58618528], [59.79533261]])
-            return preprocessing.MinMaxScaler().fit(data)
-            
-        elif 'ip' in path:
-            # ./Data/anti-ip.csv
-            # (445, 1)
-            # [178.1623553]
-            # [110.8306396]
-            data = np.array([[178.1623553], [110.8306396]])
-            return preprocessing.MinMaxScaler().fit(data)
-    return _get_scaler(path, real_col_id)
-
+    return preprocessing.MinMaxScaler().fit(real)
 
 def count_OH(mol):
     OH_count = 0;
@@ -124,9 +106,8 @@ class MultiMolecules(Molecule):
             args = args, 
             **kwargs)
 
-        self.bde_cache = LRUCache(hyp.lru_cache_capacity * len(self.init_mols))
-        # self.lru_cache_ic = LRUCache(hyp.lru_cache_capacity * len(self.init_mols)) # invalid 3d conformers
-        self.ip_cache = LRUCache(hyp.lru_cache_capacity * len(self.init_mols))
+        self.lru_cache = LRUCache(hyp.lru_cahce_capacity * len(self.init_mols))
+        self.lru_cache_ic = LRUCache(hyp.lru_cahce_capacity * len(self.init_mols)) # invalid 3d conformers
         self.discount_factor = args.discount_factor
         self.device = device
 
@@ -167,12 +148,6 @@ class MultiMolecules(Molecule):
             self.bed_weight = 0.8
             self.ip_weight = 0.2
             self.rrab_weight = 0.5
-
-            self.use_bde_cache = 'bde' in args.cache
-            self.use_ip_cache = 'ip' in args.cache
-            self.etkdg_max_attempts_cache = args.etkdg_max_attempts_cache
-            self.etkdg_max_attempts_uncache = args.etkdg_max_attempts_uncache
-
             if len(args.reward_weight) == 0:
                 # use default weights
                 pass
@@ -190,12 +165,6 @@ class MultiMolecules(Molecule):
                 self.rrab_weight = args.reward_weight[2]
 
             self.bde_scaler = get_scaler('./Data/anti-bde.csv')
-
-            self.bde_model = BDEModel(
-                'bde_predictor/weights/alfabet.npz',
-                preprocessor_path='bde_predictor/weights/alfabet_preprocessor.json',
-                device=str(self.device))
-
             self.ip_scaler = get_scaler('./Data/anti-ip.csv')
             self.ip_model_path = [
                 'aimnetnse-models/aimnet-nse-cv0.jpt',
@@ -204,7 +173,6 @@ class MultiMolecules(Molecule):
                 'aimnetnse-models/aimnet-nse-cv3.jpt',
                 'aimnetnse-models/aimnet-nse-cv4.jpt']
             self.ip_model = [AimnetNseModel(ipmp, self.device) for ipmp in self.ip_model_path]
-
             self.init_mols_n = [m.GetNumAtoms() + m.GetNumBonds() for m in self.init_mols]
 
         elif args.reward.lower() == "qed":
@@ -279,8 +247,56 @@ class MultiMolecules(Molecule):
 
             return min(pred.bde_pred), True
 
-    def predict_BDE(self, smiles, mols):
-        return self.bde_model.predict_oh_bde(smiles)
+
+    def predict_BDE(self, smiles, bacthed=False):
+        """
+            alfabet uses the SMILES string as their input. They convert the smiles to rdkit.ROMol later. 
+        """
+
+
+        if bacthed:
+            pass
+            # try:
+                
+            #     rt = bde_model.predict(smiles)
+            #     pred_all = rt[['molecule', 'bond_index', 'bde_pred','bond_type']][rt.bond_type.str.contains("O-H|H-O")]
+            #     pbdes = []
+            #     valids = []
+
+            #     for s, mol in zip(smiles, mols):
+            #         pred = pred_all.loc[pred_all['molecule'] == s]
+            #         pbde, valid = self.read_bde_from_df(mol, pred)
+            #         pbdes.append(pbde)
+            #         valids.append(valid)
+
+            #     return pbdes, valids
+
+            # except Exception as e:
+            #     print("predict_BDE Exception: ")
+            #     print(e)
+
+        else:
+
+            # predict the bde for each mol individually
+            pbdes = []
+            valids = []
+
+            for s in smiles:
+                try :
+                    rt = bde_model.predict([s])
+                    pred = rt[['molecule', 'bond_index', 'bde_pred','bond_type']][rt.bond_type.str.contains("O-H|H-O")]
+                    pbde, valid = self.read_bde_from_df(pred = pred)
+                    pbdes.append(pbde)
+                    valids.append(valid)
+                except Exception as e:
+                    print(e)
+                    print("Error Seq BDE :")
+                    print(smiles)
+                    pbdes.append(0.0)
+                    valids.append(False)
+                    # raise e
+
+            return pbdes, valids
 
     def rwmol2multi_data(self, mol):
         
@@ -324,12 +340,11 @@ class MultiMolecules(Molecule):
             cid = AllChem.EmbedMolecule(mol, useRandomCoords = True, maxAttempts= 7)
             if cid == -1:
                 # with open("error_smiles_ip.txt", 'a') as f:
-                #     f.write(smiles)
                 #     pm = Chem.RemoveHs(mol)
                 #     if len(self.path) >= 2 and self.vaild_conformer:
                 #         f.write("{s}\t{g}\n".format(s = Chem.MolToSmiles(self._path[-2]), g = Chem.MolToSmiles(pm)))
                 #         self.vaild_conformer = False
-                # self.lru_cache_ic.put(smiles, 0)
+                self.lru_cache_ic.put(smiles, 0)
                 return dict(), False
             coords = mol.GetConformer(cid).GetPositions()
             coords = torch.tensor(coords, dtype=torch.float).unsqueeze(0).repeat(3, 1, 1).to(self.device)
@@ -344,7 +359,7 @@ class MultiMolecules(Molecule):
             # raise e
             return dict(), False
 
-    def _predict_IP(self, mol, use_random_model = True):
+    def predict_IP(self, mol, use_random_model = True):
 
         # use_random_model = False
         
@@ -354,7 +369,7 @@ class MultiMolecules(Molecule):
                 return 0.0, False
 
             model_id = np.random.randint(0, len(self.ip_model))
-            model_id = 4 # todo : use random model
+            model_id = 4
             ip_model = self.ip_model[model_id]
             # disable optimizations for safety. with some combinations of pytorch/cuda it's getting very slow
             with torch.jit.optimized_execution(False), torch.no_grad():   
@@ -393,198 +408,43 @@ class MultiMolecules(Molecule):
             return pred_ip / len(self.ip_model), True
 
     
-    def predict_BDE_cache(self, smiles, smiles_p, useCache):
-
+    def predict_BDE_cache(self, molecules, useCache):
         # bde predictor with cache
-
-        bde_ps = [hyp.reward_of_invalid_mol for s in smiles]
-        bde_vs = [False for s in smiles]
-
-        smiles_uncached = []
-        mols_uncached = []
-        for s, (mol_with_H, ids) in smiles_p.items():
-            if useCache:
-                # find BDE in the cache
-                p, v = self.bde_cache.get(s)
-                if v:
-                    for i in ids:
-                        bde_ps[i] = p
-                        bde_vs[i] = True
-                    continue
-            smiles_uncached.append(s)
-            mols_uncached.append(mol_with_H)
-
-        if len(smiles_uncached) > 0:
-            ucps, ucvs = self.predict_BDE(smiles_uncached, mols_uncached)
-            for i, s in enumerate(smiles_uncached):
-                p = ucps[i]
-                v = ucvs[i]
-                if v:
-                    if useCache:
-                        self.bde_cache.put(s, p)
-                    for i in smiles_p[s][1]:
-                        bde_ps[i] = p
-                        bde_vs[i] = True
-        return bde_ps, bde_vs
-
-    def rwmol2data_atts(self, mols, maxAttempts):
-
-        """
-            return values:
-            data: the data for aimnet-nes
-            valid: find a valid conformer or not
-            atts:  [1, maxAttempts]:    number of attempts for finding the first conformer. 
-                    -1:                 no valid conformer is found.
-
-        """
-        # mols = [Chem.RWMol(mol) for mol in mols]
-        # mols = [Chem.AddHs(mol) for mol in mols]
-        # https://sourceforge.net/p/rdkit/mailman/message/33386856/
-        # EmbedMolecule may return -1 for some mols.
-
-        data = [dict() for mol in mols]
-        success = [False for mol in mols]
-        prob = [-1 for mol in mols]
-        
-        for i, mol in enumerate(mols):
-            try:
-                s = 0
-                for _ in range(maxAttempts):
-                    cid = AllChem.EmbedMolecule(mol, useRandomCoords = True, maxAttempts= 1)
-                    if cid >= 0:
-                        # success
-                        s += 1
-                        if not success[i]:
-                            success[i] = True
-                            coords = mol.GetConformer(cid).GetPositions()
-                            coords = torch.tensor(coords, dtype=torch.float).unsqueeze(0).repeat(3, 1, 1).to(self.device)
-                            numbers = [a.GetAtomicNum() for a in mol.GetAtoms()]
-                            numbers = torch.tensor(numbers, dtype=torch.long).unsqueeze(0).repeat(3, 1).to(self.device)
-                            charge = torch.tensor([1, 0, -1]).to(self.device)  # cation, neutral, anion
-                            mult = torch.tensor([2, 1, 2]).to(self.device)
-                            data[i] = dict(coord=coords, numbers=numbers, charge=charge, mult=mult)
-                prob[i] = s / maxAttempts
-            except Exception as e:
-                print(f"IP Exception: {e}")
-                # raise e
-        return data, success, prob
-
-    def predict_IP(self, molecules, maxAttempts):
-        ds, vs, probs = self.rwmol2data_atts(molecules, maxAttempts)
-
-        preds = []
-        for data, valid in zip(ds, vs):
-            if valid:
-                model_id = np.random.randint(0, len(self.ip_model))
-                model_id = 4 # todo : use random model
-                ip_model = self.ip_model[model_id]
-                # disable optimizations for safety. with some combinations of pytorch/cuda it's getting very slow
-                with torch.jit.optimized_execution(False), torch.no_grad():   
-                    pred = ip_model.model(data)
-                pred['charges'] = pred['charges'].sum(-1)
-                pred = to_numpy(pred)
-                # calculate indicies
-                pred.update(calc_react_idx(pred))
-                # write
-                for k, v in pred.items():
-                    pred[k] = v.tolist()
-                pred_ip = ev2kcal_per_mol( pred['ip'])
-                preds.append(pred_ip)
-            else:
-                preds.append(0.0)        
-        
-        return preds, vs, probs
-
-    def predict_IP_cache(self, smiles, smiles_p, useCache):
-        # ip predictor with cache
-
-        ip_preds = [hyp.reward_of_invalid_mol for s in smiles]
-        ip_vs = [False for s in smiles]
-        ip_probs = [-1 for s in smiles]
-
-        maxAttempts = self.etkdg_max_attempts_cache if useCache else self.etkdg_max_attempts_uncache
-
-        smiles_uncached = []
-        mols_uncached = []
-
-        for s, (mol_with_H, ids) in smiles_p.items():
-            if useCache:
-                # find IP in the cache
-                p, v = self.ip_cache.get(s)
-                if v:
-                    (pred, prob) = p
-                    for i in ids:
-                        if random.random() <= prob:
-                            ip_preds[i] = pred
-                            ip_vs[i] = True
-                            ip_probs[i] = prob
-                    continue
-            smiles_uncached.append(s)
-            mols_uncached.append(mol_with_H)
-
-        if len(smiles_uncached) > 0:
-            # ucps: predictions of uncached molecules
-            # ucvs: validations of the predictions
-            # probability of etkdg
-            ucps, ucvs, probs = self.predict_IP(mols_uncached, maxAttempts)
-            for i, s in enumerate(smiles_uncached):
-                pred = ucps[i]
-                v = ucvs[i]
-                prob = probs[i]
-                if v:
-                    if useCache:
-                        self.ip_cache.put(s, (pred, prob))
-                    for i in smiles_p[s][1]:
-                        ip_preds[i] = pred
-                        ip_vs[i] = True
-                        ip_probs[i] = prob
-        return ip_preds, ip_vs, ip_probs
-
-    def calc_rrabs(self, molecules):
-        rrabs = []
-        for molecule, init_mol_n in zip(molecules, self.init_mols_n):
-            n = molecule.GetNumAtoms() + molecule.GetNumBonds()
-            rrab = float(init_mol_n - n) / float(init_mol_n)
-            rrabs.append(rrab)
-        return rrabs
-
-    def find_bde_ip_reward_cache(self, molecules):
 
         # remove duplicated smiles. 
         smiles = [Chem.MolToSmiles(mol) for mol in molecules]
         smiles_p = {}
-        for i, s in enumerate(smiles):
+        for s, i in  zip(smiles, range(len(smiles))):
             if s in smiles_p:
-                smiles_p[s][1].append(i)
+                smiles_p[s].append(i)
             else:
-                mol = molecules[i]
-                mol_with_H = Chem.RWMol(mol)
-                mol_with_H = Chem.AddHs(mol)
-                smiles_p[s] = mol_with_H, [i]
+                smiles_p[s] = [i]
 
-        bde_ps, bde_vs = self.predict_BDE_cache(smiles, smiles_p, useCache = self.use_bde_cache)
-        # ignore mols without valid BDE while predicting IP
-        for s, v in zip(smiles, bde_vs):
-            if (not v) and s in smiles_p:
-                del smiles_p[s]
-        ip_preds, ip_vs, ip_probs = self.predict_IP_cache(smiles, smiles_p, useCache = self.use_ip_cache)
+        bde_ps = [-1000 for s in smiles]
+        bde_vs = [False for s in smiles]
 
-        rrabs = self.calc_rrabs(molecules)
+        # find BDE in the cache
+        smiles_uncached = {}
 
-        rewards = []
-        for bdep, bdev, ipp, ipv, ip_prob, rrab in zip(bde_ps, bde_vs, ip_preds, ip_vs, ip_probs, rrabs):
-            if bdev and ipv:
-                bden = self.bde_scaler.transform([[bdep * self.bde_factor]])
-                ipn = self.ip_scaler.transform([[ipp * self.ip_factor]])
-                bde = bden[0][0]
-                ip = ipn[0][0]
-                r = 2.0 * (self.bed_weight * (1.0 - bde) + self.ip_weight * ip) + self.rrab_weight * rrab
-                rewards.append(r)
+        for s, ids in smiles_p.items():
+            p, v = self.lru_cache.get(s)
+            if v:
+                for i in ids:
+                    bde_ps[i] = p
+                    bde_vs[i] = True
             else:
-                rewards.append(hyp.reward_of_invalid_mol)
+                smiles_uncached[s] = ids
 
-        return {'reward':rewards, 'BDE':bde_ps, 'IP':ip_preds, 'RRAB': rrabs, 'IP_Probs': ip_probs}
-        
+        if len(smiles_uncached) > 0:
+            bde_ucps, bde_ucvs = self.predict_BDE(smiles_uncached.keys())
+            for s, p, v, ids in zip(smiles_uncached.keys(), bde_ucps, bde_ucvs, smiles_uncached.values()):
+                if v:
+                    self.lru_cache.put(s, p)
+                    for i in ids:
+                        bde_ps[i] = p
+                        bde_vs[i] = True
+        return bde_ps, bde_vs
+
     def find_bde_ip_reward(self, molecules, useCache):
         # only use cache for bde 
         rewards = []
@@ -598,6 +458,8 @@ class MultiMolecules(Molecule):
             if bdev:
                 bden = self.bde_scaler.transform([[bdep * self.bde_factor]])
                 ipp, valid_ip = self.predict_IP(molecule)
+                # ipp = 140
+                # valid_ip = True
                 ip_ps.append(ipp)
                 if not valid_ip:
                     rewards.append(-1000.0)
@@ -663,14 +525,11 @@ class MultiMolecules(Molecule):
         return {'reward': rs, 'plogp':rs, 'sim': sims}
 
 
-    def find_reward(self, molecules = None):
+    def find_reward(self, molecules = None, useCache = False):
         if molecules is None:
             molecules = self.states
         if self.bde_ip_reward:
-            # rt = self.find_bde_ip_reward_cache(molecules)
-            # print(rt)
-            # return rt
-            return self.find_bde_ip_reward_cache(molecules)
+            return self.find_bde_ip_reward(molecules, useCache)
         elif self.qed_reward:
             return self.find_qed_reward(molecules)
         elif self.plogp_reward:
@@ -682,7 +541,7 @@ class DistributedAgent(object):
         super(DistributedAgent, self).__init__()
         self.gpu_index = gpu_index
         self.device = device
-        # print(device)
+        print(device)
         torch.cuda.set_device(gpu_index)
 
         self.observation_type = args.observation_type
@@ -758,9 +617,93 @@ class DistributedAgent(object):
             action = torch.argmax(q_value).numpy()
         return action, isGreedy
 
+    # def training_step(self):
+    #     batch_size = min(self.replay_buffer.__len__(), self.max_batch_size)
+    #     # states, next_states, rewards, dones = agent.replay_buffer.sample(batch_size) 
+    #     states, next_states, rewards, dones = [], [], [], []
+
+    #     data_batch = self.replay_buffer.sample(batch_size)
+    #     # data = (reward, float(done), saved_observations)
+
+    #     for data in data_batch:
+    #         reward, done, saved_observations = data
+
+    #         if self.observation_type == 'rdkit':
+    #             observations = torch.tensor(saved_observations, device = agent.device).float()
+    #         elif self.observation_type == 'list':
+    #             st, fingerprints = saved_observations
+    #             observations = np.vstack([utils.get_observations_from_list(fp, st) for fp in fingerprints])
+    #             observations = torch.tensor(observations, device = agent.device).float()
+    #         elif self.observation_type == 'numpy':
+    #             observations = torch.tensor(saved_observations, device = agent.device).float()
+    #         elif self.observation_type == 'vector':
+    #             observations = [torch.tensor(o, device = agent.device) for ob in saved_observations]
+    #         states.append(observations[-1])
+    #         next_state.append(observations)
+    #         rewards.append(reward)
+    #         dones.append(done)
+
+    #     # self.dqn.training_step(states, next_states, rewards, dones, batch_size)
+
+    #     q_t = torch.zeros(batch_size, 1, requires_grad=False)
+    #     v_tp1 = torch.zeros(batch_size, 1, requires_grad=False)
+    #     for i in range(batch_size):
+    #         # v_tp1 is the best action for the next step
+    #         v_tp1[i] = torch.max(agent.target_dqn(next_states[i]))
+
+
+    #     # for epoch in range(epochs):
+    #     #     loss = []
+    #     #     for adjacency_matrix, node_features, distance_matrix, targets in data_loader:
+    #     #         batch_mask = torch.sum(torch.abs(node_features), dim=-1) != 0
+    #     #         l, _ = model.training_step(node_features, batch_mask, adjacency_matrix, distance_matrix, None, targets)
+    #     #         loss.append(l.detach().cpu().numpy().mean())
+    #     #     loss = np.array(loss).mean()
+    #     #     print(f'Epoch: {epoch}, loss: {loss:.6f}')
+
+    #     # def training_step(self, src, src_mask, adj_matrix, distances_matrix, edges_att, y_real):
+    #     #     self.optimizer.zero_grad()
+    #     #     y_pred = self.forward(src, src_mask, adj_matrix, distances_matrix, edges_att)
+    #     #     loss = self.loss(y_pred, y_real)
+    #     #     loss.backward()
+    #     #     self.optimizer.step()
+    #     #     return loss, y_pred
+
+    #     if self.observation_type != 'vector':
+    #         state = torch.FloatTensor(states).reshape(batch_size, hyp.fingerprint_length + 1).to(self.device)
+    #         q_t = agent.dqn(state).to(self.device)
+    #     else:
+    #         state = 
+
+
+    #     rewards = torch.FloatTensor(rewards).reshape(q_t.shape).to(device)
+    #     q_t = q_t.to(device)
+
+    #     v_tp1 = v_tp1.to(device)
+    #     dones = torch.FloatTensor(dones).reshape(q_t.shape).to(device)
+    #     q_tp1_masked = (1 - dones) * v_tp1
+    #     q_t_target = rewards + hyp.gamma * q_tp1_masked
+    #     td_error = q_t - q_t_target
+    #     q_loss = torch.where(
+    #         torch.abs(td_error) < 1.0,
+    #         0.5 * td_error * td_error,
+    #         1.0 * (torch.abs(td_error) - 0.5),
+    #     )
+    #     q_loss = q_loss.mean()
+    #     agent.optimizer.zero_grad()
+    #     q_loss.backward()
+    #     torch.distributed.barrier()
+    #     agent.optimizer.step()
+    #     with torch.no_grad():
+    #         for p, p_targ in zip(agent.dqn.parameters(), agent.target_dqn.parameters()):
+    #             p_targ.data.mul_(hyp.polyak)
+    #             p_targ.data.add_((1 - hyp.polyak) * p.data)
+    #     loss = q_loss.item()
+    #     batch_losses.append(loss) 
 
     def training_step(self):
         batch_size = min(self.replay_buffer.__len__(), self.max_batch_size)
+        # states, next_states, rewards, dones = agent.replay_buffer.sample(batch_size) 
         states, next_states, rewards, dones = [], [], [], []
         # for transformer
         states_nf, states_am, states_dm = [], [], [] 
@@ -799,12 +742,17 @@ class DistributedAgent(object):
             rewards.append(reward)
             dones.append(done)
             
+        # self.dqn.training_step(states, next_states, rewards, dones, batch_size)
+        # q_t -> q
         # q = torch.zeros(batch_size, 1, requires_grad=False)
         if self.observation_type != 'vector':
             # state = torch.FloatTensor(states).reshape(batch_size, hyp.fingerprint_length + 1).to(self.device)
             states = torch.stack(states, dim = 0)
             q = self.dqn(states) #.to(self.device)
         else:
+            # states_nf = torch.tensor(states_nf, dtype = torch.float32, device=self.device)
+            # states_am = torch.tensor(states_am, dtype = torch.float32, device=self.device)
+            # states_dm = torch.tensor(states_am, dtype = torch.float32, device=self.device)
             states_nf = torch.stack(states_nf, dim = 0)
             states_am = torch.stack(states_am, dim = 0)
             states_dm = torch.stack(states_dm, dim = 0)
@@ -832,8 +780,8 @@ class DistributedAgent(object):
 
 
         max_q = max_q.to(self.device)
-        rewards = torch.tensor(rewards, dtype = torch.float32, device = self.device).reshape(q.shape)
-        dones = torch.tensor(dones, dtype = torch.float32, device = self.device).reshape(q.shape)
+        rewards = torch.tensor(rewards, dtype = torch.float32, device = self.device) # .reshape(q_t.shape)
+        dones = torch.tensor(dones, dtype = torch.float32, device = self.device) # .reshape(q_t.shape)
 
         mask = (1 - dones) * max_q
         target = rewards + hyp.gamma * mask
@@ -853,4 +801,7 @@ class DistributedAgent(object):
             for p, p_targ in zip(self.dqn.parameters(), self.target_dqn.parameters()):
                 p_targ.data.mul_(hyp.polyak)
                 p_targ.data.add_((1 - hyp.polyak) * p.data)
+        # loss = loss.item()
+        # batch_losses.append(loss) 
         return loss.item()
+

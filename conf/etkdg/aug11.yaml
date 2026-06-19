@@ -1,0 +1,7 @@
+# Match Aug 11 (trial 2900) ETKDG parameters exactly
+# AllChem.EmbedMolecule(mol, useRandomCoords=True, maxAttempts=7)
+# No force field optimization, no timeout
+max_iterations: 0
+timeout: 0
+max_attempts_cache: 7
+max_attempts_uncache: 7
