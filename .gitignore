@@ -6,7 +6,7 @@ Experiments/test_*
 Experiments/models/test_*
 tem/*
 # csrc build artifacts
-csrc/build/
+csrc/build*/
 csrc/cenv.so
 csrc/__pycache__/
 
