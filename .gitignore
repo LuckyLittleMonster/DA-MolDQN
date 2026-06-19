@@ -9,3 +9,7 @@ tem/*
 csrc/build/
 csrc/cenv.so
 csrc/__pycache__/
+
+# dev smoke-test run outputs
+Experiments/smk_*/
+Experiments/smkmp_*/

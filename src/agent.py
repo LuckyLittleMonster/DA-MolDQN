@@ -618,9 +618,13 @@ class DistributedAgent(object):
             self.target_dqn.load_state_dict(target_dqn_model_state)
             self.eps_threshold = target_dqn_checkpoint['eps_threshold']
         
-        self.dqn = nn.parallel.DistributedDataParallel(self.dqn, 
-            device_ids=[self.gpu_index], 
-            output_device = self.gpu_index) 
+        if self.device.type == 'cuda':
+            self.dqn = nn.parallel.DistributedDataParallel(self.dqn,
+                device_ids=[self.gpu_index],
+                output_device = self.gpu_index)
+        else:
+            # CPU module: DDP must not receive device_ids/output_device.
+            self.dqn = nn.parallel.DistributedDataParallel(self.dqn)
 
         for p in self.target_dqn.parameters():
             p.requires_grad = False

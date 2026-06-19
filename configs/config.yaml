@@ -1,0 +1,73 @@
+defaults:
+  - _self_
+  - launcher: single
+  - reward: qed
+
+# --- experiment identity ---
+experiment: da
+note: null
+trial: 1
+
+# --- training schedule ---
+iteration: 200000
+max_steps_per_episode: 40
+update_episodes: 1
+discount_factor: 1.0
+eps_threshold: 1.0
+eps_decay: 0.999
+
+# --- reward (group reward/ overrides reward + reward_weight) ---
+reward: bde_ip
+reward_weight: [0.8, 0.2, 0.5]
+penalty_weight: 0.0
+
+# --- optimisation ---
+optimizer: Adam
+lr: 1.0e-4
+min_batch_size: 128
+max_batch_size: 128
+
+# --- checkpoint / mode ---
+checkpoint: null
+use_checkpoint_eps: false
+
+# --- initial molecules ---
+gpu_list: [0]
+init_mol: null
+init_mol_path: null
+num_init_mol: null
+init_mol_start: 0
+
+# --- launcher (group launcher/ overrides these) ---
+starter: null
+mp_master_port: '6500'
+mp_world_size: 1
+init_method: null
+backend: gloo
+torch_num_threads: 1
+seed_offset: -1
+
+# --- env / observation ---
+use_cxx_multi_threading: 1
+observation_type: list
+cache: [bde, ip]
+etkdg_max_attempts_cache: 7
+etkdg_max_attempts_uncache: 7
+maintain_OH: null
+
+# --- recording / saving ---
+record_top_path: 10
+record_last_path: 5
+record_all_path: false
+save_reward_freq: 100
+save_model_freq: 1000
+save_path_freq: 1000
+
+# --- misc ---
+test: false
+debug: false
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null

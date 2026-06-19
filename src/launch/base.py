@@ -23,6 +23,10 @@ class Launcher(ABC):
     def setup(self, rank: int, world_size: int, *, backend: str = "gloo",
               init_method: str | None = None, timeout_s: int = 600) -> None:
         import torch.distributed as dist
+        if init_method is None:
+            # env:// rendezvous; ensure a master endpoint exists for local runs.
+            os.environ.setdefault("MASTER_ADDR", "localhost")
+            os.environ.setdefault("MASTER_PORT", "6500")
         dist.init_process_group(
             backend=backend,
             init_method=init_method,
@@ -38,9 +42,21 @@ class Launcher(ABC):
             dist.destroy_process_group()
 
     def run(self, fn, cfg) -> None:
-        """Single-process path (single/torchrun/slurm). fn(rank, world_size)."""
+        """Single-process path (single/torchrun/slurm): setup -> fn -> cleanup."""
         rank, world_size = self.resolve()
-        fn(rank, world_size)
+        self.setup(rank, world_size, backend=cfg.get("backend", "gloo"),
+                   init_method=_resolved_init_method(cfg))
+        try:
+            fn(rank, world_size)
+        finally:
+            self.cleanup()
+
+
+def _resolved_init_method(cfg):
+    base = cfg.get("init_method")
+    if not base:
+        return None
+    return f"{base}_{cfg.get('experiment')}_{cfg.get('trial')}"
 
 
 class SingleLauncher(Launcher):

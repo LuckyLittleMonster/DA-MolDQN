@@ -1,0 +1,9 @@
+# @package _global_
+iteration: 8
+max_steps_per_episode: 4
+num_init_mol: 1
+record_top_path: 2
+record_last_path: 1
+save_reward_freq: 1
+save_model_freq: 2
+save_path_freq: 1

@@ -1,0 +1,3 @@
+# @package _global_
+reward: bde_ip
+reward_weight: [0.8, 0.2, 0.5]
