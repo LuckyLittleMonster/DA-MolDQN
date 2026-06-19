@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import hyp
+from src import config_defaults as hyp
 
 from pickletools import optimize
 import rdkit
@@ -13,7 +13,7 @@ from sklearn import preprocessing
 
 import math, copy
 from torch.autograd import Variable
-from utils import xavier_normal_small_init_, xavier_uniform_small_init_
+from src.utils import xavier_normal_small_init_, xavier_uniform_small_init_
 
 import time
 

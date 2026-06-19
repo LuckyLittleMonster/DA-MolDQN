@@ -36,13 +36,13 @@ from six.moves import range
 from six.moves import zip
 
 #import utils
-import utils as utils
+from src import utils
 import pdb
 
 #debug
 import time
 from rdkit.Chem import QED
-import hyp
+from src import config_defaults as hyp
 
 from rdkit.Chem import  AllChem
 import numpy as np

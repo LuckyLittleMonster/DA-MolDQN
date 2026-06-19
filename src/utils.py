@@ -23,7 +23,7 @@ import torch
 import numpy as np
 import random
 import copy
-import hyp
+from src import config_defaults as hyp
 import sys
 import os
 import threading
@@ -33,8 +33,11 @@ from sklearn.metrics import pairwise_distances
 from collections import OrderedDict
 
 
-sys.path.append(os.path.join(os.path.dirname(rdkit.__file__), RDConfig.RDContribDir, "SA_Score"))
-#print(sys.path)
+_sa_dir = os.path.join(os.path.dirname(rdkit.__file__), RDConfig.RDContribDir, "SA_Score")
+if not os.path.isdir(_sa_dir):
+    # conda-forge rdkit layout (RDConfig dirs are relative there): $PREFIX/share/RDKit/Contrib/SA_Score
+    _sa_dir = os.path.join(sys.prefix, "share", "RDKit", "Contrib", "SA_Score")
+sys.path.append(_sa_dir)
 import sascorer
 
 #debug

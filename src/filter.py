@@ -1,9 +1,9 @@
 import os
 import shutil
 from datetime import datetime
-import hyp
+from src import config_defaults as hyp
 import math
-import utils
+from src import utils
 import numpy as np
 import argparse
 from rdkit import Chem
@@ -20,7 +20,7 @@ from similarity_filter import AntiOxidantDataSet
 import sascorer
 import pandas as pd
 import csv
-import hyp
+from src import config_defaults as hyp
 
 
 parser = argparse.ArgumentParser()

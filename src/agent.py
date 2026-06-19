@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import numpy as np
 import torch.optim as opt
-import utils
-import hyp
+from src import utils
+from src import config_defaults as hyp
 import copy
-from dqn import MolDQN, make_transformer_model, GraphTransformer
+from src.models.dqn import MolDQN, make_transformer_model, GraphTransformer
 from rdkit import Chem
 from rdkit.Chem import QED
 from rdkit.Chem import AllChem
@@ -15,22 +15,26 @@ import random
 
 from rdkit.Chem import Descriptors
 import sys
-sys.path.append(os.path.join(RDConfig.RDContribDir, 'SA_Score'))
+_sa_dir = os.path.join(RDConfig.RDContribDir, 'SA_Score')
+if not os.path.isdir(_sa_dir):
+    # conda-forge rdkit layout (RDConfig dirs are relative there): $PREFIX/share/RDKit/Contrib/SA_Score
+    _sa_dir = os.path.join(sys.prefix, "share", "RDKit", "Contrib", "SA_Score")
+sys.path.append(_sa_dir)
 import sascorer
 from sklearn import preprocessing
-from environment import Molecule
+from src.environment import Molecule
 from rdkit import DataStructs
 import pandas as pd
 import pickle
 import pdb
 import time
 import csv
-from eval import EnsembleCalculator, load_models, to_numpy
+from src.eval import EnsembleCalculator, load_models, to_numpy
 
 import numpy as np
 
 from bde_predictor.predict import BDEModel
-from utils import LRUCache
+from src.utils import LRUCache
 
 
 REPLAY_BUFFER_CAPACITY = hyp.replay_buffer_size
