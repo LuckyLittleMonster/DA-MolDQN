@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 *.pyc
+.ipynb_checkpoints/
 
 # C++ extension build artifacts
 csrc/build*/
