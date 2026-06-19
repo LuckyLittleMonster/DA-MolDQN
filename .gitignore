@@ -12,7 +12,7 @@ Data/anti_400.txt
 
 # Run outputs: contain generated molecules (confidential if from private data).
 # Re-added per run; never tracked. Keep the dir via .gitkeep.
-Experiments/
+Experiments/*
 !Experiments/.gitkeep
 
 # Design docs kept local, out of history
@@ -24,9 +24,8 @@ tem_*/
 log/
 *.log
 
-# Stray dirs
-rewards/
-results/
-
-# External reference repos (cloned locally, not part of this repo)
-refs/
+# Embedded reference repos cloned locally (not part of this repo).
+# NB: refs/GCPN and refs/GraphAF ARE tracked content — do not ignore all of refs/.
+refs/BDE-db2/
+refs/addons/
+refs/alfabet/
