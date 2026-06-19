@@ -13,3 +13,4 @@ csrc/__pycache__/
 # dev smoke-test run outputs
 Experiments/smk_*/
 Experiments/smkmp_*/
+Experiments/bdesmoke_*/

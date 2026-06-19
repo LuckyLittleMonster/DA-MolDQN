@@ -77,4 +77,5 @@ class SlurmLauncher(Launcher):
     name = "slurm"
 
     def resolve(self) -> tuple[int, int]:
-        return (int(os.environ["SLURM_PROCID"]), int(os.environ["SLURM_NPROCS"]))
+        world = os.environ.get("SLURM_NPROCS") or os.environ["SLURM_NTASKS"]
+        return (int(os.environ["SLURM_PROCID"]), int(world))
