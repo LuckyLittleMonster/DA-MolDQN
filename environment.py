@@ -46,7 +46,7 @@ import hyp
 
 from rdkit.Chem import  AllChem
 import numpy as np
-import src.cenv as cenv
+import csrc.cenv as cenv
 
 class Result(collections.namedtuple("Result", ["state", "reward", "terminated"])):
     """A namedtuple defines the result of a step for the molecule class.
