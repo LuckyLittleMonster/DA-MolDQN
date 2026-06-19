@@ -18,8 +18,13 @@ TRIAL=${TRIAL:-1}
 MAINTAIN_OH=${MAINTAIN_OH:-exist}
 
 cd /shared/data1/Users/l1062811/git/DA-MolDQN
-mkdir -p tem
-RDV="file:///shared/data1/Users/l1062811/git/DA-MolDQN/tem/sharedfile_${SLURM_JOB_ID}"
+
+# DDP rendezvous: TCP/env:// (no shared-file dependency, no stale files).
+# MASTER_ADDR = first allocated node; MASTER_PORT = job-derived free port.
+# These are exported to every srun task; launcher uses init_method=None -> env://.
+export MASTER_ADDR=$(scontrol show hostnames "$SLURM_NODELIST" | head -n1)
+export MASTER_PORT=$(( 20000 + SLURM_JOB_ID % 20000 ))
+echo "rendezvous env://  MASTER_ADDR=$MASTER_ADDR MASTER_PORT=$MASTER_PORT"
 
 srun conda run -n rl4 --no-capture-output python train.py \
   reward="${REWARD}" \
@@ -32,7 +37,6 @@ srun conda run -n rl4 --no-capture-output python train.py \
   iteration=2500 \
   eps_decay=0.968 \
   maintain_OH="${MAINTAIN_OH}" \
-  init_method="${RDV}" \
   experiment="${EXP}" \
   trial="${TRIAL}"
 
