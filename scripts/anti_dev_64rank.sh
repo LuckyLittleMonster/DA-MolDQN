@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=anti_dev
-#SBATCH --account=maple
+#SBATCH --account=app
 #SBATCH --partition=maple
 #SBATCH --nodes=2
 #SBATCH --ntasks=64
