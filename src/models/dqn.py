@@ -13,7 +13,7 @@ from sklearn import preprocessing
 
 import math, copy
 from torch.autograd import Variable
-from src.utils import xavier_normal_small_init_, xavier_uniform_small_init_
+from src.models.init import xavier_normal_small_init_, xavier_uniform_small_init_
 
 import time
 

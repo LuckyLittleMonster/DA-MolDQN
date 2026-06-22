@@ -75,7 +75,6 @@ class Trainer:
             args=cfg, device=self.device,
             init_mols=[Chem.MolFromSmiles(s) for s in self.init_mols],
         )
-
         max_iteration = cfg.iteration
         max_steps_per_episode = cfg.max_steps_per_episode
         max_episodes = max_iteration // max_steps_per_episode
@@ -83,7 +82,7 @@ class Trainer:
 
         batch_losses = []
         if cfg.reward.lower() == "bde_ip":
-            reward_list = {'reward': [], 'BDE': [], 'IP': [], 'RRAB': [], 'IP_Probs': []}
+            reward_list = {'reward': [], 'BDE': [], 'IP': [], 'RRAB': []}
         elif cfg.reward.lower() == "qed":
             reward_list = {'reward': [], 'QED': [], 'SA_score': []}
         elif cfg.reward.lower() == "plogp":
@@ -93,7 +92,6 @@ class Trainer:
 
         episode_time_list = []
         bde_cache_hit_rate_list = []
-        ip_cache_hit_rate_list = []
         memory_list = []
         top_path = PriorityQueue()
         all_path = []
@@ -198,7 +196,6 @@ class Trainer:
                 episode_time_list.append(episode_time)
 
             bde_cache_hit_rate_list.append(environment.bde_cache.hit_rate(episode=True))
-            ip_cache_hit_rate_list.append(environment.ip_cache.hit_rate(episode=True))
 
             if should_save(episodes, cfg.save_reward_freq) or (it >= max_iteration):
                 self.recorder.record_metrics({
@@ -207,9 +204,7 @@ class Trainer:
                     'rewards': reward_list,
                     'memory': memory_list,
                     'bde_cache_hit_rate': bde_cache_hit_rate_list,
-                    'ip_cache_hit_rate': ip_cache_hit_rate_list,
                     'total_bde_cache_hit_rate': environment.bde_cache.hit_rate(),
-                    'total_ip_cache_hit_rate': environment.ip_cache.hit_rate(),
                 })
                 self.recorder.flush()
 

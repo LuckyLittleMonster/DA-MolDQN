@@ -1,0 +1,28 @@
+"""BDE predictor orchestrator for the RL reward.
+
+Owns the BDE model, its scaler, and the BDE reward factor. A *pure* predictor:
+caching is handled externally by a ``CachedPredictor`` (composed in the
+environment), so this class no longer knows about caches.
+"""
+from src import config_defaults as hyp
+from src.reward.bde import BDEModel
+from src.reward.ip import get_scaler
+
+
+class BDEPredictor:
+    """Predicts O-H bond-dissociation energies (pure; no cache)."""
+
+    def __init__(self, device):
+        self.device = device
+        self.bde_factor = hyp.bde_factor
+
+        self.bde_scaler = get_scaler('./Data/anti-bde.csv')
+
+        self.bde_model = BDEModel(
+            'src/reward/bde_predictor/weights/alfabet.npz',
+            preprocessor_path='src/reward/bde_predictor/weights/alfabet_preprocessor.json',
+            device=str(self.device))
+
+    def predict_BDE(self, smiles, mols):
+        """Pure prediction. Returns ``(values, valids)`` parallel to ``smiles``."""
+        return self.bde_model.predict_oh_bde(smiles)

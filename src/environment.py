@@ -139,8 +139,6 @@ class Molecule(object):
                 self.path_rewards[k] = [[val] for val in v]
         if self.bde_cache is not None:
             self.bde_cache.reset_episode_hit_rate()
-        if self.ip_cache is not None:
-            self.ip_cache.reset_episode_hit_rate()
 
     def calc_valid_actions(self):
         """Calculate the valid actions for the state.
