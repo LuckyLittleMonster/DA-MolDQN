@@ -114,8 +114,6 @@ class Molecule(object):
             self.use_cxx_incremental_fingerprint = 1
         elif self.observation_type == 'numpy':
             self.use_cxx_incremental_fingerprint = 2
-        elif self.observation_type == 'vector':
-            self.use_cxx_incremental_fingerprint = 0
         else:
             self.use_cxx_incremental_fingerprint = None
 
@@ -177,11 +175,7 @@ class Molecule(object):
             
             if self.observation_type == "rdkit":
                 fingerprints = [self.morganFingerprintGen.GetFingerprint(mol) for mol in valid_actions]
-            elif self.observation_type == "vector":
-                # vector
-                # mol_obs = [utils.get_atom_vectors(mol, remaining_steps) for mol in valid_actions]
-                fingerprints = None
-                
+
             vas.append(valid_actions)
             des.append(fingerprints)
 

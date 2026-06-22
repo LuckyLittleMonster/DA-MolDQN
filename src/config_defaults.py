@@ -27,18 +27,3 @@ lru_cache_capacity = 128
 # etkdg_max_attempts_uncache = 7
 reward_of_invalid_mol = -1000
 
-transformer_params = {
-    'd_atom': 27, # 26 MAT + remaining_steps
-    'd_model': 1024,
-    'N': 8,
-    'h': 16,
-    'N_dense': 1,
-    'lambda_attention': 0.33, 
-    'lambda_distance': 0.33,
-    'leaky_relu_slope': 0.1, 
-    'dense_output_nonlinearity': 'relu', 
-    'distance_matrix_kernel': 'exp', 
-    'dropout': 0.0,
-    'aggregation_type': 'mean'
-}
-

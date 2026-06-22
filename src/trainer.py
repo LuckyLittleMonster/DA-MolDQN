@@ -123,10 +123,6 @@ class Trainer:
                     elif cfg.observation_type == 'numpy':
                         saved_observations = np.vstack([np.append(ob, st) for ob in fingerprints])
                         observations = torch.tensor(saved_observations, device=agent.device).float()
-                    elif cfg.observation_type == 'vector':
-                        saved_observations = [utils.get_atom_vectors(mol, st) for mol in valid_actions]
-                        saved_observations = utils.mol_to_observation(saved_observations)
-                        observations = [torch.tensor(ob, device=agent.device) for ob in saved_observations]
 
                     aid, is_greedy = agent.get_action(observations, eps_threshold)
                     actions.append(valid_actions[aid])
