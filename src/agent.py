@@ -88,12 +88,11 @@ class DistributedAgent(object):
             isGreedy = False
         elif self.observation_type != 'vector':
             # Action selection is pure inference — run the UNWRAPPED module under
-            # no_grad. Going through the DDP wrapper (self.dqn.forward) triggers
-            # DDP's _pre_forward, which can do a gloo collective; since get_action
-            # is called a DATA-DEPENDENT number of times per step (eps-greedy skips
-            # it on random actions), those collectives desync across ranks and
-            # deadlock against the per-step ETKDG barrier. module() is identical in
-            # output (same weights) but does no DDP sync.
+            # no_grad. Going through the DDP wrapper invokes DDP's forward hooks
+            # (a gloo collective) on every call; get_action runs a DATA-DEPENDENT
+            # number of times per step (eps-greedy skips it on random actions), so
+            # that is wasted sync and a cross-rank desync risk. module() gives
+            # identical output (same weights) with no DDP sync.
             with torch.no_grad():
                 q_value = self.dqn.module(observations).cpu()
             action = torch.argmax(q_value).numpy()

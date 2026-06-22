@@ -1,8 +1,8 @@
 """BDE predictor orchestrator for the RL reward.
 
 Owns the BDE model, its scaler, and the BDE reward factor. A *pure* predictor:
-caching is handled externally by a ``CachedPredictor`` (composed in the
-environment), so this class no longer knows about caches.
+caching is handled externally by ``cached`` (composed in the BDE_IP reward),
+so this class no longer knows about caches.
 """
 from src import config_defaults as hyp
 from src.reward.bde import BDEModel

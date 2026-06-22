@@ -1,0 +1,137 @@
+"""BDE_IP reward: weighted combine of scaled BDE + IP + RRAB.
+
+Owns the ``BDEPredictor`` / ``IPPredictor`` wiring (wrapped with ``cached`` for
+generic dedup + index-mapping) and the reward-combination math. BDE is memoized
+by canonical SMILES via the shared ``bde_cache``; IP is never cached (its value
+depends on a random ETKDG conformer).
+"""
+from rdkit import Chem
+
+from src import config_defaults as hyp
+from src.cache import cached
+from src.reward.bde_predictor.predictor import BDEPredictor
+from src.reward.ip_predictor.predictor import IPPredictor
+
+
+class BdeIpReward:
+    """docstring for BdeIpReward"""
+
+    def __init__(self, args, device, init_mols, bde_cache):
+        self.device = device
+        self.init_mols = init_mols
+        self.bde_cache = bde_cache
+
+        self.bde_factor = hyp.bde_factor
+        self.ip_factor = hyp.ip_factor
+
+        self.bed_weight = 0.8
+        self.ip_weight = 0.2
+        self.rrab_weight = 0.5
+
+        self.use_bde_cache = 'bde' in args.cache
+        self.etkdg_max_attempts_cache = args.etkdg_max_attempts_cache
+        self.etkdg_max_attempts_uncache = args.etkdg_max_attempts_uncache
+
+        # Intra-rank ETKDG threading: RDKit's EmbedMolecule releases the GIL,
+        # so a thread pool parallelizes 3D embedding within one rank
+        # (~1.75x at 2 threads). Lets 36 ranks x 2 threads keep 72-core etkdg
+        # throughput while halving GPU contexts (fits memory + MPS works).
+        self.etkdg_threads = int(getattr(args, 'etkdg_threads', 1))
+
+        if len(args.reward_weight) == 0:
+            # use default weights
+            pass
+        elif len(args.reward_weight) == 1:
+            # assume that the one value is bde weight, which is the same as main_multi.py
+            self.bed_weight = args.reward_weight[0]
+            self.ip_weight = 1.0 - self.bed_weight
+
+        elif len(args.reward_weight) == 2:
+            self.bed_weight = args.reward_weight[0]
+            self.ip_weight = args.reward_weight[1]
+        else :
+            self.bed_weight = args.reward_weight[0]
+            self.ip_weight = args.reward_weight[1]
+            self.rrab_weight = args.reward_weight[2]
+
+        # Pure predictors, wrapped by ``cached`` for generic dedup +
+        # index-mapping. BDE gets a swappable cache (LRU); IP gets cache=None
+        # (never cached) and call_on_empty=False.
+        self.bde_predictor = BDEPredictor(device=self.device)
+        self.bde_scaler = self.bde_predictor.bde_scaler
+        self.bde_model = self.bde_predictor.bde_model
+        self.bde = cached(
+            self.bde_predictor.predict_BDE, cache=self.bde_cache,
+            invalid_value=hyp.reward_of_invalid_mol)
+
+        self.ip_predictor = IPPredictor(
+            device=self.device,
+            etkdg_threads=self.etkdg_threads,
+            etkdg_max_attempts_cache=self.etkdg_max_attempts_cache,
+            etkdg_max_attempts_uncache=self.etkdg_max_attempts_uncache)
+        self.ip_scaler = self.ip_predictor.ip_scaler
+        self.ip_model = self.ip_predictor.ip_model
+        _ip_attempts = self.etkdg_max_attempts_uncache
+        self.ip = cached(
+            lambda keys, mols: self.ip_predictor.predict_IP(mols, _ip_attempts),
+            cache=None, call_on_empty=False,
+            invalid_value=hyp.reward_of_invalid_mol)
+
+        self.init_mols_n = [m.GetNumAtoms() + m.GetNumBonds() for m in self.init_mols]
+
+    def calc_rrabs(self, molecules):
+        rrabs = []
+        for molecule, init_mol_n in zip(molecules, self.init_mols_n):
+            n = molecule.GetNumAtoms() + molecule.GetNumBonds()
+            rrab = float(init_mol_n - n) / float(init_mol_n)
+            rrabs.append(rrab)
+        return rrabs
+
+    def compute(self, molecules, current_step, max_steps):
+
+        # remove duplicated smiles.
+        smiles = [Chem.MolToSmiles(mol) for mol in molecules]
+        smiles_p = {}
+        for i, s in enumerate(smiles):
+            if s in smiles_p:
+                smiles_p[s][1].append(i)
+            else:
+                # Rebuild the molecule from its canonical SMILES before AddHs +
+                # ETKDG. cenv's C++ reaction editing can leave a double bond in an
+                # inconsistent stereo state (marked STEREOZ but with an empty
+                # stereoatoms list); RDKit's EmbedMolecule then dereferences the
+                # empty stereoatoms array and SEGFAULTS — an uncatchable crash that
+                # kills the whole (possibly multi-node) job. A fresh MolFromSmiles
+                # re-perceives stereochemistry consistently and avoids it
+                # (SanitizeMol alone does NOT — it doesn't touch stereoatoms).
+                # For valid molecules this is a canonical round-trip identity, so
+                # rewards match the old path; unparseable mols are dropped (invalid).
+                m_clean = Chem.MolFromSmiles(s)
+                if m_clean is None:
+                    continue
+                mol_with_H = Chem.AddHs(m_clean)
+                smiles_p[s] = mol_with_H, [i]
+
+        bde_ps, bde_vs = self.bde(smiles, smiles_p, use_cache=self.use_bde_cache)
+        # ignore mols without valid BDE while predicting IP
+        for s, v in zip(smiles, bde_vs):
+            if (not v) and s in smiles_p:
+                del smiles_p[s]
+        # IP is never cached (random conformer); use_cache=False -> dedup + map only.
+        ip_preds, ip_vs = self.ip(smiles, smiles_p, use_cache=False)
+
+        rrabs = self.calc_rrabs(molecules)
+
+        rewards = []
+        for bdep, bdev, ipp, ipv, rrab in zip(bde_ps, bde_vs, ip_preds, ip_vs, rrabs):
+            if bdev and ipv:
+                bden = self.bde_scaler.transform([[bdep * self.bde_factor]])
+                ipn = self.ip_scaler.transform([[ipp * self.ip_factor]])
+                bde = bden[0][0]
+                ip = ipn[0][0]
+                r = 2.0 * (self.bed_weight * (1.0 - bde) + self.ip_weight * ip) + self.rrab_weight * rrab
+                rewards.append(r)
+            else:
+                rewards.append(hyp.reward_of_invalid_mol)
+
+        return {'reward':rewards, 'BDE':bde_ps, 'IP':ip_preds, 'RRAB': rrabs}

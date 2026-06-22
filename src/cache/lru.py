@@ -1,10 +1,8 @@
 """LRU cache implementation of the :class:`Cache` interface."""
 from collections import OrderedDict
 
-from src.cache.base import Cache
 
-
-class LRUCache(Cache):
+class LRUCache:
     def __init__(self, capacity):
         self.cache = OrderedDict()
         self.capacity = capacity

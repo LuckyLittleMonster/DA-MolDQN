@@ -1,26 +1,26 @@
-"""Abstract cache interface for property-prediction memoization."""
-from abc import ABC, abstractmethod
+"""Cache interface as a structural Protocol for property-prediction memoization."""
+from typing import Protocol, runtime_checkable
 
 
-class Cache(ABC):
-    """Key -> value cache for memoizing pure predictions.
-
-    Implementations are swappable (``LRUCache`` today; future: TTL, persistent,
-    cross-rank shared) — inject a different ``Cache`` into a ``CachedPredictor``
-    without touching the predictor.
+@runtime_checkable
+class Cache(Protocol):
+    """Key -> value cache. Structural typing: any object exposing these methods
+    *is* a ``Cache`` — no inheritance required. Swap the algorithm (``LRUCache``
+    today; future: TTL, persistent, cross-rank) by passing a different object.
     """
 
-    @abstractmethod
-    def get(self, key):
+    def get(self, key) -> tuple[object, bool]:
         """Return ``(value, hit)``. On a miss ``hit`` is False (value ignored)."""
+        ...
 
-    @abstractmethod
-    def put(self, key, value):
+    def put(self, key, value) -> None:
         """Insert / update ``key`` -> ``value``."""
+        ...
 
-    @abstractmethod
-    def hit_rate(self, episode=False):
+    def hit_rate(self, episode: bool = False) -> float:
         """Cumulative (or per-episode if ``episode``) hit rate in [0, 1]."""
+        ...
 
-    def reset_episode_hit_rate(self):
-        """Reset the per-episode hit/total counters. Optional; default no-op."""
+    def reset_episode_hit_rate(self) -> None:
+        """Reset the per-episode hit/total counters."""
+        ...

@@ -3,8 +3,8 @@
 Owns the AIMNet-NSE ensemble (5 cross-validation models), the IP scaler, an
 ``ETKDGEmbedder`` for 3D conformer generation, and the IP reward factor. A *pure*
 predictor — IP is NOT cached (its value depends on a random ETKDG conformer), so
-this class has no cache and ``predict_IP`` runs every call. The environment wraps
-it in a ``CachedPredictor(cache=None, call_on_empty=False)`` only to reuse the
+this class has no cache and ``predict_IP`` runs every call. The BDE_IP reward
+wraps it in ``cached(cache=None, call_on_empty=False)`` only to reuse the
 generic dedup + index-mapping.
 """
 import numpy as np
