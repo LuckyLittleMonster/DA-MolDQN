@@ -50,9 +50,10 @@ seed_offset: -1
 # --- env / observation ---
 use_cxx_multi_threading: 1
 observation_type: list
-cache: [bde, ip]
+cache: [bde]   # IP is NOT cached: its value depends on a random ETKDG conformer
 etkdg_max_attempts_cache: 7
 etkdg_max_attempts_uncache: 7
+etkdg_threads: 1   # intra-rank ETKDG thread pool (RDKit releases the GIL); >1 to parallelize embedding
 maintain_OH: null
 
 # --- recording / saving ---
