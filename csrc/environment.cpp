@@ -10,9 +10,6 @@ using namespace RDKit;
 using std::cout;
 using std::endl;
 
-// #define CENV_DEBUG
-// #define EMBED_DEBUG
-
 using BondType = RDKit::Bond::BondType;
 const static std::array<BondType, 4> bond_order = {
     BondType::UNSPECIFIED,
@@ -44,8 +41,6 @@ Flags::Flags(const std::string &pickle_str) {
         allow_bonds_between_rings = (pickle_str[i++] == '1');
         record_path = (pickle_str[i++] == '1');
         maintain_label = (pickle_str[i++] == '1');
-        // old_remove_method = (pickle_str[i++] == '1');
-        // maintain_OH = (pickle_str[i++] == '1');
     }
 }
 
@@ -59,8 +54,6 @@ std::string Flags::get_pickle() const {
     pickle_str[i++] = (allow_bonds_between_rings)?('1'):'0';
     pickle_str[i++] = (record_path)?('1'):'0';
     pickle_str[i++] = (maintain_label)?('1'):'0';
-    // pickle_str[i++] = (old_remove_method)?('1'):'0';
-    // pickle_str[i++] = (maintain_OH)?('1'):'0';
     return pickle_str;
 }
 
@@ -100,7 +93,7 @@ int calMaxValence(int atomic_num) {
 Environment::Environment(
     const boost::python::list &py_atom_types_str,
     const boost::python::list &py_allowed_ring_sizes,
-    const int &morgan_fingerprint_radius, 
+    const int &morgan_fingerprint_radius,
     const int &morgan_fingerprint_length,
     const Flags &_flags
     )
@@ -109,7 +102,7 @@ Environment::Environment(
         boost::python::stl_input_iterator<std::string>(py_atom_types_str),
         boost::python::stl_input_iterator<std::string>()
     };
-    
+
     for (auto &atom_str : atom_types_str) {
         int atomic_num = PeriodicTable::getTable()->getAtomicNumber(atom_str);
         this->atom_types.push_back(atomic_num);
@@ -141,7 +134,7 @@ Environment::Environment(const std::vector<int> &_at, const std::unordered_set<i
     this->imf.setFingerprintLength(morgan_fingerprint_length);
 }
 
-Environment::Environment(const Environment &e) 
+Environment::Environment(const Environment &e)
 {
     this->atom_types = e.atom_types;
     this->allowed_ring_sizes = e.allowed_ring_sizes;
@@ -150,7 +143,7 @@ Environment::Environment(const Environment &e)
     this->imf = e.imf;
 }
 
-Environment::Environment(const std::string &pickle_str) 
+Environment::Environment(const std::string &pickle_str)
 {
     std::stringstream ss(pickle_str);
     int sz;
@@ -186,7 +179,7 @@ Environment::Environment(const std::string &pickle_str)
     this->flags = Flags(flags);
 }
 
-std::string Environment::get_pickle() const 
+std::string Environment::get_pickle() const
 {
     std::stringstream ss;
     ss << atom_types.size() << " ";
@@ -203,7 +196,7 @@ std::string Environment::get_pickle() const
 boost::python::tuple Environment::get_valid_actions_and_fingerprint(boost::shared_ptr<ROMol> molecule, int get_morgan_fingerprint, int maintain_OH)
 {
     /*
-        get_morgan_fingerprint: 
+        get_morgan_fingerprint:
             0: do not generate inc fp
             1: generate fp as list
             2: generate fp as numpy
@@ -216,7 +209,7 @@ boost::python::tuple Environment::get_valid_actions_and_fingerprint(boost::share
     */
 
     boost::shared_ptr<ROMol> mol(new ROMol(*molecule));
-    if (mol == nullptr) 
+    if (mol == nullptr)
         return {};
 
     if (get_morgan_fingerprint) {
@@ -229,16 +222,16 @@ boost::python::tuple Environment::get_valid_actions_and_fingerprint(boost::share
     atom_addition(mol, get_morgan_fingerprint, maintain_OH, valid_actions, fingerprints);
     bond_addition(mol, get_morgan_fingerprint, maintain_OH, valid_actions, fingerprints);
     bond_replace(mol, get_morgan_fingerprint, maintain_OH, valid_actions, fingerprints);
-    
+
     if (this->flags.allow_no_modification) {
         boost::shared_ptr<ROMol> act(new ROMol(*mol));
         valid_actions.append(act);
         if (get_morgan_fingerprint == 1) {
             auto fp = imf.getBaseMolMorganFingerprint();
-            fingerprints.append(fp); 
+            fingerprints.append(fp);
         } else if (get_morgan_fingerprint == 2) {
             auto fp = imf.getBaseMolMorganFingerprintAsNumPy();
-            fingerprints.append(fp); 
+            fingerprints.append(fp);
         }
     }
     return boost::python::make_tuple(valid_actions, fingerprints);
@@ -248,7 +241,7 @@ boost::python::tuple Environment::get_valid_actions_and_fingerprint_smile(std::s
 {
     /*
         this func uses smiles instead of ROMol. It is slow but has better compatibility.
-        get_morgan_fingerprint: 
+        get_morgan_fingerprint:
             0: do not generate inc fp
             1: generate fp as list
             2: generate fp as numpy
@@ -260,7 +253,7 @@ boost::python::tuple Environment::get_valid_actions_and_fingerprint_smile(std::s
 
     */
     boost::shared_ptr<ROMol> mol = RDKit::v2::SmilesParse::MolFromSmiles(smiles);
-    if (mol == nullptr) 
+    if (mol == nullptr)
         return {};
 
     if (get_morgan_fingerprint) {
@@ -277,10 +270,10 @@ boost::python::tuple Environment::get_valid_actions_and_fingerprint_smile(std::s
         valid_actions.append(act);
         if (get_morgan_fingerprint == 1) {
             auto fp = imf.getBaseMolMorganFingerprint();
-            fingerprints.append(fp); 
+            fingerprints.append(fp);
         } else if (get_morgan_fingerprint == 2) {
             auto fp = imf.getBaseMolMorganFingerprintAsNumPy();
-            fingerprints.append(fp); 
+            fingerprints.append(fp);
         }
     }
     boost::python::list valid_actions_smile;
@@ -293,7 +286,7 @@ boost::python::tuple Environment::get_valid_actions_and_fingerprint_smile(std::s
 
 }
 
-void Environment::atom_addition(boost::shared_ptr<ROMol> mol, int get_morgan_fingerprint, int maintain_OH, boost::python::list &valid_actions, boost::python::list &fingerprints) 
+void Environment::atom_addition(boost::shared_ptr<ROMol> mol, int get_morgan_fingerprint, int maintain_OH, boost::python::list &valid_actions, boost::python::list &fingerprints)
 {
 
     if (!mol->getRingInfo()->isInitialized()) {
@@ -328,7 +321,7 @@ void Environment::atom_addition(boost::shared_ptr<ROMol> mol, int get_morgan_fin
                             auto fp = imf.getIncrementalMorganFingerprintAsNumPy(*rt, {atomic_idx, new_atomic_idx});
                             fingerprints.append(fp);
                         }
-                    }                    
+                    }
                 }
             }
         }
@@ -336,19 +329,19 @@ void Environment::atom_addition(boost::shared_ptr<ROMol> mol, int get_morgan_fin
 
 }
 
-int Environment::getMinFreeHs(Atom *atom1, Atom *atom2) 
+int Environment::getMinFreeHs(Atom *atom1, Atom *atom2)
 {
     return std::min(atom1->getNumImplicitHs(), atom2->getNumImplicitHs());
 }
-int Environment::getMinFreeHs(Bond *bond) 
+int Environment::getMinFreeHs(Bond *bond)
 {
     auto atom1 = bond->getBeginAtom();
     auto atom2 = bond->getEndAtom();
     return getMinFreeHs(atom1, atom2);
 }
 
-void Environment::bond_addition(boost::shared_ptr<ROMol> mol, int get_morgan_fingerprint, int maintain_OH, boost::python::list &valid_actions, boost::python::list &fingerprints) 
-{ 
+void Environment::bond_addition(boost::shared_ptr<ROMol> mol, int get_morgan_fingerprint, int maintain_OH, boost::python::list &valid_actions, boost::python::list &fingerprints)
+{
     // add a new bond between two atoms
 
     const static int N_ATOMIC_NUM = Atom("N").getAtomicNum();
@@ -371,7 +364,7 @@ void Environment::bond_addition(boost::shared_ptr<ROMol> mol, int get_morgan_fin
             auto atom2 = mol->getAtomWithIdx(j);
             auto bond = mol->getBondBetweenAtoms(i, j);
             if (bond) {
-                continue;   
+                continue;
             } else if (atom1->getAtomicNum() == atom2->getAtomicNum() && (atom1->getAtomicNum() == N_ATOMIC_NUM || atom1->getAtomicNum() == O_ATOMIC_NUM)) {
                 continue;
             } else if (!flags.allow_bonds_between_rings && is_I_in_ring && is_J_in_ring) {
@@ -392,30 +385,24 @@ void Environment::bond_addition(boost::shared_ptr<ROMol> mol, int get_morgan_fin
                     continue;
                 }
                 boost::shared_ptr<ROMol> rt(new ROMol(act, true));
-                // if ((!flags.maintain_OH) or has_OH(rt)) {
                 if (check_OH(maintain_OH, rt)) {
                     valid_actions.append(rt);
-                    // if (get_morgan_fingerprint) {
-                    //     auto fp = imf.getIncrementalMorganFingerprintAsNumPy(*rt, shortest_path);
-                    //     // auto fp = imf.getIncrementalMorganFingerprintAsNumPy(*rt, {i, j});
-                    //     fingerprints.append(fp);
-                    // } 
                     if (get_morgan_fingerprint == 1) {
                         auto fp = imf.getIncrementalMorganFingerprint(*rt, shortest_path);
                         fingerprints.append(fp);
                     } else if (get_morgan_fingerprint == 2) {
                         auto fp = imf.getIncrementalMorganFingerprintAsNumPy(*rt, shortest_path);
                         fingerprints.append(fp);
-                    }               
+                    }
                 }
-                
+
             }
         }
     }
 }
 
-void Environment::bond_replace(boost::shared_ptr<ROMol> mol, int get_morgan_fingerprint, int maintain_OH, boost::python::list &valid_actions, boost::python::list &fingerprints) 
-{ 
+void Environment::bond_replace(boost::shared_ptr<ROMol> mol, int get_morgan_fingerprint, int maintain_OH, boost::python::list &valid_actions, boost::python::list &fingerprints)
+{
     // remove the entire bond or downgrade it
 
     const static int N_ATOMIC_NUM = Atom("N").getAtomicNum();
@@ -437,32 +424,24 @@ void Environment::bond_replace(boost::shared_ptr<ROMol> mol, int get_morgan_fing
             uint sanitization_result = 0;
             MolOps::sanitizeMol(act, sanitization_result, MolOps::SANITIZE_ALL);
             if (!sanitization_result) {
-                auto frags = MolOps::getMolFrags(act, true); // sanitize = true                   
+                auto frags = MolOps::getMolFrags(act, true); // sanitize = true
                 if (frags.size() > 1) {
                     if (frags[0]->getNumAtoms() < frags[1]->getNumAtoms()) {
                         swap(frags[0], frags[1]);
                     }
                 }
                 boost::shared_ptr<ROMol> rt(new ROMol(*frags[0], true));
-                // if ((!flags.maintain_OH) or has_OH(rt)) {
                 if (check_OH(maintain_OH, rt)) {
                     valid_actions.append(rt);
-                    // if (get_morgan_fingerprint) {
-                    //     int i = bond->getBeginAtomIdx();
-                    //     int j = bond->getEndAtomIdx();
-                    //     // auto fp = imf.getIncrementalMorganFingerprintAsNumPy(*rt, {i, j}); // to do implement the inc fp for removed bond
-                    //     auto fp = imf.getMorganFingerprintAsNumPy(*rt);
-                    //     fingerprints.append(fp);    
-                    // }
                     if (get_morgan_fingerprint == 1) {
                         auto fp = imf.getMorganFingerprint(*rt);
                         fingerprints.append(fp);
                     } else if (get_morgan_fingerprint == 2) {
                         auto fp = imf.getMorganFingerprintAsNumPy(*rt);
                         fingerprints.append(fp);
-                    } 
+                    }
                 }
-                
+
             }
         }
 
@@ -472,7 +451,7 @@ void Environment::bond_replace(boost::shared_ptr<ROMol> mol, int get_morgan_fing
             if (new_bond_type != bond->getBondType()) {
                 bool canReplace = new_bond_type < bt; // downgrade
                 if (new_bond_type > bt) { // upgrade
-                    
+
                     if (new_bond_type - bt <= getMinFreeHs(bond)) {
                         canReplace = true;
                     } else {
@@ -482,7 +461,7 @@ void Environment::bond_replace(boost::shared_ptr<ROMol> mol, int get_morgan_fing
                     auto atom1 = bond->getBeginAtom();
                     auto atom2 = bond->getEndAtom();
                     if (atom1->getAtomicNum() == atom2->getAtomicNum() && (atom1->getAtomicNum() == N_ATOMIC_NUM || atom1->getAtomicNum() == O_ATOMIC_NUM)) {
-                        // no N=N and O=O. 
+                        // no N=N and O=O.
                         // MolDQN did forbid this, I don't know why N=N is not allowed. --Huanyi
                         canReplace = false;
                     }
@@ -496,16 +475,8 @@ void Environment::bond_replace(boost::shared_ptr<ROMol> mol, int get_morgan_fing
                         continue;
                     }
                     boost::shared_ptr<ROMol> rt(new ROMol(act, true));
-                    // if ((!flags.maintain_OH) or has_OH(rt)) {
                     if (check_OH(maintain_OH, rt)) {
                         valid_actions.append(rt);
-                        // if (get_morgan_fingerprint) {
-                        //     int i = bond->getBeginAtomIdx();
-                        //     int j = bond->getEndAtomIdx();
-                        //     auto fp = imf.getIncrementalMorganFingerprintAsNumPy(*rt, {i, j});
-                        //     fingerprints.append(fp);    
-                        // }
-
                         if (get_morgan_fingerprint == 1) {
                             int i = bond->getBeginAtomIdx();
                             int j = bond->getEndAtomIdx();
@@ -515,8 +486,8 @@ void Environment::bond_replace(boost::shared_ptr<ROMol> mol, int get_morgan_fing
                             int i = bond->getBeginAtomIdx();
                             int j = bond->getEndAtomIdx();
                             auto fp = imf.getIncrementalMorganFingerprintAsNumPy(*rt, {i, j});
-                            fingerprints.append(fp);    
-                        } 
+                            fingerprints.append(fp);
+                        }
 
                     }
                 }
@@ -572,8 +543,6 @@ BOOST_PYTHON_MODULE(cenv)
         .def_readwrite("allow_bonds_between_rings", &Flags::allow_bonds_between_rings)
         .def_readwrite("record_path", &Flags::record_path)
         .def_readwrite("maintain_label", &Flags::maintain_label);
-        // .def_readwrite("old_remove_method", &Flags::old_remove_method);
-        // .def_readwrite("maintain_OH", &Flags::maintain_OH);
 
     class_<Environment>("Environment", init<boost::python::list, boost::python::list, int, int, Flags>())
         .def(init<std::string>())

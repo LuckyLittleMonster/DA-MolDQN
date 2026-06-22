@@ -1,8 +1,5 @@
 #include "incremental_morgan_fingerprint.h"
 
-// #define CENV_DEBUG
-
-
 using namespace RDKit;
 namespace python = boost::python;
 namespace numpy = boost::python::numpy;
@@ -10,7 +7,6 @@ namespace numpy = boost::python::numpy;
 using std::cout;
 using std::endl;
 
-// typedef std::tuple<boost::dynamic_bitset<>, unsigned int, unsigned int> MyAccumTuple;
 using MyAccumTuple = boost::tuple<boost::dynamic_bitset<>, unsigned int, unsigned int>;
 
 void initialize_numpy()
@@ -20,9 +16,9 @@ void initialize_numpy()
         Py_Initialize();
         numpy::initialize();
         import_array();
-        f = false;    
+        f = false;
     }
-    
+
 }
 
 IncrementalMorganFingerprint::IncrementalMorganFingerprint() {
@@ -70,8 +66,6 @@ boost::python::object IncrementalMorganFingerprint::getBaseMolMorganFingerprintA
 }
 
 boost::python::list IncrementalMorganFingerprint::getIncrementalMorganFingerprint(const RDKit::ROMol &new_mol, const std::list<int> &fromAtoms) {
-    // Table_T new_hash_value_table(hash_value_table);
-    // this->calcIncrementalFingerprint(new_mol, fromAtoms, new_hash_value_table);
     Table_T new_hash_value_table;
     if (new_mol.getNumAtoms() > this->baseMol.getNumAtoms()) {
         // atom addition
@@ -130,8 +124,8 @@ boost::python::object IncrementalMorganFingerprint::getIncrementalMorganFingerpr
         // cout << val.first % this->length << ", ";
         vs.insert(val.first);
     }
-    
-    if (!equal(s, vs)) 
+
+    if (!equal(s, vs))
     {
 
         cout << "baseMol: " << MolToSmiles(this->baseMol) << endl;
@@ -139,7 +133,7 @@ boost::python::object IncrementalMorganFingerprint::getIncrementalMorganFingerpr
         //     auto atomic_num = atom->getAtomicNum();
         //     auto atomic_idx = atom->getIdx();
         //     cout << atomic_idx << ": ";
-        //     cout << 
+        //     cout <<
         // }
         {
             uint nAtoms = this->baseMol.getNumAtoms();
@@ -147,14 +141,14 @@ boost::python::object IncrementalMorganFingerprint::getIncrementalMorganFingerpr
             for (uint i = 0; i < nAtoms; ++i) {
                 cout << i << " : ";
                 for (uint j = 0; j < (radius + 1); ++j) {
-                    cout << "{" 
-                        // << this->hash_value_table[j][i].first << "," 
+                    cout << "{"
+                        // << this->hash_value_table[j][i].first << ","
                         << this->hash_value_table[j][i].second << "},";
                 }
                 cout << endl;
             }
         }
-        
+
 
         cout << "new_mol: " << MolToSmiles(new_mol) << endl;
         cout << "s: ";
@@ -168,13 +162,13 @@ boost::python::object IncrementalMorganFingerprint::getIncrementalMorganFingerpr
         for (uint i = 0; i < nAtoms; ++i) {
             cout << i << " : ";
             for (uint j = 0; j < (radius + 1); ++j) {
-                cout << "{" 
-                    // << new_hash_value_table[j][i].first << "," 
+                cout << "{"
+                    // << new_hash_value_table[j][i].first << ","
                     << new_hash_value_table[j][i].second << "},";
             }
             cout << endl;
         }
-        
+
         cout << "v: ";
         for (auto &val : vs) {
             cout << val << ", ";
@@ -201,8 +195,8 @@ boost::python::object IncrementalMorganFingerprint::getIncrementalMorganFingerpr
         for (uint i = 0; i < nAtoms; ++i) {
             cout << i << " : ";
             for (uint j = 0; j < (radius + 1); ++j) {
-                cout << "{" 
-                    // << debug_table[j][i].first << "," 
+                cout << "{"
+                    // << debug_table[j][i].first << ","
                     << debug_table[j][i].second << "},";
             }
             cout << endl;
@@ -242,7 +236,6 @@ boost::python::object IncrementalMorganFingerprint::getMorganFingerprintAsNumPy(
 }
 
 boost::python::list IncrementalMorganFingerprint::getMorganFingerprintByGenerator(const RDKit::ROMol &new_mol) {
-    // todo
     boost::python::list lt;
     return lt;
 }
@@ -268,57 +261,8 @@ boost::python::object IncrementalMorganFingerprint::getMorganFingerprintAsNumPyB
     return python::object(res);
 }
 
-// std::set<uint32_t> IncrementalMorganFingerprint::convertTableToSet(Table_T &table) {
-//     std::set<uint32_t> s;
-//     std::vector<boost::dynamic_bitset<>> neighborhoods;
-
-//     auto &l = table[0];
-//     boost::dynamic_bitset<> deadAtoms(l.size());
-//     for (auto &val : l) {
-
-//         auto &nb = val.first;
-//         auto &el = val.second;
-
-//         neighborhoods.push_back(nb);
-//         s.insert(el);
-//     }
-
-//     for (size_t i = 1; i < table.size(); ++i) {
-//         std::vector<RDKit::MorganFingerprints::MyAccumTuple> neighborhoodsThisRound;
-//         auto &l = table[i];
-//         for (uint j = 0; j < l.size(); ++j) {
-//             auto &atomIdx = j;
-//             auto &val = l[j];
-//             auto &nb = val.first;
-//             auto &el = val.second;
-
-//             if (std::find(neighborhoods.begin(), neighborhoods.end(), nb) == neighborhoods.end()) {
-//                 neighborhoods.push_back(nb);
-//                 s.insert(el);
-//             }
-//         }
-//     }
-//     return s;
-// }
-
-// namespace std {
-
-//     template <typename Block, typename Alloc> struct hash<boost::dynamic_bitset<Block, Alloc> > {
-//         size_t operator()(boost::dynamic_bitset<Block, Alloc> const& bs) const {
-//             size_t seed = boost::hash_value(bs.size());
-
-//             std::vector<Block> blocks(bs.num_blocks());
-//             boost::hash_range(seed, blocks.begin(), blocks.end());
-
-//             return seed;
-//         }
-//     };
-
-// }
-
 std::set<uint32_t> IncrementalMorganFingerprint::convertTableToSet(Table_T &table) {
     std::set<uint32_t> s;
-    // std::vector<boost::dynamic_bitset<>> neighborhoods;
     std::unordered_set<boost::dynamic_bitset<>> neighborhoods;
 
     auto &l = table[0];
@@ -328,7 +272,6 @@ std::set<uint32_t> IncrementalMorganFingerprint::convertTableToSet(Table_T &tabl
         auto &nb = val.first;
         auto &el = val.second;
 
-        // neighborhoods.push_back(nb);
         neighborhoods.insert(nb);
         s.insert(el);
     }
@@ -343,7 +286,6 @@ std::set<uint32_t> IncrementalMorganFingerprint::convertTableToSet(Table_T &tabl
             auto &el = val.second;
 
             if (!deadAtoms[atomIdx]) {
-                // neighborhoodsThisRound.push_back(boost::make_tuple(nb, el, atomIdx));
                 neighborhoodsThisRound.push_back(MyAccumTuple(nb, el, atomIdx));
             }
         }
@@ -353,10 +295,8 @@ std::set<uint32_t> IncrementalMorganFingerprint::convertTableToSet(Table_T &tabl
                          neighborhoodsThisRound.begin();
                  iter != neighborhoodsThisRound.end(); ++iter) {
             if (
-                // std::find(neighborhoods.begin(), neighborhoods.end(), iter->get<0>()) == neighborhoods.end()
                 neighborhoods.find(iter->get<0>()) == neighborhoods.end()
                 ) {
-                // neighborhoods.push_back(iter->get<0>());
                 neighborhoods.insert(iter->get<0>());
                 s.insert(iter->get<1>());
             } else {
@@ -417,20 +357,13 @@ boost::python::object IncrementalMorganFingerprint::convertTableToNumPy(Table_T 
 void IncrementalMorganFingerprint::calcFingerprint(const ROMol &mol, uint radius,
     std::vector<uint32_t> *invariants,
     const std::set<uint32_t> *fromAtoms, bool useChirality,
-    bool useBondTypes, 
+    bool useBondTypes,
     bool onlyNonzeroInvariants,
     bool includeRedundantEnvironments,
     Table_T &res
-    ) 
+    )
 {
     using namespace RDKit::MorganFingerprints;
-    #if 0
-    std::cout << "calcFingerprint" << std::endl;
-    std::cout << "useChirality: " << useChirality << std::endl;
-    std::cout << "useBondTypes: " << useBondTypes << std::endl; 
-    std::cout << "onlyNonzeroInvariants: " << onlyNonzeroInvariants << std::endl; 
-    std::cout << "includeRedundantEnvironments: " << includeRedundantEnvironments << std::endl;
-    #endif
     const ROMol *lmol = &mol;
     std::unique_ptr<ROMol> tmol;
     if (useChirality && !mol.hasProp(common_properties::_StereochemDone)) {
@@ -457,15 +390,10 @@ void IncrementalMorganFingerprint::calcFingerprint(const ROMol &mol, uint radius
     for (uint i = 0; i < nAtoms; ++i) {
         if (!fromAtoms || fromAtoms->find(i) != fromAtoms->end()) {
             if (!onlyNonzeroInvariants || (*invariants)[i]) {
-                // uint32_t bit = updateElement(res, (*invariants)[i], useCounts);
-                updateElement(i, 0, (*invariants)[i], empty_nb,res); 
-                // if (atomsSettingBits) {
-                //     (*atomsSettingBits)[bit].push_back(std::make_pair(i, 0));
-                // }
+                updateElement(i, 0, (*invariants)[i], empty_nb,res);
             }
         }
     }
-    // std::cout << "calcFingerprint update 0 done" << std::endl;
     boost::dynamic_bitset<> chiralAtoms(nAtoms);
 
     // these are the neighborhoods that have already been added
@@ -506,16 +434,13 @@ void IncrementalMorganFingerprint::calcFingerprint(const ROMol &mol, uint radius
     }
     // now do our subsequent rounds:
     for (uint layer = 0; layer < radius; ++layer) {
-        // std::cout << "layer: " << layer << std::endl;
         std::vector<uint32_t> roundInvariants(nAtoms);
         std::vector<boost::dynamic_bitset<>> roundAtomNeighborhoods =
                 atomNeighborhoods;
         std::vector<MyAccumTuple> neighborhoodsThisRound;
 
         for (auto atomIdx : atomOrder) {
-            // std::cout << "atomIdx: " << atomIdx << std::endl;
             if (!deadAtoms[atomIdx]) {
-                // std::cout << "not dead atomIdx: " << atomIdx << std::endl;
                 const Atom *tAtom = lmol->getAtomWithIdx(atomIdx);
                 if (!tAtom->getDegree()) {
                     deadAtoms.set(atomIdx, 1);
@@ -576,7 +501,6 @@ void IncrementalMorganFingerprint::calcFingerprint(const ROMol &mol, uint radius
                         }
                     }
                 }
-                // cout << "----------------------" << endl;
                 if (useChirality && looksChiral) {
                     chiralAtoms[atomIdx] = 1;
                     // add an extra value to the invariant to reflect chirality:
@@ -591,7 +515,6 @@ void IncrementalMorganFingerprint::calcFingerprint(const ROMol &mol, uint radius
                     }
                 }
                 roundInvariants[atomIdx] = static_cast<uint32_t>(invar);
-                // neighborhoodsThisRound.push_back(boost::make_tuple(roundAtomNeighborhoods[atomIdx],static_cast<uint32_t>(invar), atomIdx));
                 neighborhoodsThisRound.push_back(MyAccumTuple(roundAtomNeighborhoods[atomIdx],static_cast<uint32_t>(invar), atomIdx));
 
                 if (!includeRedundantEnvironments &&
@@ -600,54 +523,31 @@ void IncrementalMorganFingerprint::calcFingerprint(const ROMol &mol, uint radius
                     // we have seen this exact environment before, this atom
                     // is now out of consideration:
                     deadAtoms[atomIdx] = 1;
-                    std::cout <<"p1   atom: "<< atomIdx <<" is dead."<<std::endl;
-                    std::cout << "neighborhoods: ";
-                    for (auto &n : neighborhoods) {
-                        cout << n << ", ";
-                    }
-                    cout << endl;
                 }
             }
         }
         std::sort(neighborhoodsThisRound.begin(), neighborhoodsThisRound.end());
-        // std::cout << "neighborhoodsThisRound: " << neighborhoodsThisRound.size() << std::endl;
-        int debug_id = 0;
         for (std::vector<MyAccumTuple>::const_iterator iter =
                          neighborhoodsThisRound.begin();
                  iter != neighborhoodsThisRound.end(); ++iter) {
             // if we haven't seen this exact environment before, update the
             // fingerprint:
-            // std::cout << debug_id << ", p1" << std::endl;
             if (includeRedundantEnvironments ||
                     std::find(neighborhoods.begin(), neighborhoods.end(),
                                         iter->get<0>()) == neighborhoods.end()) {
-                // std::cout << debug_id << ", p2" << std::endl;
                 if (!onlyNonzeroInvariants || invariantCpy[iter->get<2>()]) {
-                    // std::cout << debug_id << ", p3" << std::endl;
                     if (includeAtoms[iter->get<2>()]) {
-                        // std::cout << debug_id << ", p4" << std::endl;
-                        // uint32_t bit = updateElement(res, iter->get<1>(), useCounts);
                         updateElement(iter->get<2>(), layer + 1, iter->get<1>(), iter->get<0>(),res);
-                        // std::cout << debug_id << ", p5" << std::endl;
-                        // if (atomsSettingBits) {
-                        //     (*atomsSettingBits)[bit].push_back(
-                        //             std::make_pair(iter->get<2>(), layer + 1));
-                        // }
                     }
                     if (!fromAtoms || fromAtoms->find(iter->get<2>()) != fromAtoms->end()) {
                         neighborhoods.push_back(iter->get<0>());
                     }
                 }
-                // std::cerr<<" layer: "<<layer<<" atom: "<<iter->get<2>()<<" "
-                // <<iter->get<0>()<< " " << iter->get<1>() << " " <<
-                // deadAtoms[iter->get<2>()]<<std::endl;
             } else {
                 // we have seen this exact environment before, this atom
                 // is now out of consideration:
-                std::cout<<"p2   atom: "<< iter->get<2>()<<" is dead."<<std::endl;
                 deadAtoms[iter->get<2>()] = 1;
             }
-            debug_id++;
         }
 
         // the invariants from this round become the global invariants:
@@ -665,13 +565,7 @@ void IncrementalMorganFingerprint::calcFingerprint(const ROMol &mol, uint radius
 void IncrementalMorganFingerprint::calcIncrementalFingerprint(const ROMol &mol, const std::list<int> &fromAtoms, Table_T &res) {
 
     using namespace RDKit::MorganFingerprints;
-    #ifdef CENV_DEBUG
-    cout << "atom1_idx: " << atom1_idx << endl;
-    cout << "atom2_idx: " << atom2_idx << endl;
-    cout << "radius: " << this->radius << endl;
-    cout << "length: " << this->length << endl;
-    #endif
-    // I assume that the new added atom and bond are at the last, and other atoms (index) are not changed, but didn't verify this. -- Huanyi  
+    // I assume that the new added atom and bond are at the last, and other atoms (index) are not changed, but didn't verify this. -- Huanyi
 
     const ROMol *lmol = &mol;
     uint nAtoms = mol.getNumAtoms();
@@ -700,7 +594,6 @@ void IncrementalMorganFingerprint::calcIncrementalFingerprint(const ROMol &mol, 
               components.push_back(1);
             }
             uint32_t invar = vectHasher(components);
-            // res[0][atom_idx].second = invar;
             updateElement(atom_idx, 0, invar, empty_nb, res);
             queue.push_back(atom_idx);
             total.push_back(atom_idx);
@@ -713,7 +606,7 @@ void IncrementalMorganFingerprint::calcIncrementalFingerprint(const ROMol &mol, 
     }
 
     // add all atoms where bondtype changed
-    // The bondtypes are used to decide the order of hashing. 
+    // The bondtypes are used to decide the order of hashing.
     // No need to update those atoms' initial hash value.
     {
         // may optimize it.
@@ -746,7 +639,7 @@ void IncrementalMorganFingerprint::calcIncrementalFingerprint(const ROMol &mol, 
                     checked[oIdx] = 1;
                 }
                 ++beg;
-            }       
+            }
         }
         for (auto atomIdx : total) {
             const Atom *tAtom = lmol->getAtomWithIdx(atomIdx);
@@ -775,24 +668,14 @@ void IncrementalMorganFingerprint::calcIncrementalFingerprint(const ROMol &mol, 
             }
             std::sort(nbrs.begin(), nbrs.end());
             std::uint32_t invar = layer;
-            // cout << "layer: " << layer << ", atomIdx: " << atomIdx << endl;
-            // cout << "invar: " << invar << endl;
             gboost::hash_combine(invar, res[layer][atomIdx].second);
-            // cout << "invar: " << invar << "," << res[layer][atomIdx].second << endl;
             for (auto &nb : nbrs) {
                 gboost::hash_combine(invar, nb);
-                // cout << "invar: " << invar << "," << (nb.first) << "," << (nb.second) << endl;
             }
             updateElement(atomIdx, layer + 1, invar, bs, res);
-            // cout << "----------------------" << endl;
         }
 
         queue = std::move(next_queue);
-        // cout << "layer " << layer << "queue: ";
-        // for (auto i : queue) {
-        //     cout << i << ",";
-        // }
-        // cout << endl;
     }
 }
 
@@ -800,6 +683,5 @@ void IncrementalMorganFingerprint::calcIncrementalFingerprint(const ROMol &mol, 
 
 uint32_t IncrementalMorganFingerprint::updateElement(uint atomIdx, uint radius, uint32_t element, const boost::dynamic_bitset<> &env, Table_T &hash_value_table) {
     hash_value_table[radius][atomIdx] = std::pair<boost::dynamic_bitset<>, uint32_t>(env, element);
-    // cout << "updateElement: " << atomIdx << "," << radius << "," << element << "," << env << endl;
     return element;
 }
