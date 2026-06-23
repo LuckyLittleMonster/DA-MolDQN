@@ -42,6 +42,7 @@ reward:
   bde_factor: 0.9
   ip_factor: 0.8
   reward_of_invalid_mol: -1000
+  ip_ensemble: true   # true: average all 5 aimnet-nse cv models; false: cv4 only
 
 # --- env / observation ---
 env:

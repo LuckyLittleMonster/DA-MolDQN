@@ -5,3 +5,4 @@ reward:
     bde: 0.8
     ip: 0.2
     rrab: 0.5
+  ip_ensemble: true   # true: average all 5 aimnet-nse cv models; false: cv4 only

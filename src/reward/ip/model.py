@@ -33,17 +33,22 @@ def calc_react_idx(data):
 
 class AimnetNseModel():
     """The original model is not picklable and can't be used with spawn.
-    This class is a wrapper of EnsembleCalculator."""
+    This class is a wrapper of EnsembleCalculator.
 
-    def __init__(self, path, device):
-        self.path = path
+    ``paths`` is a list of ``.jpt`` files: ``load_models`` builds one
+    ``EnsembleCalculator`` over them (a single path -> just that model; multiple
+    -> the average). One ``data`` dict is run through all models in one forward.
+    """
+
+    def __init__(self, paths, device):
+        self.paths = list(paths)
         self.device = device
-        self.model = load_models([path]).to(device)
+        self.model = load_models(self.paths).to(device)
 
     def __setstate__(self, state):
-        self.path = state['path']
+        self.paths = list(state['paths'])
         self.device = state['device']
-        self.model = load_models([self.path]).to(self.device)
+        self.model = load_models(self.paths).to(self.device)
 
     def __getstate__(self):
-        return dict(path=self.path, device=self.device)
+        return dict(paths=self.paths, device=self.device)

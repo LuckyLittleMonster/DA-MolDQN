@@ -24,6 +24,7 @@ class BdeIpReward:
         env_cfg = config.env
         self.bde_factor = reward_cfg.bde_factor
         self.ip_factor = reward_cfg.ip_factor
+        self.ip_ensemble = reward_cfg.ip_ensemble
         self.reward_of_invalid_mol = reward_cfg.reward_of_invalid_mol
 
         # Named reward weights (no list-length magic).
@@ -55,6 +56,7 @@ class BdeIpReward:
         self.ip_pred = IPPredictor(
             device=self.device,
             ip_factor=self.ip_factor,
+            ip_ensemble=self.ip_ensemble,
             etkdg_threads=self.etkdg_threads,
             etkdg_max_attempts_cache=self.etkdg_max_attempts_cache,
             etkdg_max_attempts_uncache=self.etkdg_max_attempts_uncache)

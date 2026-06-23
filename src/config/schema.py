@@ -146,10 +146,13 @@ class RewardCfg:
     bde_factor: float = 0.9       # hyp-only
     ip_factor: float = 0.8        # hyp-only
     reward_of_invalid_mol: float = -1000.0  # hyp-only
+    ip_ensemble: bool = True      # True: avg all 5 aimnet-nse cv models; False: cv4 only
 
     def __post_init__(self):
         if not isinstance(self.type, RewardType):
             raise ValueError(f"reward.type must be RewardType, got {self.type!r}")
+        if not isinstance(self.ip_ensemble, bool):
+            raise ValueError(f"reward.ip_ensemble must be a bool, got {self.ip_ensemble!r}")
 
 
 @dataclass

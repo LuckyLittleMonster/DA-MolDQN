@@ -157,6 +157,7 @@ def parse_config(cfg) -> Config:
             ip_factor=float(_get(reward, "ip_factor", RewardCfg.ip_factor)),
             reward_of_invalid_mol=float(
                 _get(reward, "reward_of_invalid_mol", RewardCfg.reward_of_invalid_mol)),
+            ip_ensemble=bool(_get(reward, "ip_ensemble", RewardCfg.ip_ensemble)),
         ),
         env=EnvCfg(
             atom_types=[str(a) for a in _get(env, "atom_types", EnvCfg().atom_types)],
