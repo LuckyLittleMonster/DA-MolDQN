@@ -52,22 +52,22 @@ class Launcher(ABC):
         if dist.is_initialized():
             dist.destroy_process_group()
 
-    def run(self, fn, cfg) -> None:
+    def run(self, fn, config) -> None:
         """Single-process path (single/torchrun/slurm): setup -> fn -> cleanup."""
         rank, world_size = self.resolve()
-        self.setup(rank, world_size, backend=cfg.get("backend", "gloo"),
-                   init_method=_resolved_init_method(cfg))
+        self.setup(rank, world_size, backend=config.dist.backend.value,
+                   init_method=_resolved_init_method(config))
         try:
             fn(rank, world_size)
         finally:
             self.cleanup()
 
 
-def _resolved_init_method(cfg):
-    base = cfg.get("init_method")
+def _resolved_init_method(config):
+    base = config.dist.init_method
     if not base:
         return None
-    return f"{base}_{cfg.get('experiment')}_{cfg.get('trial')}"
+    return f"{base}_{config.experiment.experiment}_{config.experiment.trial}"
 
 
 class SingleLauncher(Launcher):

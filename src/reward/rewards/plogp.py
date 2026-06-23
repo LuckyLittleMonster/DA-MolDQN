@@ -7,8 +7,8 @@ class PlogpReward:
 
     bde_cache = None
 
-    def __init__(self, args):
-        self.discount_factor = args.discount_factor
+    def __init__(self, config):
+        self.discount_factor = config.reward.discount_factor
         # self.plogp_weight = 1.0
 
     def compute(self, molecules, current_step, max_steps):

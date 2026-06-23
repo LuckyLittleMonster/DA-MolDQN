@@ -5,7 +5,7 @@ import random
 import numpy as np
 import torch
 
-from src import config_defaults as hyp
+from src.config import ENV_DEFAULTS
 from src.features.fingerprints import get_observations_from_list
 
 
@@ -46,7 +46,7 @@ class ReplayBuffer(object):
             elif self.use_cxx_incremental_fingerprint == 1:
                 states.append(get_observations_from_list(fingerprints[-1], steps))
                 observations = np.vstack([get_observations_from_list(fp, steps) for fp in fingerprints])
-                next_states.append(torch.FloatTensor(observations).reshape(-1, hyp.fingerprint_length + 1))
+                next_states.append(torch.FloatTensor(observations).reshape(-1, ENV_DEFAULTS.fingerprint_length + 1))
             elif self.use_cxx_incremental_fingerprint == 2:
                 states.append(obs_t)
                 next_states.append(obs_tp1)

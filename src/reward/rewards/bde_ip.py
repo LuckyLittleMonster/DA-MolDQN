@@ -7,7 +7,6 @@ depends on a random ETKDG conformer).
 """
 from rdkit import Chem
 
-from src import config_defaults as hyp
 from src.cache import cached
 from src.reward.bde_predictor.predictor import BDEPredictor
 from src.reward.ip_predictor.predictor import IPPredictor
@@ -16,56 +15,46 @@ from src.reward.ip_predictor.predictor import IPPredictor
 class BdeIpReward:
     """docstring for BdeIpReward"""
 
-    def __init__(self, args, device, init_mols, bde_cache):
+    def __init__(self, config, device, init_mols, bde_cache):
         self.device = device
         self.init_mols = init_mols
         self.bde_cache = bde_cache
 
-        self.bde_factor = hyp.bde_factor
-        self.ip_factor = hyp.ip_factor
+        reward_cfg = config.reward
+        env_cfg = config.env
+        self.bde_factor = reward_cfg.bde_factor
+        self.ip_factor = reward_cfg.ip_factor
+        self.reward_of_invalid_mol = reward_cfg.reward_of_invalid_mol
 
-        self.bed_weight = 0.8
-        self.ip_weight = 0.2
-        self.rrab_weight = 0.5
+        # Named reward weights (no list-length magic).
+        weights = reward_cfg.bde_ip
+        self.bed_weight = weights.bde
+        self.ip_weight = weights.ip
+        self.rrab_weight = weights.rrab
 
-        self.use_bde_cache = 'bde' in args.cache
-        self.etkdg_max_attempts_cache = args.etkdg_max_attempts_cache
-        self.etkdg_max_attempts_uncache = args.etkdg_max_attempts_uncache
+        self.use_bde_cache = env_cfg.cache.bde
+        self.etkdg_max_attempts_cache = env_cfg.etkdg.max_attempts_cache
+        self.etkdg_max_attempts_uncache = env_cfg.etkdg.max_attempts_uncache
 
         # Intra-rank ETKDG threading: RDKit's EmbedMolecule releases the GIL,
         # so a thread pool parallelizes 3D embedding within one rank
         # (~1.75x at 2 threads). Lets 36 ranks x 2 threads keep 72-core etkdg
         # throughput while halving GPU contexts (fits memory + MPS works).
-        self.etkdg_threads = int(getattr(args, 'etkdg_threads', 1))
-
-        if len(args.reward_weight) == 0:
-            # use default weights
-            pass
-        elif len(args.reward_weight) == 1:
-            # assume that the one value is bde weight, which is the same as main_multi.py
-            self.bed_weight = args.reward_weight[0]
-            self.ip_weight = 1.0 - self.bed_weight
-
-        elif len(args.reward_weight) == 2:
-            self.bed_weight = args.reward_weight[0]
-            self.ip_weight = args.reward_weight[1]
-        else :
-            self.bed_weight = args.reward_weight[0]
-            self.ip_weight = args.reward_weight[1]
-            self.rrab_weight = args.reward_weight[2]
+        self.etkdg_threads = env_cfg.etkdg.threads
 
         # Pure predictors, wrapped by ``cached`` for generic dedup +
         # index-mapping. BDE gets a swappable cache (LRU); IP gets cache=None
         # (never cached) and call_on_empty=False.
-        self.bde_predictor = BDEPredictor(device=self.device)
+        self.bde_predictor = BDEPredictor(device=self.device, bde_factor=self.bde_factor)
         self.bde_scaler = self.bde_predictor.bde_scaler
         self.bde_model = self.bde_predictor.bde_model
         self.bde = cached(
             self.bde_predictor.predict_BDE, cache=self.bde_cache,
-            invalid_value=hyp.reward_of_invalid_mol)
+            invalid_value=self.reward_of_invalid_mol)
 
         self.ip_predictor = IPPredictor(
             device=self.device,
+            ip_factor=self.ip_factor,
             etkdg_threads=self.etkdg_threads,
             etkdg_max_attempts_cache=self.etkdg_max_attempts_cache,
             etkdg_max_attempts_uncache=self.etkdg_max_attempts_uncache)
@@ -75,7 +64,7 @@ class BdeIpReward:
         self.ip = cached(
             lambda keys, mols: self.ip_predictor.predict_IP(mols, _ip_attempts),
             cache=None, call_on_empty=False,
-            invalid_value=hyp.reward_of_invalid_mol)
+            invalid_value=self.reward_of_invalid_mol)
 
         self.init_mols_n = [m.GetNumAtoms() + m.GetNumBonds() for m in self.init_mols]
 
@@ -132,6 +121,6 @@ class BdeIpReward:
                 r = 2.0 * (self.bed_weight * (1.0 - bde) + self.ip_weight * ip) + self.rrab_weight * rrab
                 rewards.append(r)
             else:
-                rewards.append(hyp.reward_of_invalid_mol)
+                rewards.append(self.reward_of_invalid_mol)
 
         return {'reward':rewards, 'BDE':bde_ps, 'IP':ip_preds, 'RRAB': rrabs}

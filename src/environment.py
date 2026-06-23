@@ -42,7 +42,7 @@ import pdb
 #debug
 import time
 from rdkit.Chem import QED
-from src import config_defaults as hyp
+from src.config import ENV_DEFAULTS, ObservationType
 
 from rdkit.Chem import  AllChem
 import numpy as np
@@ -57,15 +57,19 @@ class Result(collections.namedtuple("Result", ["state", "reward", "terminated"])
       terminated: Boolean. Whether this episode is terminated.
   """
 
+# Import-time global: the cenv environment needs these constants (atom_types,
+# ring sizes, fingerprint radius/length) BEFORE any runtime config exists. They
+# are NOT user-overridable; source them from the EnvCfg dataclass defaults.
 flags = cenv.Flags() # use default flags for test.
-cxx_environment = cenv.Environment(hyp.atom_types, hyp.allowed_ring_sizes, hyp.fingerprint_radius, hyp.fingerprint_length, flags)
+cxx_environment = cenv.Environment(ENV_DEFAULTS.atom_types, ENV_DEFAULTS.allowed_ring_sizes,
+                                   ENV_DEFAULTS.fingerprint_radius, ENV_DEFAULTS.fingerprint_length, flags)
 
 class Molecule(object):
     """Defines the Markov decision process of generating a molecule."""
 
     def __init__(
         self,
-        args,
+        config,
         init_mols=None,
     ):
         """Initializes the parameters for the MDP.
@@ -97,27 +101,21 @@ class Molecule(object):
       record_path: Boolean. Whether to record the steps internally.
     """
 
-        self.allow_bonds_between_rings = hyp.allow_bonds_between_rings
-        self.allow_no_modification = hyp.allow_no_modification
-        self.allow_removal = hyp.allow_removal
-        self.allowed_ring_sizes = set(hyp.allowed_ring_sizes)
-        self.atom_types = set(hyp.atom_types)
-        self.max_steps = args.max_steps_per_episode
-        self.record_top_path = args.record_top_path
-        self.record_last_path = args.record_last_path
-        self.record_all_path = args.record_all_path
-        self.record_path = (self.record_top_path > 0) or (self.record_last_path > 0) or args.record_all_path
-        self.observation_type = args.observation_type.lower()
-        if self.observation_type == 'rdkit':
-            self.use_cxx_incremental_fingerprint = 0
-        elif self.observation_type == 'list':
-            self.use_cxx_incremental_fingerprint = 1
-        elif self.observation_type == 'numpy':
-            self.use_cxx_incremental_fingerprint = 2
-        else:
-            self.use_cxx_incremental_fingerprint = None
+        env = config.env
+        self.allow_bonds_between_rings = env.allow_bonds_between_rings
+        self.allow_no_modification = env.allow_no_modification
+        self.allow_removal = env.allow_removal
+        self.allowed_ring_sizes = set(env.allowed_ring_sizes)
+        self.atom_types = set(env.atom_types)
+        self.max_steps = config.train.max_steps_per_episode
+        self.record_top_path = config.record.record_top_path
+        self.record_last_path = config.record.record_last_path
+        self.record_all_path = config.record.record_all_path
+        self.record_path = (self.record_top_path > 0) or (self.record_last_path > 0) or self.record_all_path
+        self.observation = env.observation
+        self.use_cxx_incremental_fingerprint = self.observation.cenv_fp_mode
 
-        self.morganFingerprintGen = rdFingerprintGenerator.GetMorganGenerator(fpSize=hyp.fingerprint_length, radius=hyp.fingerprint_radius)
+        self.morganFingerprintGen = rdFingerprintGenerator.GetMorganGenerator(fpSize=env.fingerprint_length, radius=env.fingerprint_radius)
         self.init_mols = init_mols
         self.states = []
         self.current_step = 0
@@ -173,7 +171,7 @@ class Molecule(object):
             # debug_fingerprints = [self.morganFingerprintGen.GetFingerprint(mol) for mol in valid_actions]
             # print(debug_fingerprints)
             
-            if self.observation_type == "rdkit":
+            if self.observation is ObservationType.RDKIT:
                 fingerprints = [self.morganFingerprintGen.GetFingerprint(mol) for mol in valid_actions]
 
             vas.append(valid_actions)

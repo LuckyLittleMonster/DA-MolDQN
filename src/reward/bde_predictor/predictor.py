@@ -4,7 +4,7 @@ Owns the BDE model, its scaler, and the BDE reward factor. A *pure* predictor:
 caching is handled externally by ``cached`` (composed in the BDE_IP reward),
 so this class no longer knows about caches.
 """
-from src import config_defaults as hyp
+from src.config import RewardCfg
 from src.reward.bde import BDEModel
 from src.reward.ip import get_scaler
 
@@ -12,9 +12,9 @@ from src.reward.ip import get_scaler
 class BDEPredictor:
     """Predicts O-H bond-dissociation energies (pure; no cache)."""
 
-    def __init__(self, device):
+    def __init__(self, device, bde_factor=RewardCfg.bde_factor):
         self.device = device
-        self.bde_factor = hyp.bde_factor
+        self.bde_factor = bde_factor
 
         self.bde_scaler = get_scaler('./Data/anti-bde.csv')
 

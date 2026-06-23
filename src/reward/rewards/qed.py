@@ -8,21 +8,11 @@ class QedReward:
 
     bde_cache = None
 
-    def __init__(self, args):
-        self.discount_factor = args.discount_factor
-        self.qed_weight = 0.8
-        self.sa_weight = 0.2
-        if len(args.reward_weight) == 0:
-            # use default weights
-            pass
-        elif len(args.reward_weight) == 1:
-            # assume that the one value is bde weight, which is the same as main_multi.py
-            self.qed_weight = args.reward_weight[0]
-            self.sa_weight = 1.0 - self.qed_weight
-
-        elif len(args.reward_weight) == 2:
-            self.qed_weight = args.reward_weight[0]
-            self.sa_weight = args.reward_weight[1]
+    def __init__(self, config):
+        self.discount_factor = config.reward.discount_factor
+        weights = config.reward.qed
+        self.qed_weight = weights.qed
+        self.sa_weight = weights.sa
 
     def compute(self, molecules, current_step, max_steps):
         rs = []

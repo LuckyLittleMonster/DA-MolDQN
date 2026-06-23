@@ -1,3 +1,6 @@
 # @package _global_
-reward: qed
-reward_weight: [0.8, 0.2]
+reward:
+  type: qed
+  qed:
+    qed: 0.8
+    sa: 0.2

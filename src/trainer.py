@@ -19,11 +19,10 @@ import numpy as np
 import psutil
 import torch
 import torch.distributed as dist
-from omegaconf import OmegaConf
 from rdkit import Chem
 
 from src import utils
-from src import config_defaults as hyp
+from src.config import ENV_DEFAULTS, ObservationType, RewardType
 from src.agent import DistributedAgent, MultiMolecules
 from src.persistence import Recorder
 
@@ -34,8 +33,8 @@ def should_save(episode, freq):
     return episode % freq == freq - 1
 
 
-def resolve_device(cfg, rank):
-    gpu_list = [int(g) for g in cfg.gpu_list]
+def resolve_device(config, rank):
+    gpu_list = [int(g) for g in config.mols.gpu_list]
     if torch.cuda.is_available() and len(gpu_list) > 0:
         gpu_id = gpu_list[rank % len(gpu_list)]
         return torch.device(f"cuda:{gpu_id}"), gpu_id
@@ -43,52 +42,57 @@ def resolve_device(cfg, rank):
 
 
 class Trainer:
-    def __init__(self, cfg, rank: int, world_size: int, init_mols, mode: str = "train"):
-        self.cfg = cfg
+    def __init__(self, config, rank: int, world_size: int, init_mols,
+                 mode: str = "train", config_yaml: str | None = None):
+        self.config = config
+        self.config_yaml = config_yaml
         self.rank = rank
         self.world_size = world_size
         self.init_mols = init_mols
         self.mode = mode  # train | finetune | test
         self.is_test = mode == "test"
-        self.device, self.gpu_index = resolve_device(cfg, rank)
+        self.device, self.gpu_index = resolve_device(config, rank)
         base = os.path.join(".", "Experiments")
-        self.recorder = Recorder(base, cfg.experiment, cfg.trial, rank, world_size)
+        self.recorder = Recorder(base, config.experiment.experiment,
+                                 config.experiment.trial, rank, world_size)
 
     def run(self):
-        cfg = self.cfg
+        config = self.config
         rank = self.rank
-        if rank == 0:
-            self.recorder.save_config(OmegaConf.to_yaml(cfg))
+        if rank == 0 and self.config_yaml is not None:
+            self.recorder.save_config(self.config_yaml)
 
-        if cfg.torch_num_threads > 0:
-            torch.set_num_threads(cfg.torch_num_threads)
+        if config.dist.torch_num_threads > 0:
+            torch.set_num_threads(config.dist.torch_num_threads)
 
-        agent = DistributedAgent(hyp.fingerprint_length + 1, self.gpu_index, self.device, cfg, rank)
+        agent = DistributedAgent(ENV_DEFAULTS.fingerprint_length + 1, self.gpu_index,
+                                 self.device, config, rank)
 
-        init_eps_threshold = cfg.eps_threshold
-        if cfg.checkpoint is not None and cfg.use_checkpoint_eps:
+        init_eps_threshold = config.train.eps_threshold
+        if config.ckpt.checkpoint is not None and config.ckpt.use_checkpoint_eps:
             init_eps_threshold = agent.eps_threshold
         if self.is_test:
             init_eps_threshold = 0.0  # eps is zero for test (greedy), regardless of checkpoint
 
         environment = MultiMolecules(
-            args=cfg, device=self.device,
+            config=config, device=self.device,
             init_mols=[Chem.MolFromSmiles(s) for s in self.init_mols],
         )
-        max_iteration = cfg.iteration
-        max_steps_per_episode = cfg.max_steps_per_episode
+        max_iteration = config.train.iteration
+        max_steps_per_episode = config.train.max_steps_per_episode
         max_episodes = max_iteration // max_steps_per_episode
-        min_batch_size = cfg.min_batch_size
+        min_batch_size = config.optim.min_batch_size
+        observation = config.env.observation
 
         batch_losses = []
-        if cfg.reward.lower() == "bde_ip":
+        if config.reward.type is RewardType.BDE_IP:
             reward_list = {'reward': [], 'BDE': [], 'IP': [], 'RRAB': []}
-        elif cfg.reward.lower() == "qed":
+        elif config.reward.type is RewardType.QED:
             reward_list = {'reward': [], 'QED': [], 'SA_score': []}
-        elif cfg.reward.lower() == "plogp":
+        elif config.reward.type is RewardType.PLOGP:
             reward_list = {'reward': [], 'plogp': [], 'sim': []}
         else:
-            raise ValueError(f"Unknown reward: {cfg.reward!r}")
+            raise ValueError(f"Unknown reward: {config.reward.type!r}")
 
         episode_time_list = []
         bde_cache_hit_rate_list = []
@@ -113,14 +117,14 @@ class Trainer:
                 rewards = environment.find_reward()
                 actions = []
                 for valid_actions, fingerprints, reward in zip(valid_actions_batch, fingerprints_batch, rewards['reward']):
-                    if cfg.observation_type == 'rdkit':
+                    if observation is ObservationType.RDKIT:
                         saved_observations = np.vstack([utils.get_observations(fp, st) for fp in fingerprints])
                         observations = torch.tensor(saved_observations, device=agent.device).float()
-                    elif cfg.observation_type == 'list':
+                    elif observation is ObservationType.LIST:
                         saved_observations = (st, fingerprints)
                         observations = np.vstack([utils.get_observations_from_list(fp, st) for fp in fingerprints])
                         observations = torch.tensor(observations, device=agent.device).float()
-                    elif cfg.observation_type == 'numpy':
+                    elif observation is ObservationType.NUMPY:
                         saved_observations = np.vstack([np.append(ob, st) for ob in fingerprints])
                         observations = torch.tensor(saved_observations, device=agent.device).float()
 
@@ -139,47 +143,48 @@ class Trainer:
             f_rewards = rewards['reward']
             memory_list.append(current_process.memory_info().rss)
 
-            if cfg.record_top_path or cfg.record_all_path or (cfg.record_last_path + episodes >= max_episodes):
+            rec = config.record
+            if rec.record_top_path or rec.record_all_path or (rec.record_last_path + episodes >= max_episodes):
                 path, rewards = environment.get_path()
-                if cfg.record_top_path:
+                if rec.record_top_path:
                     try:
                         for i in range(len(self.init_mols)):
-                            if top_path.qsize() < cfg.record_top_path or rewards['reward'][i][-1] > top_path.queue[0][0][0]:
+                            if top_path.qsize() < rec.record_top_path or rewards['reward'][i][-1] > top_path.queue[0][0][0]:
                                 sample = {'path': path[i]}
                                 for k, v in rewards.items():
                                     sample[k] = v[i]
                                 priority = (rewards['reward'][i][-1], -it, -i)
                                 top_path.put((priority, sample))
-                                if top_path.qsize() > cfg.record_top_path:
+                                if top_path.qsize() > rec.record_top_path:
                                     top_path.get()
                     except Exception as e:
                         print(top_path.queue)
                         print(e)
                         raise
-                if cfg.record_all_path:
+                if rec.record_all_path:
                     for mi in path:
                         for mj in mi:
                             all_path.append(Chem.MolToSmiles(mj))
-                if cfg.record_last_path + episodes >= max_episodes:
+                if rec.record_last_path + episodes >= max_episodes:
                     last_path.append((path, rewards))
 
-            if self.is_test or should_save(episodes, cfg.save_path_freq) or (episodes + 1 >= max_episodes):
-                if cfg.record_top_path or cfg.record_last_path:
+            if self.is_test or should_save(episodes, rec.save_path_freq) or (episodes + 1 >= max_episodes):
+                if rec.record_top_path or rec.record_last_path:
                     self.recorder.record_paths(top=list(top_path.queue), last=last_path,
-                                               all_smiles=all_path if cfg.record_all_path else None)
+                                               all_smiles=all_path if rec.record_all_path else None)
                     self.recorder.flush()
             if self.is_test:
                 self.recorder.flush()
                 self._finalize()
                 return
 
-            if (should_save(episodes, cfg.save_model_freq) or it >= max_iteration) and rank == 0:
+            if (should_save(episodes, rec.save_model_freq) or it >= max_iteration) and rank == 0:
                 self.recorder.save_checkpoint(
                     agent.dqn.module.state_dict(), agent.target_dqn.state_dict(),
                     eps_threshold, episodes)
 
             # RED LINE: once-per-update_episodes DQN sync — do not move.
-            if (episodes % cfg.update_episodes == 0) and (agent.replay_buffer.__len__() >= min_batch_size) and (not self.is_test):
+            if (episodes % config.train.update_episodes == 0) and (agent.replay_buffer.__len__() >= min_batch_size) and (not self.is_test):
                 loss = agent.training_step()
                 batch_losses.append(loss)
 
@@ -193,7 +198,7 @@ class Trainer:
 
             bde_cache_hit_rate_list.append(environment.bde_cache.hit_rate(episode=True))
 
-            if should_save(episodes, cfg.save_reward_freq) or (it >= max_iteration):
+            if should_save(episodes, rec.save_reward_freq) or (it >= max_iteration):
                 self.recorder.record_metrics({
                     'batch_losses': batch_losses,
                     'episode_time': episode_time_list,
@@ -204,7 +209,7 @@ class Trainer:
                 })
                 self.recorder.flush()
 
-            eps_threshold *= cfg.eps_decay
+            eps_threshold *= config.train.eps_decay
             episodes += 1
 
         self.recorder.flush()
@@ -215,4 +220,6 @@ class Trainer:
         if dist.is_available() and dist.is_initialized():
             dist.barrier()
         if self.rank == 0:
-            Recorder.merge(os.path.join(".", "Experiments"), self.cfg.experiment, self.cfg.trial, self.world_size)
+            Recorder.merge(os.path.join(".", "Experiments"),
+                           self.config.experiment.experiment,
+                           self.config.experiment.trial, self.world_size)

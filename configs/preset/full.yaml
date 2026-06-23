@@ -1,3 +1,4 @@
 # @package _global_
-iteration: 200000
-max_steps_per_episode: 40
+train:
+  iteration: 200000
+  max_steps_per_episode: 40

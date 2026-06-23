@@ -10,7 +10,7 @@ generic dedup + index-mapping.
 import numpy as np
 import torch
 
-from src import config_defaults as hyp
+from src.config import RewardCfg
 from src.eval import to_numpy
 from src.reward.ip import (ev2kcal_per_mol, calc_react_idx, get_scaler,
                            AimnetNseModel)
@@ -21,9 +21,10 @@ class IPPredictor:
     """Predicts ionization potentials via an AIMNet-NSE ensemble (pure; no cache)."""
 
     def __init__(self, device, etkdg_threads,
-                 etkdg_max_attempts_cache, etkdg_max_attempts_uncache):
+                 etkdg_max_attempts_cache, etkdg_max_attempts_uncache,
+                 ip_factor=RewardCfg.ip_factor):
         self.device = device
-        self.ip_factor = hyp.ip_factor
+        self.ip_factor = ip_factor
         self.etkdg_max_attempts_cache = etkdg_max_attempts_cache
         self.etkdg_max_attempts_uncache = etkdg_max_attempts_uncache
 

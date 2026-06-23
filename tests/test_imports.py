@@ -6,7 +6,7 @@ import pytest
 # NB: src.filter is an orphan (nobody imports it) and references a missing module
 # `similarity_filter`; it is excluded here and removed in Phase 7 cleanup.
 LIGHT = [
-    "src.config_defaults",
+    "src.config",
     "src.utils",
     "src.eval",
     "src.shared_adam",

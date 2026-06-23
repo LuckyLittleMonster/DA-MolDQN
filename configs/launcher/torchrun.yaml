@@ -1,3 +1,4 @@
 # @package _global_
-starter: torchrun
-backend: nccl
+dist:
+  starter: torchrun
+  backend: nccl

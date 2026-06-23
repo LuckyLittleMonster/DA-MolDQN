@@ -1,3 +1,4 @@
 # @package _global_
-starter: fork
-mp_world_size: 2
+dist:
+  starter: fork
+  mp_world_size: 2

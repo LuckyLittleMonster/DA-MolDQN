@@ -9,13 +9,15 @@ import os
 from src.launch.base import Launcher, find_free_port
 
 
-def _fork_worker(fn, cfg, rank: int, world_size: int) -> None:
-    launcher = ForkLauncher(world_size, start_method=cfg.get("starter", "fork"),
-                            master_port=str(cfg.get("mp_master_port", "12355")))
+def _fork_worker(fn, config, rank: int, world_size: int) -> None:
+    starter = config.dist.starter
+    starter_name = starter.value if starter is not None else "fork"
+    launcher = ForkLauncher(world_size, start_method=starter_name,
+                            master_port=str(config.dist.mp_master_port))
     launcher.setup(
         rank, world_size,
-        backend=cfg.get("backend", "gloo"),
-        init_method=_init_method(cfg),
+        backend=config.dist.backend.value,
+        init_method=_init_method(config),
     )
     try:
         fn(rank, world_size)
@@ -23,11 +25,11 @@ def _fork_worker(fn, cfg, rank: int, world_size: int) -> None:
         launcher.cleanup()
 
 
-def _init_method(cfg):
-    base = cfg.get("init_method")
+def _init_method(config):
+    base = config.dist.init_method
     if base is None:
         return None
-    return f"{base}_{cfg.get('experiment')}_{cfg.get('trial')}"
+    return f"{base}_{config.experiment.experiment}_{config.experiment.trial}"
 
 
 class ForkLauncher(Launcher):
@@ -42,7 +44,7 @@ class ForkLauncher(Launcher):
         # rank is assigned per spawned process; not meaningful on the spawner.
         return (None, self.world_size)  # type: ignore[return-value]
 
-    def run(self, fn, cfg) -> None:
+    def run(self, fn, config) -> None:
         import torch.multiprocessing as mp
 
         mp.set_start_method(self.start_method, force=True)
@@ -51,7 +53,7 @@ class ForkLauncher(Launcher):
         # An explicit MASTER_PORT in the environment still takes precedence.
         os.environ.setdefault("MASTER_PORT", str(find_free_port()))
         procs = [
-            mp.Process(target=_fork_worker, args=(fn, cfg, rank, self.world_size))
+            mp.Process(target=_fork_worker, args=(fn, config, rank, self.world_size))
             for rank in range(self.world_size)
         ]
         for p in procs:
