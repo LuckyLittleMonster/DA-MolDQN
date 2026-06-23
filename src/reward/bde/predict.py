@@ -1,8 +1,8 @@
 """High-level BDE prediction API for RL integration.
 
 Usage:
-    from bde_predictor.predict import BDEModel
-    model = BDEModel('bde_predictor/weights/bde_db2_model3.npz', device='cuda')
+    from src.reward.bde.predict import BDEModel
+    model = BDEModel('src/reward/bde/weights/alfabet.npz', device='cuda')
     bdes, valids = model.predict_oh_bde(['c1ccc(O)cc1', 'Oc1ccc(O)cc1'])
 """
 import torch

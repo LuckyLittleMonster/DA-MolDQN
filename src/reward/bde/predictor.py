@@ -5,8 +5,8 @@ caching is handled externally by ``cached`` (composed in the BDE_IP reward),
 so this class no longer knows about caches.
 """
 from src.config import RewardCfg
-from src.reward.bde import BDEModel
-from src.reward.ip import get_scaler
+from src.reward.bde.predict import BDEModel
+from src.reward.scaler import get_scaler
 
 
 class BDEPredictor:
@@ -19,8 +19,8 @@ class BDEPredictor:
         self.bde_scaler = get_scaler('./Data/anti-bde.csv')
 
         self.bde_model = BDEModel(
-            'src/reward/bde_predictor/weights/alfabet.npz',
-            preprocessor_path='src/reward/bde_predictor/weights/alfabet_preprocessor.json',
+            'src/reward/bde/weights/alfabet.npz',
+            preprocessor_path='src/reward/bde/weights/alfabet_preprocessor.json',
             device=str(self.device))
 
     def predict_BDE(self, smiles, mols):

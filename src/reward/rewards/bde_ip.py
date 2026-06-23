@@ -8,8 +8,8 @@ depends on a random ETKDG conformer).
 from rdkit import Chem
 
 from src.cache import cached
-from src.reward.bde_predictor.predictor import BDEPredictor
-from src.reward.ip_predictor.predictor import IPPredictor
+from src.reward.bde.predictor import BDEPredictor
+from src.reward.ip.predictor import IPPredictor
 
 
 class BdeIpReward:
@@ -45,24 +45,24 @@ class BdeIpReward:
         # Pure predictors, wrapped by ``cached`` for generic dedup +
         # index-mapping. BDE gets a swappable cache (LRU); IP gets cache=None
         # (never cached) and call_on_empty=False.
-        self.bde_predictor = BDEPredictor(device=self.device, bde_factor=self.bde_factor)
-        self.bde_scaler = self.bde_predictor.bde_scaler
-        self.bde_model = self.bde_predictor.bde_model
+        self.bde_pred = BDEPredictor(device=self.device, bde_factor=self.bde_factor)
+        self.bde_scaler = self.bde_pred.bde_scaler
+        self.bde_model = self.bde_pred.bde_model
         self.bde = cached(
-            self.bde_predictor.predict_BDE, cache=self.bde_cache,
+            self.bde_pred.predict_BDE, cache=self.bde_cache,
             invalid_value=self.reward_of_invalid_mol)
 
-        self.ip_predictor = IPPredictor(
+        self.ip_pred = IPPredictor(
             device=self.device,
             ip_factor=self.ip_factor,
             etkdg_threads=self.etkdg_threads,
             etkdg_max_attempts_cache=self.etkdg_max_attempts_cache,
             etkdg_max_attempts_uncache=self.etkdg_max_attempts_uncache)
-        self.ip_scaler = self.ip_predictor.ip_scaler
-        self.ip_model = self.ip_predictor.ip_model
+        self.ip_scaler = self.ip_pred.ip_scaler
+        self.ip_model = self.ip_pred.ip_model
         _ip_attempts = self.etkdg_max_attempts_uncache
         self.ip = cached(
-            lambda keys, mols: self.ip_predictor.predict_IP(mols, _ip_attempts),
+            lambda keys, mols: self.ip_pred.predict_IP(mols, _ip_attempts),
             cache=None, call_on_empty=False,
             invalid_value=self.reward_of_invalid_mol)
 

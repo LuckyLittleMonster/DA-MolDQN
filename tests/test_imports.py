@@ -14,7 +14,7 @@ LIGHT = [
 ]
 
 # Heavy modules: importing them constructs the C++ cenv environment (environment.py)
-# and pulls bde_predictor (agent.py). Require the compiled csrc.cenv + torch runtime.
+# and pulls src.reward.bde (agent.py). Require the compiled csrc.cenv + torch runtime.
 HEAVY = [
     "src.environment",
     "src.agent",

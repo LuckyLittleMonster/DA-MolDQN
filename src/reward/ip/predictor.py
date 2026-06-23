@@ -12,9 +12,9 @@ import torch
 
 from src.config import RewardCfg
 from src.eval import to_numpy
-from src.reward.ip import (ev2kcal_per_mol, calc_react_idx, get_scaler,
-                           AimnetNseModel)
-from src.reward.ip_predictor.etkdg import ETKDGEmbedder
+from src.reward.ip.model import ev2kcal_per_mol, calc_react_idx, AimnetNseModel
+from src.reward.scaler import get_scaler
+from src.reward.ip.etkdg import ETKDGEmbedder
 
 
 class IPPredictor:
