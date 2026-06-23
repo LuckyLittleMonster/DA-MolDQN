@@ -29,17 +29,17 @@ echo "rendezvous env://  MASTER_ADDR=$MASTER_ADDR MASTER_PORT=$MASTER_PORT"
 srun conda run -n rl4 --no-capture-output python train.py \
   reward="${REWARD}" \
   launcher=slurm \
-  backend=gloo \
-  gpu_list='[0]' \
-  init_mol_path="${DATA}" \
-  num_init_mol="${NMOL}" \
-  max_steps_per_episode=10 \
-  iteration=2500 \
-  eps_decay=0.968 \
-  etkdg_threads=2 \
-  maintain_OH="${MAINTAIN_OH}" \
-  experiment="${EXP}" \
-  trial="${TRIAL}"
+  dist.backend=gloo \
+  mols.gpu_list='[0]' \
+  mols.init_mol_path="${DATA}" \
+  mols.num_init_mol="${NMOL}" \
+  train.max_steps_per_episode=10 \
+  train.iteration=2500 \
+  train.eps_decay=0.968 \
+  env.etkdg.threads=2 \
+  env.maintain_OH="${MAINTAIN_OH}" \
+  experiment.experiment="${EXP}" \
+  experiment.trial="${TRIAL}"
 
 # Move the SLURM log into the unified run folder.
 mv "Experiments/slurm_${SLURM_JOB_NAME}_${SLURM_JOB_ID}.log" "Experiments/${EXP}_${TRIAL}/" 2>/dev/null || true
