@@ -1,226 +1,177 @@
-"""PyTorch port of the BDE-db2 nfp MPNN model.
+"""High-level BDE prediction API for RL integration.
 
-Architecture: 6 EdgeUpdate + 5 NodeUpdate rounds with residual connections.
-Input: molecular graphs (atom tokens, bond tokens, connectivity, bond_indices)
-Output: per-bond [BDE, BDFE] predictions in kcal/mol
+Usage:
+    from src.reward.bde.model import BDEModel
+    model = BDEModel('src/reward/bde/weights/alfabet.npz', device='cuda')
+    bdes, valids = model.predict_oh_bde(['c1ccc(O)cc1', 'Oc1ccc(O)cc1'])
 """
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 import numpy as np
+from pathlib import Path
+from .net import BDENet
+from .preprocessor import BDEPreprocessor
+
+_DEFAULT_PP = str(
+    Path(__file__).resolve().parent.parent /
+    'BDE-db2/Example-BDE-prediction/model_3_tfrecords_multi_halo_cfc/preprocessor.json')
 
 
-class ConcatDense(nn.Module):
-    """Concatenate inputs then Dense(2*F, relu) -> Dense(F)."""
-    def __init__(self, input_dim: int, output_dim: int):
-        super().__init__()
-        self.dense1 = nn.Linear(input_dim, 2 * output_dim)
-        self.dense2 = nn.Linear(2 * output_dim, output_dim)
+class BDEModel:
+    """BDE prediction model with preprocessing and batch inference."""
 
-    def forward(self, *tensors: torch.Tensor) -> torch.Tensor:
-        x = torch.cat(tensors, dim=-1)
-        x = F.relu(self.dense1(x))
-        x = self.dense2(x)
-        return x
+    def __init__(self, weights_path: str, preprocessor_path: str = None,
+                 device: str = 'cpu', dtype=torch.float32):
+        self.device = torch.device(device)
+        self.dtype = dtype
+        self.preprocessor = BDEPreprocessor(preprocessor_path or _DEFAULT_PP)
+        self.model = BDENet.from_npz(weights_path, device=self.device)
+        self.model = self.model.to(dtype=dtype)
 
+    @torch.no_grad()
+    def predict_smiles(self, smiles_list: list, batch_size: int = 256) -> list:
+        """Predict BDE/BDFE for a list of SMILES strings.
 
-class EdgeUpdateLayer(nn.Module):
-    """For each edge, gather src/dst atoms, concat with bond, ConcatDense."""
-    def __init__(self, hidden_dim: int):
-        super().__init__()
-        self.concat_dense = ConcatDense(3 * hidden_dim, hidden_dim)
-
-    def forward(self, atom_state, bond_state, src_idx, dst_idx, batch_idx, bond_mask):
-        # Gather source and target atoms
-        src_atom = atom_state[batch_idx, src_idx]
-        dst_atom = atom_state[batch_idx, dst_idx]
-        new_bond = self.concat_dense(bond_state, src_atom, dst_atom)
-        new_bond = new_bond * bond_mask.unsqueeze(-1)
-        return new_bond
-
-
-class NodeUpdateLayer(nn.Module):
-    """Aggregate edge messages to nodes, then MLP."""
-    def __init__(self, hidden_dim: int):
-        super().__init__()
-        self.message_dense = ConcatDense(2 * hidden_dim, hidden_dim)
-        self.update_dense_1 = nn.Linear(hidden_dim, 2 * hidden_dim)
-        self.update_dense_2 = nn.Linear(2 * hidden_dim, hidden_dim)
-
-    def forward(self, atom_state, bond_state, src_idx, dst_idx, batch_idx, bond_mask, num_atoms):
-        B, _, H = bond_state.shape
-        # source_atom = gather via connectivity[:,:,1] (neighbor endpoint)
-        neighbor_atom = atom_state[batch_idx, dst_idx]
-        messages = self.message_dense(neighbor_atom, bond_state)
-        messages = messages * bond_mask.unsqueeze(-1)
-
-        # Scatter-sum to target node via connectivity[:,:,0]
-        agg = torch.zeros(B, num_atoms, H, device=bond_state.device, dtype=bond_state.dtype)
-        target_expanded = src_idx.unsqueeze(-1).expand_as(messages)
-        agg.scatter_add_(1, target_expanded, messages)
-
-        new_atom = F.relu(self.update_dense_1(agg))
-        new_atom = self.update_dense_2(new_atom)
-        return new_atom
-
-
-class BDEPredictor(nn.Module):
-    """BDE-db2 MPNN: per-bond BDE and BDFE from molecular graph.
-
-    6 EdgeUpdate + 5 NodeUpdate with residual. Output = mean + deviation.
-    """
-    def __init__(self, num_atom_types=171, num_bond_types=200, hidden_dim=128,
-                 num_messages=6, output_dim=2, output_bias=False,
-                 swap_src_dst=False):
-        super().__init__()
-        self.hidden_dim = hidden_dim
-        self.num_messages = num_messages
-        self.swap_src_dst = swap_src_dst
-
-        self.atom_embedding = nn.Embedding(num_atom_types, hidden_dim, padding_idx=0)
-        self.bond_embedding = nn.Embedding(num_bond_types, hidden_dim, padding_idx=0)
-        self.edge_updates = nn.ModuleList([EdgeUpdateLayer(hidden_dim) for _ in range(num_messages)])
-        self.node_updates = nn.ModuleList([NodeUpdateLayer(hidden_dim) for _ in range(num_messages - 1)])
-        self.bde_mean = nn.Embedding(num_bond_types, output_dim, padding_idx=0)
-        self.bde_no_mean = nn.Linear(hidden_dim, output_dim, bias=output_bias)
-
-    def forward(self, atom, bond, connectivity, bond_indices):
+        Returns list of dicts per molecule:
+            bde: np.array [n_bonds] - BDE per bond (kcal/mol)
+            bdfe: np.array [n_bonds] - BDFE per bond (kcal/mol)
+            oh_bde: float or None - minimum O-H BDE (kcal/mol)
+            oh_bond_indices: list[int] - O-H bond indices
+            valid: bool
         """
-        Args:
-            atom: [B, N] long
-            bond: [B, E] long
-            connectivity: [B, E, 2] long - (src, dst) per directed edge
-            bond_indices: [B, E] long - RDKit bond index per directed edge
+        # Preprocess all molecules
+        graphs = []
+        graph_indices = []  # maps graph idx -> original smiles idx
+        results = [None] * len(smiles_list)
+
+        for i, smi in enumerate(smiles_list):
+            try:
+                g = self.preprocessor.process_smiles(smi)
+                if len(g['bond']) == 0:
+                    results[i] = {'bde': np.array([]), 'bdfe': np.array([]),
+                                  'oh_bde': None, 'oh_bond_indices': [], 'valid': True}
+                    continue
+                graphs.append(g)
+                graph_indices.append(i)
+            except Exception:
+                results[i] = {'bde': None, 'bdfe': None,
+                              'oh_bde': None, 'oh_bond_indices': [], 'valid': False}
+
+        # Batch inference
+        for start in range(0, len(graphs), batch_size):
+            batch_graphs = graphs[start:start + batch_size]
+            batch_gi = graph_indices[start:start + batch_size]
+            batch = self.preprocessor.collate(batch_graphs, device=str(self.device))
+
+            pred = self.model(**batch).cpu().float().numpy()  # [B, max_bonds, 2]
+
+            for j, gi in enumerate(batch_gi):
+                smi = smiles_list[gi]
+                n_bonds = len(batch_graphs[j]['bond']) // 2
+                bde_vals = pred[j, :n_bonds, 0]
+                bdfe_vals = pred[j, :n_bonds, 1]
+
+                oh_ids = self.preprocessor.get_oh_bond_indices(smi)
+                oh_bde = None
+                if oh_ids:
+                    oh_bdes = [float(bde_vals[idx]) for idx in oh_ids if idx < n_bonds]
+                    if oh_bdes:
+                        oh_bde = min(oh_bdes)
+
+                results[gi] = {
+                    'bde': bde_vals,
+                    'bdfe': bdfe_vals,
+                    'oh_bde': oh_bde,
+                    'oh_bond_indices': oh_ids,
+                    'valid': True,
+                }
+
+        return results
+
+    def predict_oh_bde(self, smiles_list: list, batch_size: int = 256) -> tuple:
+        """Predict minimum O-H BDE for each molecule.
+
         Returns:
-            [B, n_bonds, 2] float - per-bond [BDE, BDFE]
+            bdes: list[float] (min O-H BDE per mol, 0.0 if invalid/no O-H)
+            valids: list[bool]
         """
-        B, N = atom.shape
-        E = bond.shape[1]
-        H = self.hidden_dim
+        results = self.predict_smiles(smiles_list, batch_size)
+        bdes = []
+        valids = []
+        for r in results:
+            if r['valid'] and r['oh_bde'] is not None:
+                bdes.append(r['oh_bde'])
+                valids.append(True)
+            else:
+                bdes.append(0.0)
+                valids.append(False)
+        return bdes, valids
 
-        atom_state = self.atom_embedding(atom)
-        bond_state = self.bond_embedding(bond)
+    # --- Three-phase split for GIL-free overlap ---
 
-        # Masks must match embedding dtype for fp16 compatibility
-        dtype = bond_state.dtype
-        bond_mask = (bond != 0).to(dtype)
-        atom_mask = (atom != 0).to(dtype)
+    def prep_batch(self, smiles_list: list) -> tuple:
+        """Phase 1 (Python, needs GIL): preprocess SMILES → GPU-ready batch.
 
-        # Precompute indices for gather
-        src_idx = connectivity[:, :, 0]  # [B, E]
-        dst_idx = connectivity[:, :, 1]  # [B, E]
-        batch_idx = torch.arange(B, device=atom.device).unsqueeze(1).expand(B, E)
+        Returns: (batch, graphs, graph_indices, results)
+            batch: dict of tensors on self.device (or None if no valid graphs)
+            graphs: list of graph dicts
+            graph_indices: maps graph position → original smiles index
+            results: partial results list (pre-filled for trivial/failed mols)
+        """
+        graphs = []
+        graph_indices = []
+        results = [None] * len(smiles_list)
 
-        # ALFABET uses concat(bond, dst, src); BDE-db2 uses concat(bond, src, dst)
-        eu_src, eu_dst = (dst_idx, src_idx) if self.swap_src_dst else (src_idx, dst_idx)
+        for i, smi in enumerate(smiles_list):
+            try:
+                g = self.preprocessor.process_smiles(smi)
+                if len(g['bond']) == 0:
+                    results[i] = {'oh_bde': None, 'valid': True}
+                    continue
+                graphs.append(g)
+                graph_indices.append(i)
+            except Exception:
+                results[i] = {'oh_bde': None, 'valid': False}
 
-        for i in range(self.num_messages):
-            new_bond = self.edge_updates[i](atom_state, bond_state, eu_src, eu_dst, batch_idx, bond_mask)
-            bond_state = bond_state + new_bond
+        batch = None
+        if graphs:
+            batch = self.preprocessor.collate(graphs, device=str(self.device))
+        return batch, graphs, graph_indices, results
 
-            if i < self.num_messages - 1:
-                new_atom = self.node_updates[i](atom_state, bond_state, src_idx, dst_idx, batch_idx, bond_mask, N)
-                new_atom = new_atom * atom_mask.unsqueeze(-1)
-                atom_state = atom_state + new_atom
+    @torch.no_grad()
+    def forward_batch(self, batch):
+        """Phase 2 (GPU, GIL-free during kernel): run MPNN forward only.
 
-        # Readout: scatter-mean by bond_indices, then slice first half
-        # The TF Reduce(mean) scatters into a tensor of same size as input,
-        # then Slice takes the first n_directed//2 entries.
-        # bond_indices maps directed edges to undirected bond indices (0,0,1,1,2,2,...)
+        Returns: raw prediction numpy array [B, max_bonds, 2], or None.
+        """
+        if batch is None:
+            return None
+        return self.model(**batch).cpu().float().numpy()
 
-        # We scatter into a buffer of size E (same as directed edges)
-        bond_agg = torch.zeros(B, E, H, device=bond_state.device, dtype=bond_state.dtype)
-        bond_count = torch.zeros(B, E, 1, device=bond_state.device, dtype=bond_state.dtype)
+    def postprocess_oh_bde(self, pred, graphs, graph_indices, results, smiles_list):
+        """Phase 3 (Python, needs GIL): extract O-H BDE from raw predictions.
 
-        bi_expanded = bond_indices.unsqueeze(-1).expand(B, E, H)
-        bi_count = bond_indices.unsqueeze(-1)
+        Returns: (bdes, valids) lists.
+        """
+        if pred is not None:
+            for j, gi in enumerate(graph_indices):
+                smi = smiles_list[gi]
+                n_bonds = len(graphs[j]['bond']) // 2
+                bde_vals = pred[j, :n_bonds, 0]
+                oh_ids = self.preprocessor.get_oh_bond_indices(smi)
+                oh_bde = None
+                if oh_ids:
+                    oh_bdes = [float(bde_vals[idx]) for idx in oh_ids if idx < n_bonds]
+                    if oh_bdes:
+                        oh_bde = min(oh_bdes)
+                results[gi] = {'oh_bde': oh_bde, 'valid': True}
 
-        masked_state = bond_state * bond_mask.unsqueeze(-1)
-        masked_count = bond_mask.unsqueeze(-1)
-
-        bond_agg.scatter_add_(1, bi_expanded, masked_state)
-        bond_count.scatter_add_(1, bi_count, masked_count)
-        bond_count = bond_count.clamp(min=1)
-        bond_features = bond_agg / bond_count  # [B, E, H]
-
-        # Slice: first half = undirected bonds
-        n_bonds = E // 2
-        bond_features = bond_features[:, :n_bonds, :]  # [B, n_bonds, H]
-
-        # BDE deviation
-        bde_deviation = self.bde_no_mean(bond_features)  # [B, n_bonds, 2]
-
-        # BDE mean: same scatter-mean-slice pattern
-        bde_mean_emb = self.bde_mean(bond)  # [B, E, 2]
-        bde_mean_agg = torch.zeros(B, E, 2, device=bond_state.device, dtype=bond_state.dtype)
-        bde_mean_count = torch.zeros(B, E, 1, device=bond_state.device, dtype=bond_state.dtype)
-
-        bi_mean = bond_indices.unsqueeze(-1).expand(B, E, 2)
-        bde_mean_agg.scatter_add_(1, bi_mean, bde_mean_emb * bond_mask.unsqueeze(-1))
-        bde_mean_count.scatter_add_(1, bi_count, masked_count)
-        bde_mean_count = bde_mean_count.clamp(min=1)
-        bde_mean_val = bde_mean_agg / bde_mean_count
-        bde_mean_val = bde_mean_val[:, :n_bonds, :]  # [B, n_bonds, 2]
-
-        return bde_deviation + bde_mean_val
-
-    @classmethod
-    def from_npz(cls, npz_path: str, device='cpu') -> 'BDEPredictor':
-        """Load model with pre-trained weights from .npz file."""
-        data = np.load(npz_path)
-
-        atom_emb = data['atom_embedding/embeddings']
-        bond_emb = data['bond_embedding/embeddings']
-        num_atom_types, hidden_dim = atom_emb.shape
-        num_bond_types = bond_emb.shape[0]
-        output_dim = data['bde_mean/embeddings'].shape[1]
-
-        num_messages = sum(1 for k in data.files
-                          if 'concat_dense/dense/kernel' in k and k.startswith('edge_update'))
-        output_bias = 'bde_no_mean/bias' in data.files
-
-        # ALFABET has output bias; also needs swapped src/dst in EdgeUpdate
-        swap_src_dst = output_bias
-
-        model = cls(num_atom_types=num_atom_types, num_bond_types=num_bond_types,
-                     hidden_dim=hidden_dim, num_messages=num_messages,
-                     output_dim=output_dim, output_bias=output_bias,
-                     swap_src_dst=swap_src_dst)
-
-        # Embeddings (no transpose)
-        model.atom_embedding.weight.data = torch.from_numpy(atom_emb.copy())
-        model.bond_embedding.weight.data = torch.from_numpy(bond_emb.copy())
-        model.bde_mean.weight.data = torch.from_numpy(data['bde_mean/embeddings'].copy())
-
-        # Edge updates
-        for i in range(num_messages):
-            prefix = 'edge_update/concat_dense' if i == 0 else f'edge_update_{i}/concat_dense'
-            eu = model.edge_updates[i].concat_dense
-            eu.dense1.weight.data = torch.from_numpy(data[f'{prefix}/dense/kernel'].T.copy())
-            eu.dense1.bias.data = torch.from_numpy(data[f'{prefix}/dense/bias'].copy())
-            eu.dense2.weight.data = torch.from_numpy(data[f'{prefix}/dense_1/kernel'].T.copy())
-            eu.dense2.bias.data = torch.from_numpy(data[f'{prefix}/dense_1/bias'].copy())
-
-        # Node updates
-        for i in range(num_messages - 1):
-            cd_prefix = 'node_update/concat_dense' if i == 0 else f'node_update_{i}/concat_dense'
-            nu_prefix = 'node_update' if i == 0 else f'node_update_{i}'
-            nu = model.node_updates[i]
-
-            nu.message_dense.dense1.weight.data = torch.from_numpy(data[f'{cd_prefix}/dense_2/kernel'].T.copy())
-            nu.message_dense.dense1.bias.data = torch.from_numpy(data[f'{cd_prefix}/dense_2/bias'].copy())
-            nu.message_dense.dense2.weight.data = torch.from_numpy(data[f'{cd_prefix}/dense_3/kernel'].T.copy())
-            nu.message_dense.dense2.bias.data = torch.from_numpy(data[f'{cd_prefix}/dense_3/bias'].copy())
-
-            nu.update_dense_1.weight.data = torch.from_numpy(data[f'{nu_prefix}/dense/kernel'].T.copy())
-            nu.update_dense_1.bias.data = torch.from_numpy(data[f'{nu_prefix}/dense/bias'].copy())
-            nu.update_dense_2.weight.data = torch.from_numpy(data[f'{nu_prefix}/dense_1/kernel'].T.copy())
-            nu.update_dense_2.bias.data = torch.from_numpy(data[f'{nu_prefix}/dense_1/bias'].copy())
-
-        # Output head
-        model.bde_no_mean.weight.data = torch.from_numpy(data['bde_no_mean/kernel'].T.copy())
-        if output_bias:
-            model.bde_no_mean.bias.data = torch.from_numpy(data['bde_no_mean/bias'].copy())
-
-        model.eval()
-        return model.to(device)
+        bdes = []
+        valids = []
+        for r in results:
+            if r is not None and r.get('valid') and r.get('oh_bde') is not None:
+                bdes.append(r['oh_bde'])
+                valids.append(True)
+            else:
+                bdes.append(0.0)
+                valids.append(False)
+        return bdes, valids

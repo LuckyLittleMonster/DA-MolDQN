@@ -5,7 +5,7 @@ caching is handled externally by ``cached`` (composed in the BDE_IP reward),
 so this class no longer knows about caches.
 """
 from src.config import RewardCfg
-from src.reward.bde.predict import BDEModel
+from src.reward.bde.model import BDEModel
 from src.reward.scaler import get_scaler
 
 
