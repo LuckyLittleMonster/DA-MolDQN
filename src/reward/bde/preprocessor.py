@@ -160,16 +160,24 @@ class BDEPreprocessor:
                 'bond': np.zeros(0, dtype=np.int32),
                 'connectivity': np.zeros((0, 2), dtype=np.int64),
                 'bond_indices': np.zeros(0, dtype=np.int32),
+                'oh_bond_indices': [],
             }
 
         bond_tokens = []
         connectivity = []
         bond_indices_list = []
+        # O-H bond indices, recorded here so the O-H BDE read-off needs no second
+        # MolFromSmiles+AddHs. bde_vals is ordered by GetBonds() iteration
+        # (== bond.GetIdx()), so these idx values index it directly.
+        oh_bond_indices = []
 
         for bond in bonds:
             idx = bond.GetIdx()
             begin = bond.GetBeginAtomIdx()
             end = bond.GetEndAtomIdx()
+            if {bond.GetBeginAtom().GetAtomicNum(),
+                    bond.GetEndAtom().GetAtomicNum()} == {1, 8}:
+                oh_bond_indices.append(idx)
 
             # Forward edge: begin -> end
             bond_tokens.append(self.bond_tokenizer(
@@ -188,6 +196,7 @@ class BDEPreprocessor:
             'bond': np.array(bond_tokens, dtype=np.int32),
             'connectivity': np.array(connectivity, dtype=np.int64),
             'bond_indices': np.array(bond_indices_list, dtype=np.int32),
+            'oh_bond_indices': oh_bond_indices,
         }
 
     def collate(self, graphs: list, device='cpu') -> dict:
@@ -227,16 +236,3 @@ class BDEPreprocessor:
             'bond_indices': bond_indices,
         }
 
-    def get_oh_bond_indices(self, smiles: str) -> list:
-        """Get RDKit bond indices for all O-H bonds in a molecule."""
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            return []
-        mol = Chem.AddHs(mol)
-        oh_ids = []
-        for bond in mol.GetBonds():
-            a1 = bond.GetBeginAtom().GetAtomicNum()
-            a2 = bond.GetEndAtom().GetAtomicNum()
-            if (a1 == 8 and a2 == 1) or (a1 == 1 and a2 == 8):
-                oh_ids.append(bond.GetIdx())
-        return oh_ids
