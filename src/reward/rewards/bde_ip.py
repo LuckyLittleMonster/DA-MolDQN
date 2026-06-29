@@ -7,7 +7,7 @@ depends on a random ETKDG conformer).
 """
 from rdkit import Chem
 
-from src.cache import cached
+from src.cache import cached, LRUCache
 from src.reward.bde.predictor import BDEPredictor
 from src.reward.ip.predictor import IPPredictor
 
@@ -34,6 +34,11 @@ class BdeIpReward:
         self.rrab_weight = weights.rrab
 
         self.use_bde_cache = env_cfg.cache.bde
+        # IP caching is OFF by default (cache.ip=false): IP depends on a random
+        # ETKDG conformer, so a single cached value is a frozen noisy sample
+        # (see docs/ip-stability-verification.md). cache.ip=true enables it for
+        # the cached-vs-fresh A/B study only.
+        self.use_ip_cache = env_cfg.cache.ip
         self.etkdg_max_attempts_cache = env_cfg.etkdg.max_attempts_cache
         self.etkdg_max_attempts_uncache = env_cfg.etkdg.max_attempts_uncache
 
@@ -42,6 +47,9 @@ class BdeIpReward:
         # (~1.75x at 2 threads). Lets 36 ranks x 2 threads keep 72-core etkdg
         # throughput while halving GPU contexts (fits memory + MPS works).
         self.etkdg_threads = env_cfg.etkdg.threads
+        # Identity-based ETKDG seed makes IP reproducible per molecule, which is
+        # what makes cache.ip exact (cache == recompute). See etkdg.py.
+        self.etkdg_deterministic_seed = env_cfg.etkdg.deterministic_seed
 
         # Pure predictors, wrapped by ``cached`` for generic dedup +
         # index-mapping. BDE gets a swappable cache (LRU); IP gets cache=None
@@ -59,13 +67,16 @@ class BdeIpReward:
             ip_ensemble=self.ip_ensemble,
             etkdg_threads=self.etkdg_threads,
             etkdg_max_attempts_cache=self.etkdg_max_attempts_cache,
-            etkdg_max_attempts_uncache=self.etkdg_max_attempts_uncache)
+            etkdg_max_attempts_uncache=self.etkdg_max_attempts_uncache,
+            etkdg_deterministic_seed=self.etkdg_deterministic_seed)
         self.ip_scaler = self.ip_pred.ip_scaler
         self.ip_model = self.ip_pred.ip_model
         _ip_attempts = self.etkdg_max_attempts_uncache
+        self.ip_cache = (LRUCache(env_cfg.lru_cache_capacity * len(self.init_mols))
+                         if self.use_ip_cache else None)
         self.ip = cached(
             lambda keys, mols: self.ip_pred.predict_IP(mols, _ip_attempts),
-            cache=None, call_on_empty=False,
+            cache=self.ip_cache, call_on_empty=False,
             invalid_value=self.reward_of_invalid_mol)
 
         self.init_mols_n = [m.GetNumAtoms() + m.GetNumBonds() for m in self.init_mols]
@@ -108,8 +119,9 @@ class BdeIpReward:
         for s, v in zip(smiles, bde_vs):
             if (not v) and s in smiles_p:
                 del smiles_p[s]
-        # IP is never cached (random conformer); use_cache=False -> dedup + map only.
-        ip_preds, ip_vs = self.ip(smiles, smiles_p, use_cache=False)
+        # IP: use_cache=False (default) -> fresh ETKDG conformer every visit;
+        # use_cache=True (cache.ip) -> frozen first-visit single-conformer IP.
+        ip_preds, ip_vs = self.ip(smiles, smiles_p, use_cache=self.use_ip_cache)
 
         rrabs = self.calc_rrabs(molecules)
 

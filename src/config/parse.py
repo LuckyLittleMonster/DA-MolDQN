@@ -185,6 +185,8 @@ def parse_config(cfg) -> Config:
                 max_attempts_uncache=int(
                     _get(etkdg_node, "max_attempts_uncache", EtkdgCfg.max_attempts_uncache)),
                 threads=int(_get(etkdg_node, "threads", EtkdgCfg.threads)),
+                deterministic_seed=bool(
+                    _get(etkdg_node, "deterministic_seed", EtkdgCfg.deterministic_seed)),
             ),
             multi_threading=bool(_get(env, "multi_threading", EnvCfg.multi_threading)),
             lru_cache_capacity=int(

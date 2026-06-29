@@ -37,14 +37,16 @@ class IPPredictor:
     def __init__(self, device, etkdg_threads,
                  etkdg_max_attempts_cache, etkdg_max_attempts_uncache,
                  ip_factor=RewardCfg.ip_factor,
-                 ip_ensemble=RewardCfg.ip_ensemble):
+                 ip_ensemble=RewardCfg.ip_ensemble,
+                 etkdg_deterministic_seed=False):
         self.device = device
         self.ip_factor = ip_factor
         self.ip_ensemble = bool(ip_ensemble)
         self.etkdg_max_attempts_cache = etkdg_max_attempts_cache
         self.etkdg_max_attempts_uncache = etkdg_max_attempts_uncache
 
-        self.etkdg = ETKDGEmbedder(device, etkdg_threads)
+        self.etkdg = ETKDGEmbedder(device, etkdg_threads,
+                                   deterministic_seed=etkdg_deterministic_seed)
 
         self.ip_scaler = get_scaler('./Data/anti-ip.csv')
         self.ip_model_path = _IP_CV_PATHS if self.ip_ensemble else _IP_CV4_PATH

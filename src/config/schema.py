@@ -166,10 +166,15 @@ class EtkdgCfg:
     max_attempts_cache: int = 7
     max_attempts_uncache: int = 7
     threads: int = 1  # intra-rank ETKDG thread pool (>1 parallelizes embedding)
+    # Seed ETKDG by molecule identity (crc32 of canonical SMILES) instead of
+    # batch position -> IP becomes reproducible per molecule and cache.ip exact.
+    deterministic_seed: bool = False
 
     def __post_init__(self):
         if self.threads < 1:
             raise ValueError(f"etkdg.threads must be >= 1, got {self.threads}")
+        if not isinstance(self.deterministic_seed, bool):
+            raise ValueError(f"etkdg.deterministic_seed must be a bool, got {self.deterministic_seed!r}")
 
 
 @dataclass

@@ -32,7 +32,22 @@ def resolve_init_mols(config, rank, world_size):
     return init_mols[bid:eid]
 
 
+def _seed_everything(seed):
+    import random
+
+    import numpy as np
+    import torch
+
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+
+
 def _worker(rank, world_size, config, mode, config_yaml):
+    # seed_offset >= 0 makes the run reproducible (per-rank seed = offset + rank);
+    # the default -1 leaves RNG unseeded (status-quo behaviour).
+    if config.dist.seed_offset >= 0:
+        _seed_everything(config.dist.seed_offset + rank)
     init_mols = resolve_init_mols(config, rank, world_size)
     Trainer(config, rank, world_size, init_mols, mode=mode,
             config_yaml=config_yaml).run()

@@ -65,6 +65,7 @@ env:
     max_attempts_cache: 7
     max_attempts_uncache: 7
     threads: 1    # intra-rank ETKDG thread pool (RDKit releases the GIL); >1 to parallelize
+    deterministic_seed: false   # true: seed ETKDG by molecule identity -> IP reproducible -> cache.ip exact
 
 # --- initial molecules ---
 mols:
