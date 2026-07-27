@@ -76,7 +76,13 @@ class MaintainOH:
 class BdeIpWeights:
     bde: float = 0.8
     ip: float = 0.2
-    rrab: float = 0.5
+    rrab: float = 0.5              # bde_ip only (additive, relative to the episode start)
+    # --- bde_ip2 only: multiplicative single-sided size window on heavy-atom count ---
+    # defaults from Data/anti_400.txt (8..26 heavy atoms, p10 10, median 13, p90 19):
+    # n_max = the dataset MAXIMUM, i.e. the largest size chemists already accepted.
+    size_n_max: float = 26.0
+    size_k: float = 3.0            # softness; d = 1/(1+exp((n-n_max)/k))
+    size_floor: float = 0.1        # keeps a gradient in the oversized region (0 -> absorbing)
 
 
 @dataclass
@@ -99,6 +105,7 @@ class ExperimentCfg:
 class TrainCfg:
     iteration: int = 200000
     max_steps_per_episode: int = 40
+    aux_distill: float = 0.0   # candidate-set distillation weight (observation=gnn)
     update_episodes: int = 1
     eps_threshold: float = 1.0
     eps_decay: float = 0.999
@@ -189,6 +196,7 @@ class EnvCfg:
     allow_no_modification: bool = True
     allow_bonds_between_rings: bool = False
     observation: ObservationType = ObservationType.LIST
+    gnn_ckpt: str | None = None      # frozen property-GNN teacher checkpoint (observation=gnn)
     maintain_oh: MaintainOH = field(default_factory=MaintainOH)
     cache: CacheCfg = field(default_factory=CacheCfg)
     etkdg: EtkdgCfg = field(default_factory=EtkdgCfg)

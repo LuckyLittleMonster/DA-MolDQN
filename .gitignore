@@ -10,6 +10,12 @@ csrc/cenv.so
 
 # Confidential data — never commit (symlink to private dataset)
 Data/anti_400.txt
+Data/anti-ip.csv
+Data/anti-bde.csv
+Data/proxy_cache/
+
+# Run logs (contain generated molecules)
+logs_*.out
 
 # Run outputs: contain generated molecules (confidential if from private data).
 # Re-added per run; never tracked. Keep the dir via .gitkeep.
@@ -18,6 +24,11 @@ Experiments/*
 
 # Design docs kept local, out of history
 docs/
+cpp_bench/
+
+# Research scaffolding for the GNN Q-network study. Lives on the `rep` branch only;
+# nothing in src/ depends on it. Its write-up is docs/gnn_qnetwork_study.md.
+rep_gnn/
 
 # Temp / rendezvous / logs
 tem/

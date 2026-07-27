@@ -65,7 +65,28 @@ class Trainer:
         if config.dist.torch_num_threads > 0:
             torch.set_num_threads(config.dist.torch_num_threads)
 
-        agent = DistributedAgent(ENV_DEFAULTS.fingerprint_length + 1, self.gpu_index,
+        gnn_teacher = None
+        input_length = ENV_DEFAULTS.fingerprint_length + 1
+        if config.env.observation is ObservationType.GNN:
+            from src.models.gnn_teacher import GNNTeacher, make_corrections
+            gnn_teacher = GNNTeacher(config.env.gnn_ckpt, self.device,
+                                     reward_kind=config.reward.type.value)
+            # r_hat MUST reproduce the FULL reward. The teacher was trained on the property
+            # only, so any reward term it never saw has to be added here -- otherwise the
+            # better-ranking agent optimises the modelled part and drifts on the rest
+            # (measured: r_hat vs production QED reward Spearman only +0.363; molecules grew
+            # 16.6 -> 19.5 heavy atoms on QED and shrank 13.9 -> 9.9 with n_unique 0.59 ->
+            # 0.19 on BDE_IP). See make_corrections for what each reward needs.
+            gnn_teacher.scale_fn, gnn_teacher.extra_fn = make_corrections(
+                config.reward.type.value, config, gnn_teacher)
+            input_length = gnn_teacher.obs_dim
+            if rank == 0:
+                print(f"[gnn] teacher {config.env.gnn_ckpt} -> obs_dim {input_length} "
+                      f"(aux_distill={getattr(config.train, 'aux_distill', 0.0)}, "
+                      f"scale_fn={'on' if gnn_teacher.scale_fn else 'none'}, "
+                      f"extra_fn={'on' if gnn_teacher.extra_fn else 'none'})", flush=True)
+
+        agent = DistributedAgent(input_length, self.gpu_index,
                                  self.device, config, rank)
 
         init_eps_threshold = config.train.eps_threshold
@@ -87,6 +108,9 @@ class Trainer:
         batch_losses = []
         if config.reward.type is RewardType.BDE_IP:
             reward_list = {'reward': [], 'BDE': [], 'IP': [], 'RRAB': []}
+        elif config.reward.type is RewardType.BDE_IP2:
+            # SIZE_D replaces RRAB: the multiplicative size desirability actually applied
+            reward_list = {'reward': [], 'BDE': [], 'IP': [], 'SIZE_D': []}
         elif config.reward.type is RewardType.QED:
             reward_list = {'reward': [], 'QED': [], 'SA_score': []}
         elif config.reward.type is RewardType.PLOGP:
@@ -110,6 +134,13 @@ class Trainer:
             if rank == 0:
                 episode_start_time = time.time()
             environment.initialize()
+            if gnn_teacher is not None and environment.states:
+                # bde_ip's rrab is relative to the EPISODE's start molecule; refresh it so
+                # r_hat's correction matches what the reward will actually compute. Cheap,
+                # and done unconditionally so a future correction that reads init_size
+                # cannot silently see a stale value.
+                _m0 = environment.states[0]
+                gnn_teacher.init_size = _m0.GetNumAtoms() + _m0.GetNumBonds()
             for st in range(max_steps_per_episode):
                 steps_left = max_steps_per_episode - st - 1
                 done = steps_left == 0
@@ -126,6 +157,11 @@ class Trainer:
                         observations = torch.tensor(observations, device=agent.device).float()
                     elif observation is ObservationType.NUMPY:
                         saved_observations = np.vstack([np.append(ob, st) for ob in fingerprints])
+                        observations = torch.tensor(saved_observations, device=agent.device).float()
+                    elif config.env.observation is ObservationType.GNN:
+                        # valid_actions are RDKit Mols; the frozen teacher turns them into
+                        # [embedding, step, r_hat] with r_hat calibrated to the true reward
+                        saved_observations = gnn_teacher.observe(valid_actions, st)
                         observations = torch.tensor(saved_observations, device=agent.device).float()
 
                     aid, is_greedy = agent.get_action(observations, eps_threshold)

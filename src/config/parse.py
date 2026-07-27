@@ -94,6 +94,9 @@ def _bde_ip_weights(node) -> BdeIpWeights:
         bde=float(_get(node, "bde", BdeIpWeights.bde)),
         ip=float(_get(node, "ip", BdeIpWeights.ip)),
         rrab=float(_get(node, "rrab", BdeIpWeights.rrab)),
+        size_n_max=float(_get(node, "size_n_max", BdeIpWeights.size_n_max)),
+        size_k=float(_get(node, "size_k", BdeIpWeights.size_k)),
+        size_floor=float(_get(node, "size_floor", BdeIpWeights.size_floor)),
     )
 
 
@@ -133,6 +136,7 @@ def parse_config(cfg) -> Config:
             max_steps_per_episode=int(
                 _get(train, "max_steps_per_episode", TrainCfg.max_steps_per_episode)),
             update_episodes=int(_get(train, "update_episodes", TrainCfg.update_episodes)),
+            aux_distill=float(_get(train, "aux_distill", TrainCfg.aux_distill) or 0.0),
             eps_threshold=float(_get(train, "eps_threshold", TrainCfg.eps_threshold)),
             eps_decay=float(_get(train, "eps_decay", TrainCfg.eps_decay)),
             gamma=float(_get(train, "gamma", TrainCfg.gamma)),
@@ -174,6 +178,7 @@ def parse_config(cfg) -> Config:
                 _get(env, "allow_bonds_between_rings", EnvCfg.allow_bonds_between_rings)),
             observation=_enum_from(
                 ObservationType, _get(env, "observation", ObservationType.LIST)),
+            gnn_ckpt=_get(env, "gnn_ckpt", None),
             maintain_oh=parse_maintain_oh(_get(env, "maintain_OH", None)),
             cache=CacheCfg(
                 bde=bool(_get(cache_node, "bde", CacheCfg.bde)),

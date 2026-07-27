@@ -28,8 +28,20 @@ class DistributedAgent(object):
         # todo: initialize the same weights in target_dqn and dqn?
         # MolDQN didn't do that, I am not sure if I need to add it.
         # --Huanyi
-        self.dqn = MolDQN(input_length, 1).to(self.device)
-        self.target_dqn = MolDQN(input_length, 1).to(self.device)
+        # GNN mode swaps in the residual prior head: Q starts EXACTLY at the frozen
+        # teacher's reward prediction (zero-initialised last layer) instead of at random.
+        # See src/models/gnn_teacher.py for the measurements motivating this.
+        self.use_gnn = self.observation is ObservationType.GNN
+        if self.use_gnn:
+            # lazy: keeps torch_geometric off the fingerprint path, which every rank pays
+            # for at startup otherwise
+            from src.models.gnn_teacher import MolDQNPrior
+            _Net = MolDQNPrior
+        else:
+            _Net = MolDQN
+        self.aux_distill = float(getattr(config.train, "aux_distill", 0.0) or 0.0)
+        self.dqn = _Net(input_length, 1).to(self.device)
+        self.target_dqn = _Net(input_length, 1).to(self.device)
         checkpoint = config.ckpt.checkpoint
         if checkpoint is not None:
             if rank == 0:
@@ -104,7 +116,7 @@ class DistributedAgent(object):
                 st, fingerprints = saved_observations
                 observations = np.vstack([utils.get_observations_from_list(fp, st) for fp in fingerprints])
                 observations = torch.tensor(observations, device = self.device).float()
-            elif self.observation is ObservationType.NUMPY:
+            elif self.observation in (ObservationType.NUMPY, ObservationType.GNN):
                 observations = torch.tensor(saved_observations, device = self.device).float()
             states.append(observations[-1])
             next_states.append(observations)
@@ -149,6 +161,17 @@ class DistributedAgent(object):
         )
 
         loss = loss.mean()
+
+        # --- candidate-set distillation (no extra oracle calls) ---
+        # The Bellman gradient only ever reaches states[i] = one molecule per transition,
+        # while the argmax has to rank the WHOLE candidate set. `big` already holds every
+        # candidate, and its last column is the frozen teacher's reward prediction, so this
+        # term supplies a free label for all of them and is what repairs the coverage hole.
+        if self.use_gnn and self.aux_distill > 0.0:
+            aux = torch.nn.functional.smooth_l1_loss(
+                self.dqn(big).reshape(-1), big[:, -1].detach())
+            loss = loss + self.aux_distill * aux
+
         self.optimizer.zero_grad()
         loss.backward()
         torch.distributed.barrier()

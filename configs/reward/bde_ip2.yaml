@@ -1,0 +1,14 @@
+# @package _global_
+# BDE_IP with the size constraint made MULTIPLICATIVE (bounded desirability, like QED's
+# internal molecular-weight term) instead of the additive, unbounded, init-molecule-relative
+# rrab, plus clamped property scalers. See src/reward/rewards/bde_ip2.py for the rationale.
+reward:
+  type: bde_ip2
+  bde_ip:
+    bde: 0.8
+    ip: 0.2
+    rrab: 0.5          # unused by bde_ip2 (kept so bde_ip/bde_ip2 share one weights block)
+    size_n_max: 26.0   # Data/anti_400.txt maximum heavy-atom count
+    size_k: 3.0        # d = 1/(1+exp((n_heavy - n_max)/k))
+    size_floor: 0.1    # keeps a gradient in the oversized region (0 would be absorbing)
+  ip_ensemble: true

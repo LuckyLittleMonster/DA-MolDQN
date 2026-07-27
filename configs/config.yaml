@@ -13,6 +13,7 @@ experiment:
 train:
   iteration: 200000
   max_steps_per_episode: 40
+  aux_distill: 0.0        # >0 enables candidate-set distillation (observation=gnn)
   update_episodes: 1
   eps_threshold: 1.0
   eps_decay: 0.999
@@ -34,6 +35,10 @@ reward:
     bde: 0.8
     ip: 0.2
     rrab: 0.5
+    # bde_ip2 only: multiplicative single-sided size window (heavy atoms)
+    size_n_max: 26.0   # Data/anti_400.txt maximum
+    size_k: 3.0
+    size_floor: 0.1
   qed:
     qed: 0.8
     sa: 0.2
@@ -54,7 +59,8 @@ env:
   allow_removal: true
   allow_no_modification: true
   allow_bonds_between_rings: false
-  observation: list
+  observation: list      # list | rdkit | numpy | gnn (frozen property-GNN teacher)
+  gnn_ckpt: null         # required when observation=gnn; e.g. gnn_models/gnn_qed.pt
   maintain_OH: null   # null/none | exist | same | <int>
   multi_threading: true
   lru_cache_capacity: 128

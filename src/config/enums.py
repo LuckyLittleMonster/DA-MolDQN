@@ -19,6 +19,7 @@ class ObservationType(Enum):
     RDKIT = "rdkit"
     LIST = "list"
     NUMPY = "numpy"
+    GNN = "gnn"      # frozen property-GNN teacher observation (see src/models/gnn_teacher.py)
 
     @property
     def cenv_fp_mode(self) -> int:
@@ -27,6 +28,8 @@ class ObservationType(Enum):
             ObservationType.RDKIT: 0,
             ObservationType.LIST: 1,
             ObservationType.NUMPY: 2,
+            # GNN needs the env to hand back RDKit Mols, same as RDKIT mode
+            ObservationType.GNN: 0,
         }[self]
 
 
@@ -40,6 +43,7 @@ class FpFormat(IntEnum):
 
 class RewardType(Enum):
     BDE_IP = "bde_ip"
+    BDE_IP2 = "bde_ip2"   # multiplicative size desirability + clamped scalers
     QED = "qed"
     PLOGP = "plogp"
 
